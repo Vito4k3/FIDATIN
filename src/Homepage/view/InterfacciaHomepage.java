@@ -1,13 +1,21 @@
 package Homepage.view;
 
+import GestionePazienti.model.Paziente;
+import GestionePrenotazioni.model.Prenotazione;
+import GestionePrenotazioni.view.FramePrenotazioni;
 import Homepage.Eventi.Evento;
 import Homepage.Eventi.EventoEvent;
 import Style.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class InterfacciaHomepage extends JPanel implements ActionListener{
 
@@ -32,13 +40,24 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
     private JButton Bacheca = new JButton("Bacheca");
     private Evento evento;
     private InterfacciaTab interfacciaTab;
-
+    private FramePrenotazioni framePrenotazioni= new FramePrenotazioni();
+    private DefaultTableModel tableModel;
+    private JTable prenotazioniDiOggi;
+    String userHome = System.getProperty("user.home");
+    File fileDatabasePrenotazioni= new File(userHome, "databasePrenotazioni.dat");
 
     public InterfacciaHomepage(){
         init();
     }
 
     private void init(){
+
+        try {
+            framePrenotazioni.getController().getDatabase().caricaDaFile(fileDatabasePrenotazioni);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         setLayout(new BorderLayout());
 
         Font font = new Font(null, Font.BOLD, 15);
@@ -105,11 +124,57 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
 
         // EST
         estJp = new JPanel(new GridLayout(2, 1, 10, 5));
-        JTextArea jtxprenotazioniDiOggi = new MyTextArea();
-        estJp.add(jtxprenotazioniDiOggi);
+
+        List<Prenotazione> prenotazioniGiornaliere = framePrenotazioni.getController().getDatabase().prenotazioniGiornaliere();
+
+        String[] colonne;
+        if(!prenotazioniGiornaliere.isEmpty()) {
+            colonne = new String[]{"Paziente", "Dottore", "Orario", "Reparto", "Tipo"};
+        }else{
+            colonne = new String[]{"Nessuna prenotazione giornaliera"};
+        }
+        tableModel = new DefaultTableModel(colonne, 0){
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public int getRowCount() {
+                return prenotazioniGiornaliere.size();
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                Prenotazione prenotazione= prenotazioniGiornaliere.get(rowIndex);
+                switch(columnIndex){
+                    case 0:
+                        return prenotazione.getPaziente().getNome() + " " + prenotazione.getPaziente().getCognome();
+                    case 1:
+                        return prenotazione.getDottore().getNome() + " " + prenotazione.getDottore().getCognome();
+                    case 2:
+                        return prenotazione.getOra();
+                    case 3:
+                        return prenotazione.getReparto();
+                    case 4:
+                        return prenotazione.getTipoPrenotazione();
+                    default:
+                        return null;
+                }
+            }
+
+        };
+        prenotazioniDiOggi = new MyTableStyle(tableModel);
+        if(!prenotazioniGiornaliere.isEmpty()){
+            prenotazioniDiOggi.getColumnModel().getColumn(1).setPreferredWidth(100);
+            prenotazioniDiOggi.getColumnModel().getColumn(2).setPreferredWidth(25);
+        }
+        estJp.add(new MyScrollPane(prenotazioniDiOggi));
         // add to container panel
 
-        gridContainer.add(new MyScrollPane(estJp));
+        gridContainer.add(estJp);
 
 
         centerJp = new JPanel(new GridLayout(2, 1, 10, 5));
