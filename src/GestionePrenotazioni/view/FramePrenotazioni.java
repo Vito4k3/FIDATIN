@@ -272,4 +272,7 @@ public class FramePrenotazioni extends JPanel{
         return interfacciaPannelloPulsanti.getInterfacciaTab();
     }
 
+    public Controller getController(){
+        return this.controller;
+    }
 }

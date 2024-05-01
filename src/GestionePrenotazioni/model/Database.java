@@ -26,16 +26,13 @@ public class Database {
     }
 
     public List<Prenotazione> prenotazioniGiornaliere(){
-        List<Prenotazione> listaPrenotazioniGiornaliere = new ArrayList<Prenotazione>();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        List<Prenotazione> listaPrenotazioniGiornaliere = new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+        String dataGiornaliera = formatter.format(new Date());
         for(int i=0; i<prenotazioni.size(); i++){
-            try {
-                if(formatter.parse(prenotazioni.get(i).getData()).equals(new Date())){
+                if(prenotazioni.get(i).getData().equals(dataGiornaliera)){
                     listaPrenotazioniGiornaliere.add(prenotazioni.get(i));
                 }
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
         }
         return listaPrenotazioniGiornaliere;
     }
