@@ -220,50 +220,6 @@ public class InterfacciaPAZIENTI extends JPanel{
         }
     }
 
-    public void eliminaDalFile(int riga) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file + ".tmp"))) {
-
-            StringBuilder sb = new StringBuilder();
-
-            for (int col = 0; col < tableModel.getColumnCount(); col++) {
-                Object value = tableModel.getValueAt(riga, col);
-                if (value != null) {
-                    sb.append(value).append("\t");
-                } else {
-                    sb.append("\t");
-                }
-            }
-
-            String lineToRemove = sb.toString().trim();
-
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                String trimmedLine = currentLine.trim();
-                if (trimmedLine.equals(lineToRemove))
-                    continue;
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-
-            // Chiusura dei buffer
-            writer.close();
-            reader.close();
-
-            // Elimina il file originale e rinomina quello temporaneo
-            File tempFile = new File(file + ".tmp");
-            if (file.delete()) {
-                if (!tempFile.renameTo(file)) {
-                    throw new IOException("Impossibile rinominare il file temporaneo");
-                }
-            } else {
-                throw new IOException("Impossibile eliminare il file originale");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void modificaAlFile(int riga, Object[] DatoRiga) {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
