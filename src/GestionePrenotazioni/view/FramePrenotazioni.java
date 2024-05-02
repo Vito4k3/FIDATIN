@@ -275,4 +275,7 @@ public class FramePrenotazioni extends JPanel{
     public Controller getController(){
         return this.controller;
     }
+    public InterfacciaInserimento getInterfacciaInserimento(){
+        return interfacciaInserimento;
+    }
 }

@@ -1,57 +1,53 @@
 package GestionePrescrizioni.model;
 
 
-public class Prescrizione {
-    protected String nomeDottore;
-    protected String diagnosi;
-    protected String nomeCliente;
-    protected String cognomeCliente;
+import GestioneDottori.model.Dottore;
+import GestionePazienti.model.Paziente;
 
-    public Prescrizione(String nomeDottore, String diagnosi, String nomeCliente, String cognomeCliente) {
-        this.nomeDottore = nomeDottore;
-        this.diagnosi = diagnosi;
-        this.nomeCliente = nomeCliente;
-        this.cognomeCliente = cognomeCliente;
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Prescrizione implements Serializable {
+    protected Paziente paziente;
+    protected Dottore dottore;
+    protected String oggettoPrescrizione;
+
+    public Prescrizione(Paziente paziente, Dottore dottore, String oggettoPrescrizione) {
+        this.paziente = paziente;
+        this.dottore = dottore;
+        this.oggettoPrescrizione = oggettoPrescrizione;
     }
 
-    public String getNomeDottore() {
-        return nomeDottore;
+    public Paziente getPaziente() {
+        return paziente;
     }
 
-    public void setNomeDottore(String nomeDottore) {
-        this.nomeDottore = nomeDottore;
+    public void setPaziente(Paziente paziente) {
+        this.paziente = paziente;
     }
 
-    public String getDiagnosi() {
-        return diagnosi;
+    public Dottore getDottore() {
+        return dottore;
     }
 
-    public void setDiagnosi(String diagnosi) {
-        this.diagnosi = diagnosi;
+    public void setDottore(Dottore dottore) {
+        this.dottore = dottore;
     }
 
-    public String getNomeCliente() {
-        return nomeCliente;
+    public String getOggettoPrescrizione() {
+        return oggettoPrescrizione;
     }
 
-    public void setNomeCliente(String nomeCliente) {
-        this.nomeCliente = nomeCliente;
-    }
-
-    public String getCognomeCliente() {
-        return cognomeCliente;
-    }
-
-    public void setCognomeCliente(String cognomeCliente) {
-        this.cognomeCliente = cognomeCliente;
+    public void setOggettoPrescrizione(String oggettoPrescrizione) {
+        this.oggettoPrescrizione = oggettoPrescrizione;
     }
 
     @Override
     public String toString() {
-        return "Prescrizione{" + "nomeDottore=" + nomeDottore + ", diagnosi=" + diagnosi + ", nomeCliente=" + nomeCliente + ", cognomeCliente=" + cognomeCliente + '}';
+        return "Prescrizione{" +
+                "paziente=" + paziente +
+                ", dottore=" + dottore +
+                ", oggettoPrescrizione='" + oggettoPrescrizione + '\'' +
+                '}';
     }
-
-    
-    
-    
 }

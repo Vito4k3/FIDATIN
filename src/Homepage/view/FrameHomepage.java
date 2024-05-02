@@ -58,10 +58,12 @@ public class FrameHomepage extends JFrame {
                 JButton pulsantePazienti = e.getButtonPazienti();
 
                 if(pulsantePremuto.equals(pulsantePrenotazione)){
+                    panelPrenotazioni.getInterfacciaInserimento().aggiornaFileDottori();
                     cardLayout.show(cardPanel, "PRENOTAZIONI");
                 }else if(pulsantePremuto.equals(pulsanteDottori)){
                     cardLayout.show(cardPanel, "DOTTORI");
                 }else if(pulsantePremuto.equals(pulsantePrescrizioni)){
+                    panelPrescrizioni.getInterfacciaInserimento().aggiornaFileDottori();
                     cardLayout.show(cardPanel, "PRESCRIZIONI");
                 }else if(pulsantePremuto.equals(pulsantePazienti)){
                     cardLayout.show(cardPanel, "PAZIENTI");

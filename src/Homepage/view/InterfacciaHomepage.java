@@ -203,4 +203,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
     public InterfacciaTab getTab(){
         return interfacciaTab;
     }
+    public DefaultTableModel getTableModel () {
+        return tableModel;
+    }
 }

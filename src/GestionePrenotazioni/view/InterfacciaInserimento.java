@@ -6,8 +6,7 @@ import GestionePazienti.model.Paziente;
 import GestionePrenotazioni.model.Reparto;
 import GestionePrenotazioni.model.TipoPrenotazione;
 import Style.MyButtonStyle;
-import GestionePrenotazioni.style.myLabelStyle;
-import GestionePrenotazioni.style.myTextFieldStyle;
+import Style.MyLabelStyle;
 import Style.MyComboBox;
 import Style.MyComboBoxDottori;
 import GestionePazienti.model.GestionePazienti;
@@ -16,8 +15,6 @@ import Style.MyComboBoxPaziente;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -26,6 +23,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 
 public class InterfacciaInserimento extends JPanel {
@@ -34,7 +32,6 @@ public class InterfacciaInserimento extends JPanel {
             panelBox4, panelBox5, panelBox6;
     private JLabel title, labelTipologiaAppuntamento, labelPaziente, labelDottore, labelReparto, labelData, labelOra;
     private JComboBox boxTipoPrenotazione, boxReparto;
-    private MyComboBoxDottori sceltaDottore;
     private MyComboBoxPaziente sceltaPaziente;
     private JButton buttonSalva;
     private SpinnerModel spinnerDateModel;
@@ -42,31 +39,34 @@ public class InterfacciaInserimento extends JPanel {
     private Calendar calendar;
     private Date now, startDate, endDate;
     private SpinnerDateModel timeModel;
-    private ArrayList<Dottore> listaDottori;
+    //
     private ArrayList<Paziente> listaPazienti;
     private DatabaseDottori databaseDottori;
+    private ArrayList<Dottore> listaDottori;
     private GestionePazienti gestionePazienti;
-    private Dottore[] arrayDottori;
-    private Paziente[] arrayPazienti;
+    private MyComboBoxDottori sceltaDottore;
+    //
     private JSpinner.DateEditor editor;
-    public InterfacciaInserimento(){
-        setLayout(new BorderLayout());
-        setBackground(Color.white);
+    private File fileDatabaseDottori = new File(System.getProperty("user.home"), "databaseDottori.dat");
+    private File fileDatabasePazienti = new File(System.getProperty("user.home"), "databasePazienti.dat");
 
-        databaseDottori = new DatabaseDottori();
-        gestionePazienti = new GestionePazienti();
-
-
-        String userHome = System.getProperty("user.home");
-        File fileDatabaseDottori= new File(userHome, "databaseDottori.dat");
-        File fileDatabasePazienti= new File(userHome, "databasePazienti.dat");
-
-
+    public void aggiornaFileDottori(){
         try {
             databaseDottori.caricaDaFile(fileDatabaseDottori);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        listaDottori.clear();
+        listaDottori.addAll(databaseDottori.getDottori());
+
+        sceltaDottore.sostituisciLista(listaDottori);
+    }
+    public InterfacciaInserimento(){
+        setLayout(new BorderLayout());
+        setBackground(Color.white);
+
+        gestionePazienti = new GestionePazienti();
+        databaseDottori = new DatabaseDottori();
 
         try {
             gestionePazienti.caricaDaFile(fileDatabasePazienti);
@@ -74,8 +74,8 @@ public class InterfacciaInserimento extends JPanel {
             throw new RuntimeException(e);
         }
 
-        listaDottori = new ArrayList<>(databaseDottori.getDottori());
         listaPazienti = new ArrayList<>(gestionePazienti.getPazienti());
+        listaDottori = new ArrayList<>(databaseDottori.getDottori());
 
         // Inizializzazione panel
         mainPanel = new JPanel();
@@ -101,23 +101,21 @@ public class InterfacciaInserimento extends JPanel {
 
         // Inizializzazione label
         title = new JLabel("Inserisci Prenotazione");
-        labelTipologiaAppuntamento = new myLabelStyle("Tipologia Appuntamento:");
-        labelPaziente = new myLabelStyle("Paziente:");
-        labelDottore = new myLabelStyle("Dottore:");
-        labelReparto = new myLabelStyle("Reparto:");
-        labelData = new myLabelStyle("Data:");
-        labelOra = new myLabelStyle("Ora:");
+        labelTipologiaAppuntamento = new MyLabelStyle("Tipologia Appuntamento:");
+        labelPaziente = new MyLabelStyle("Paziente:");
+        labelDottore = new MyLabelStyle("Dottore:");
+        labelReparto = new MyLabelStyle("Reparto:");
+        labelData = new MyLabelStyle("Data:");
+        labelOra = new MyLabelStyle("Ora:");
 
         TipoPrenotazione[] tipiPrenotazioni = TipoPrenotazione.values();
         Reparto[] reparti = Reparto.values();
-        arrayDottori = listaDottori.toArray(new Dottore[listaDottori.size()]);
-        arrayPazienti = listaPazienti.toArray(new Paziente[listaPazienti.size()]);
 
         // Inizializzazione dei campi di testo
         boxTipoPrenotazione = new MyComboBox(tipiPrenotazioni);
 
-        sceltaPaziente = new MyComboBoxPaziente(arrayPazienti);
-        sceltaDottore = new MyComboBoxDottori(arrayDottori);
+        sceltaPaziente = new MyComboBoxPaziente(listaPazienti);
+        sceltaDottore = new MyComboBoxDottori(listaDottori);
 
         boxReparto = new MyComboBox(reparti);
 
@@ -169,10 +167,6 @@ public class InterfacciaInserimento extends JPanel {
 
                     editor.commitEdit();
                     setSpinner(dataString);
-
-                    System.out.println(dataString);
-
-                    System.out.println(spinner.getValue());
 
                 } catch (ParseException ex) {
                     ex.printStackTrace();
@@ -241,18 +235,16 @@ public class InterfacciaInserimento extends JPanel {
     }
 
     public Dottore getDottoreSelezionato() {
-        int index= sceltaDottore.getSelectedIndex();
-
-        return arrayDottori[index];
+        return (Dottore) sceltaDottore.getSelectedItem();
     }
     public void setBoxDottore(Dottore dottore) {
         int ris = 0;
-        for(int i=0; i<arrayDottori.length; i++){
-            if(dottore.getNome().equals(arrayDottori[i].getNome()) && dottore.getCognome().equals(arrayDottori[i].getCognome())){
+        for(int i=0; i<listaDottori.size(); i++){
+            if(dottore.getNome().equals(listaDottori.get(i).getNome()) && dottore.getCognome().equals(listaDottori.get(i).getCognome())){
                 ris=i;
             }
         }
-        this.sceltaDottore.setSelectedItem(arrayDottori[ris]);
+        this.sceltaDottore.setSelectedItem(listaDottori.get(ris));
     }
 
     public void setTitle(String title){
@@ -287,7 +279,7 @@ public class InterfacciaInserimento extends JPanel {
 
     public Paziente getPazienteSelezionato() {
         int index= sceltaPaziente.getSelectedIndex();
-        return arrayPazienti[index];
+        return listaPazienti.get(index);
     }
     public JComboBox getBoxPaziente(){
         return sceltaPaziente;
@@ -297,12 +289,12 @@ public class InterfacciaInserimento extends JPanel {
     }
     public void setBoxPaziente(Paziente paziente) {
         int ris = 0;
-        for(int i=0; i<arrayPazienti.length; i++){
-            if(paziente.getNome().equals(arrayDottori[i].getNome()) && paziente.getCognome().equals(arrayDottori[i].getCognome())){
+        for(int i=0; i<listaDottori.size(); i++){
+            if(paziente.getNome().equals(listaDottori.get(i).getNome()) && paziente.getCognome().equals(listaDottori.get(i).getCognome())){
                 ris=i;
             }
         }
-        this.sceltaPaziente.setSelectedItem(arrayPazienti[ris]);
+        this.sceltaPaziente.setSelectedItem(listaPazienti.get(ris));
     }
 
     public JSpinner getSpinner() {
@@ -338,5 +330,8 @@ public class InterfacciaInserimento extends JPanel {
 
     public JSpinner.DateEditor getEditorSpinner(){
         return this.editor;
+    }
+    public List<Dottore> getDottori(){
+        return listaDottori;
     }
 }

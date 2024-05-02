@@ -44,6 +44,7 @@ public class MyScrollPane extends JScrollPane {
                 g2.dispose();
             }
 
+
             @Override
             protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
                 Graphics2D g2 = (Graphics2D)g.create();
@@ -86,6 +87,8 @@ public class MyScrollPane extends JScrollPane {
             }
 
         });
+
+
 
     }
 }
