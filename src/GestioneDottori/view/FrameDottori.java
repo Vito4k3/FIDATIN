@@ -6,6 +6,7 @@ import GestioneDottori.controller.Controller;
 import GestioneDottori.model.Dottore;
 import GestioneDottori.model.Status;
 import GestioneDottori.model.TipoOperatori;
+import GestionePrenotazioni.model.DatabasePrenotazione;
 import Style.InterfacciaTab;
 
 
@@ -16,15 +17,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class FrameDottori extends JPanel{
     private InterfacciaInserimento interfacciaInserimento, interfacciaInserimentoAggiungi;
@@ -34,6 +31,7 @@ public class FrameDottori extends JPanel{
     private File file;
     private JPanel mainPanel, homePanel;
     private JDialog dialog, dialog2;
+    private DatabasePrenotazione databasePrenotazionePrescrizioni;
     private int ordinamento= 0;
 
     public FrameDottori(){
@@ -253,9 +251,14 @@ public class FrameDottori extends JPanel{
         TipoOperatori tipoOperatore = (TipoOperatori) interfacciaInserimento.getBoxTipoOperatore().getSelectedItem();
         Status stato = (Status) interfacciaInserimento.getBoxStatus().getSelectedItem();
 
+
+        Dottore vecchioDottore = getController().getDottori().get(rigaSelezionata);
         Dottore nuovoDottore = new Dottore(nome, cognome, tipoOperatore, stato, oraInizio, oraFine);
 
+        databasePrenotazionePrescrizioni.AggiornaDottorePrenotazione(vecchioDottore, nuovoDottore);
+
         controller.getDatabase().sostituisciDottore(rigaSelezionata, nuovoDottore);
+
         interfacciaTabella.aggiorna();
         try {
             controller.salvaSuFile(file);
@@ -273,6 +276,9 @@ public class FrameDottori extends JPanel{
 
     public InterfacciaTab getTab(){
         return interfacciaPannelloPulsanti.getInterfacciaTab();
+    }
+    public void setDatabasePrenotazioni(DatabasePrenotazione databasePrenotazione){
+        this.databasePrenotazionePrescrizioni = databasePrenotazione;
     }
 
 }

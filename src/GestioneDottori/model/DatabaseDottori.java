@@ -47,7 +47,7 @@ public class DatabaseDottori {
     }
 
     public void caricaDaFile(File file) throws IOException {
-        if (file.length() != 0) {
+        if (file != null && file.length() > 0) { // !!!
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois2 = new ObjectInputStream(fis);
 

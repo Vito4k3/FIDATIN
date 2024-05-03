@@ -2,6 +2,7 @@ package GestioneDottori.model;
 
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Dottore implements Serializable {
     private String nome, cognome;
@@ -76,5 +77,13 @@ public class Dottore implements Serializable {
                 ", orarioLavorativoInizio='" + orarioLavorativoInizio + '\'' +
                 ", orarioLavorativoFine='" + orarioLavorativoFine + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dottore dottore = (Dottore) o;
+        return Objects.equals(nome, dottore.nome) && Objects.equals(cognome, dottore.cognome);
     }
 }

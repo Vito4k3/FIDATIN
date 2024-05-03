@@ -1,6 +1,6 @@
 package Homepage.view;
 
-import GestionePazienti.model.Paziente;
+import GestionePrenotazioni.model.DatabasePrenotazione;
 import GestionePrenotazioni.model.Prenotazione;
 import GestionePrenotazioni.view.FramePrenotazioni;
 import Homepage.Eventi.Evento;
@@ -11,7 +11,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -43,20 +42,14 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
     private FramePrenotazioni framePrenotazioni= new FramePrenotazioni();
     private DefaultTableModel tableModel;
     private JTable prenotazioniDiOggi;
-    String userHome = System.getProperty("user.home");
-    File fileDatabasePrenotazioni= new File(userHome, "databasePrenotazioni.dat");
+    private DatabasePrenotazione databasePrenotazione;
+    private List<Prenotazione> prenotazioniGiornaliere;
 
     public InterfacciaHomepage(){
         init();
     }
 
     private void init(){
-
-        try {
-            framePrenotazioni.getController().getDatabase().caricaDaFile(fileDatabasePrenotazioni);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         setLayout(new BorderLayout());
 
@@ -125,7 +118,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
         // EST
         estJp = new JPanel(new GridLayout(2, 1, 10, 5));
 
-        List<Prenotazione> prenotazioniGiornaliere = framePrenotazioni.getController().getDatabase().prenotazioniGiornaliere();
+        prenotazioniGiornaliere = framePrenotazioni.getController().getDatabase().prenotazioniGiornaliere();
 
         String[] colonne;
         if(!prenotazioniGiornaliere.isEmpty()) {
@@ -202,5 +195,12 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
 
     public InterfacciaTab getTab(){
         return interfacciaTab;
+    }
+    public DefaultTableModel getTableModel () {
+        return tableModel;
+    }
+    public void setDatabasePrenotazioni(DatabasePrenotazione database){
+        this.databasePrenotazione = database;
+        prenotazioniGiornaliere = databasePrenotazione.prenotazioniGiornaliere();
     }
 }

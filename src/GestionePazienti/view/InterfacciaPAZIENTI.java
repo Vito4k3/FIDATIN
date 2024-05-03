@@ -2,15 +2,22 @@ package GestionePazienti.view;
 
 import javax.print.ServiceUI;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.xml.crypto.Data;
 
 import GestioneDottori.model.Dottore;
 import GestionePazienti.model.GestionePazienti;
 import GestionePazienti.model.Paziente;
+import GestionePrenotazioni.model.DatabasePrenotazione;
 import Homepage.view.FrameHomepage;
-import Style.InterfacciaTab;
-import Style.MyButtonStyle;
-import Style.MyTableStyle;
+import Style.*;
+import org.intellij.lang.annotations.Flow;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -23,6 +30,8 @@ public class InterfacciaPAZIENTI extends JPanel{
     private GestionePazienti g = new GestionePazienti();
     private File file = g.file;
     private Color verde;
+    private JTextField fieldRicerca;
+    private DatabasePrenotazione databasePrenotazione;
 
     public InterfacciaPAZIENTI() {
         setSize(900, 700);
@@ -55,21 +64,22 @@ public class InterfacciaPAZIENTI extends JPanel{
                     case 1:
                         return paziente.getCognome();
                     case 2:
-                        return paziente.getCodiceFiscale();
-                    case 3:
-                        return paziente.getResidenza();
-                    case 4:
                         return paziente.getDataNascita();
-                    case 5:
+                    case 3:
                         return paziente.getCodiceFiscale();
-                    case 6:
+                    case 4:
+                        return paziente.getSesso();
+                    case 5:
                         return paziente.getResidenza();
+                    case 6:
+                        return paziente.getCap();
                     default:
                         return null;
                 }
             }
             
         };
+
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -94,6 +104,34 @@ public class InterfacciaPAZIENTI extends JPanel{
         JButton eliminaButton = new MyButtonStyle("Elimina", verde);
         JButton apriCartellaButton = new MyButtonStyle("Apri Cartella Clinica", verde);
         apriCartellaButton.setPreferredSize(new Dimension(130,40));
+
+        fieldRicerca = new JTextField(15);
+        fieldRicerca.setPreferredSize(new Dimension(140,30));
+        Border lineBorder = new LineBorder(Color.black, 2);
+        Border emptyBorder = new EmptyBorder(0,0,0,30);
+        Border compoundBorder = new CompoundBorder(lineBorder, emptyBorder);
+        fieldRicerca.setBorder(compoundBorder);
+
+        fieldRicerca.addKeyListener(new KeyListener() { //implementazione del keyListener sulla textField ricerca
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                AbstractTableModel dtb = (AbstractTableModel) tableModel;
+                TableRowSorter<AbstractTableModel> trs = new TableRowSorter<>(dtb);
+                table.setRowSorter(trs);
+                trs.setRowFilter(RowFilter.regexFilter(fieldRicerca.getText()));
+
+            }
+        });
 
 
         aggiungiButton.addActionListener(e -> {
@@ -133,19 +171,30 @@ public class InterfacciaPAZIENTI extends JPanel{
         apriCartellaButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow != -1) {
-                String nomePaziente = (String) table.getValueAt(selectedRow, 0);
-                String cognomePaziente = (String) table.getValueAt(selectedRow, 1);
+                Paziente paziente = g.getPazienti().get(selectedRow);
 
                 JTabbedPane tabbedPane = new JTabbedPane();
-                JPanel panel1 = new JPanel();
+                JPanel panel1 = new JPanel(new BorderLayout());
                 JPanel panel2 = new JPanel();
                 JPanel panel3 = new JPanel();
 
                 // Simulazione dei documenti
-                JLabel l1 = new JLabel("Dati di " + nomePaziente + " " + cognomePaziente);
-                JLabel l2 = new JLabel("Prescrizioni di " + nomePaziente + " " + cognomePaziente);
-                JLabel l3 = new JLabel("Prenotazioni di " + nomePaziente + " " + cognomePaziente);
-                panel1.add(l1);
+                JLabel l1 = new JLabel("Dati di " + paziente.getNome() + " " + paziente.getCognome());
+                l1.setOpaque(false);
+                l1.setBackground(Color.white);
+
+                JTextArea t1 = new JTextArea();
+                //t1.setOpaque(false);
+                t1.setEditable(false);
+                t1.setFocusable(false);
+                t1.setText(paziente.getCartella().getDati());
+                MyScrollPane scroll = new MyScrollPane(t1);
+                scroll.setBackground(Color.white);
+
+                JLabel l2 = new JLabel("Prescrizioni di " + paziente.getNome() + " " + paziente.getCognome());
+                JLabel l3 = new JLabel("Prenotazioni di " + paziente.getNome() + " " + paziente.getCognome());
+                panel1.add(l1, BorderLayout.PAGE_START);
+                panel1.add(scroll, BorderLayout.CENTER);
                 panel2.add(l2);
                 panel3.add(l3);
 
@@ -153,15 +202,18 @@ public class InterfacciaPAZIENTI extends JPanel{
                 tabbedPane.addTab("Prescrizioni", panel2);
                 tabbedPane.addTab("Prenotazioni", panel3);
 
-                tabbedPane.setSize(600, 400);
+                tabbedPane.setPreferredSize(new Dimension(350, 150));
 
                 JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, tabbedPane,
-                        "Cartella Clinica di " + nomePaziente + " " + cognomePaziente, JOptionPane.PLAIN_MESSAGE);
+                        "Cartella Clinica di " + paziente.getNome() + " " + paziente.getCognome(), JOptionPane.PLAIN_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Seleziona un paziente.", "Errore",
                         JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        JPanel ricercaPanel = new JPanel(new FlowLayout());
+        ricercaPanel.add(fieldRicerca);
 
         buttonPanel.add(apriCartellaButton);
         buttonPanel.add(eliminaButton);
@@ -169,10 +221,16 @@ public class InterfacciaPAZIENTI extends JPanel{
         buttonPanel.add(aggiungiButton);
 
         JPanel upperPanel = new JPanel(new BorderLayout());
-        upperPanel.add(interfacciaTab, BorderLayout.NORTH);
-        upperPanel.add(buttonPanel, BorderLayout.LINE_END);
+        JPanel panel = new JPanel(new BorderLayout());
 
-        mainPanel.add(upperPanel, BorderLayout.NORTH);
+        upperPanel.add(buttonPanel, BorderLayout.LINE_END);
+        upperPanel.add(ricercaPanel, BorderLayout.LINE_START);
+        upperPanel.setBorder(new EmptyBorder(25,0,0,0));
+
+        panel.add(interfacciaTab, BorderLayout.NORTH);
+        panel.add(upperPanel);
+
+        mainPanel.add(panel, BorderLayout.NORTH);
 
 
         add(mainPanel);
@@ -351,10 +409,14 @@ public class InterfacciaPAZIENTI extends JPanel{
                             capField.getText(),
                     };
 
+                    CartellaClinica cartellaClinica = new CartellaClinica();
+                    cartellaClinica.setDati("Data di Nascita: " + dataDiNascitaField.getText() + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
+                            "\nSesso: " + sessoField.getText() + "\nResidenza: " + residenzaField.getText() + "\nCAP: " + capField.getText());
 
                     Paziente paziente = new Paziente(nomeField.getText(), cognomeField.getText(), dataDiNascitaField.getText(),
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
-                            capField.getText(),null);
+                            capField.getText(),cartellaClinica);
+
                     g.AggiungiPaziente(paziente);
                     tableModel.fireTableDataChanged();
 
@@ -485,10 +547,20 @@ public class InterfacciaPAZIENTI extends JPanel{
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
                             capField.getText() };
 
+                    CartellaClinica cartellaClinica = new CartellaClinica();
+                    cartellaClinica.setDati("Data di Nascita: " + dataDiNascitaField.getText() + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
+                            "\nSesso: " + sessoField.getText() + "\nResidenza: " + residenzaField.getText() + "\nCAP: " + capField.getText());
+
                     Paziente paziente = new Paziente(nomeField.getText(), cognomeField.getText(), dataDiNascitaField.getText(),
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
-                            capField.getText(),null);
+                            capField.getText(),cartellaClinica);
+
+                    Paziente vecchioPaziente = g.getPazienti().get(riga);
+
+                    databasePrenotazione.AggiornaPazientePrenotazione(vecchioPaziente, paziente);
+
                     g.getPazienti().set(riga, paziente);
+
                     tableModel.fireTableDataChanged();
                     //((InterfacciaPAZIENTI) parent).modificaPaziente(riga, rowData);
                     dispose();
@@ -520,6 +592,9 @@ public class InterfacciaPAZIENTI extends JPanel{
 
     public InterfacciaTab getTab(){
         return interfacciaTab;
+    }
+    public void setDatabasePrenotazioni(DatabasePrenotazione database){
+        this.databasePrenotazione = database;
     }
 
 }

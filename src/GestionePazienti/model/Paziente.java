@@ -1,14 +1,16 @@
 package GestionePazienti.model;
 
+import GestioneDottori.model.Dottore;
 import GestionePazienti.view.CartellaClinica;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Paziente implements Serializable {
     private String nome, cognome, codiceFiscale, residenza, dataNascita, sesso, cap;
     private CartellaClinica cartella;
     
-    public Paziente(String nome, String cognome, String dataNascita, String codiceFiscale,String sesso, String residenza, String cap,
+    public Paziente(String nome, String cognome, String dataNascita, String codiceFiscale, String sesso, String residenza, String cap,
             CartellaClinica cartella) {
         this.nome = nome;
         this.cognome = cognome;
@@ -27,6 +29,7 @@ public class Paziente implements Serializable {
         this.residenza = "";
         this.dataNascita = "";
         this.cartella = null;
+        this.sesso=" ";
     }
 
     public String getNome() {
@@ -73,21 +76,39 @@ public class Paziente implements Serializable {
         return cartella;
     }
 
-    public void setCartella(CartellaClinica cartella) {
-        this.cartella = cartella;
+    public String getSesso() {
+        return sesso;
     }
 
+    public void setSesso(String sesso) {
+        this.sesso = sesso;
+    }
 
-    //implementazione del metodo di aggiunta/aggiornamento della diagnosi
-    public void AggiungiDiagnosi(String d){
-        getCartella().setDiagnosi(d);
+    public String getCap() {
+        return cap;
+    }
+
+    public void setCap(String cap) {
+        this.cap = cap;
+    }
+
+    public void setCartella(CartellaClinica cartella) {
+        this.cartella = cartella;
     }
 
         @Override
         public String toString() {
             return "Paziente [nome=" + nome + ", cognome=" + cognome + ", codiceFiscale=" + codiceFiscale + ", residenza="
                     + residenza + ", dataNascita=" + dataNascita + ", cartella=" + cartella + "]";
-        }   
+        }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Paziente paziente = (Paziente) o;
+        return Objects.equals(paziente.getCodiceFiscale(), codiceFiscale);
+    }
     
 
 }

@@ -56,7 +56,6 @@ public class FramePrenotazioni extends JPanel{
         homePanel= new JPanel(new BorderLayout());
 
         dialog = new JDialog();
-        dialog2= new JDialog();
 
 
         interfacciaPannelloPulsanti.setEvento(new Evento() {
@@ -104,25 +103,27 @@ public class FramePrenotazioni extends JPanel{
                         }
                     }
                 }else if(premuto.equals(buttonModifica)){       //Pulsante Modifica
+                    dialog2= new JDialog();
                     JTable table = interfacciaTabella.getTable();
                     int rigaSelezionata= -1;
                     rigaSelezionata = table.getSelectedRow();
                     if(rigaSelezionata!=-1) {
-                        if (interfacciaInserimento.getButtonSalva().getActionListeners().length == 0) {
-                            interfacciaInserimento.getButtonSalva().addActionListener(new ActionListener() {
-
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    dialog2.setVisible(false);
-                                    processaEventoModifica();
-                                }
-                            });
-                        }
                         if (!dialog2.isVisible()) {
+                            if (interfacciaInserimento.getButtonSalva().getActionListeners().length == 0) {
+                                interfacciaInserimento.getButtonSalva().addActionListener(new ActionListener() {
+
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        dialog2.setVisible(false);
+                                        processaEventoModifica();
+                                    }
+                                });
+                            }
                             Prenotazione prenotazione = controller.getDatabase().getPrenotazioni().get(rigaSelezionata);
 
                             Paziente paziente = prenotazione.getPaziente();
                             Dottore dottore = prenotazione.getDottore();
+                            System.out.print(dottore.getNome());//
                             String ora = prenotazione.getOra();
                             String data = prenotazione.getData();
                             Reparto reparto = prenotazione.getReparto();
@@ -257,9 +258,14 @@ public class FramePrenotazioni extends JPanel{
 
         Dottore dottore = interfacciaInserimento.getDottoreSelezionato();
 
-        Prenotazione nuovaPrenotazione = new Prenotazione(paziente, dottore, data, ora, reparto, tipoPrenotazione);
+        Prenotazione prenotazione = controller.getDatabase().getPrenotazioni().get(rigaSelezionata);
+        prenotazione.setPaziente(paziente);
+        prenotazione.setDottore(dottore);
+        prenotazione.setOra(ora);
+        prenotazione.setData(data);
+        prenotazione.setReparto(reparto);
+        prenotazione.setTipoPrenotazione(tipoPrenotazione);
 
-        controller.getDatabase().sostituisciPrenotazione(rigaSelezionata, nuovaPrenotazione);
         interfacciaTabella.aggiorna();
         try {
             controller.salvaSuFile(file);
@@ -268,11 +274,19 @@ public class FramePrenotazioni extends JPanel{
         }
     }
 
+
     public InterfacciaTab  getTab(){
         return interfacciaPannelloPulsanti.getInterfacciaTab();
     }
 
     public Controller getController(){
         return this.controller;
+    }
+    public InterfacciaInserimento getInterfacciaInserimento(){
+        return interfacciaInserimento;
+    }
+
+    public InterfacciaInserimento getInterfacciaInserimentoAggiungi(){
+        return interfacciaInserimentoAggiungi;
     }
 }

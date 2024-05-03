@@ -9,7 +9,7 @@ import java.util.Date;
 
 import GestioneDottori.model.Dottore;
 import GestionePazienti.model.Paziente;
-import GestionePrenotazioni.model.Database;
+import GestionePrenotazioni.model.DatabasePrenotazione;
 import GestionePrenotazioni.model.Prenotazione;
 import GestionePrenotazioni.model.Reparto;
 import GestionePrenotazioni.model.TipoPrenotazione;
@@ -19,7 +19,7 @@ import java.util.Locale;
 
 public class Controller {
     private Prenotazione prenotazione;
-    private Database database = new Database();
+    private DatabasePrenotazione databasePrenotazione = new DatabasePrenotazione();
     public void addPrenotazione(Paziente paziente, Dottore dottore, Date dataDate, LocalTime ora, int repartoInt, int tipoPrenotazioneInt){
 
         //conversione tipo reparto
@@ -60,24 +60,24 @@ public class Controller {
         prenotazione= new Prenotazione(paziente, dottore, data, oraFormattata, reparto, tipoPrenotazione);
 
         //aggiunta prenotazione dentro il database
-        database.aggiungiPrenotazione(prenotazione);
+        databasePrenotazione.aggiungiPrenotazione(prenotazione);
     }
         //metodo per restituire le prenotazioni
         public List<Prenotazione> getPrenotazioni() {
-            return database.getPrenotazioni();
+            return databasePrenotazione.getPrenotazioni();
         }
 
         public void salvaSuFile(File file) throws IOException {
-            database.salvaSuFile(file);
+            databasePrenotazione.salvaSuFile(file);
         }
         public void caricaDaFile(File file) throws IOException {
-            database.caricaDaFile(file);
+            databasePrenotazione.caricaDaFile(file);
         }
         public void setContatore(int contatore){
             prenotazione.setContatore(contatore);
         }
 
-        public Database getDatabase(){
-            return this.database;
+        public DatabasePrenotazione getDatabase(){
+            return this.databasePrenotazione;
         }
 }

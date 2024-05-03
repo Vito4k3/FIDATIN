@@ -53,6 +53,7 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
         }
     }
 
+
     public void fixTable(JScrollPane scroll) {
         scroll.getViewport().setBackground(Color.WHITE);
         scroll.setVerticalScrollBar(new JScrollBar());
