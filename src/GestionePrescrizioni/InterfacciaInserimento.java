@@ -53,7 +53,6 @@ public class InterfacciaInserimento extends JPanel {
         try {
             databaseDottori.caricaDaFile(fileDatabaseDottori);
         } catch (IOException e) {
-            throw new RuntimeException(e);
         }
         try {
             gestionePazienti.caricaDaFile(fileDatabasePazienti);

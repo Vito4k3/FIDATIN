@@ -34,6 +34,10 @@ public class FrameHomepage extends JFrame {
         FramePrenotazioni panelPrenotazioni = new FramePrenotazioni();
         SchermataPrescrizione panelPrescrizioni = new SchermataPrescrizione();
 
+        panelDottori.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
+        panelPazienti.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
+        interfacciaHomepage.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
+
         // Crea il layout a card e aggiunge i pannelli al layout associandoli a stringhe univoche
         CardLayout cardLayout = new CardLayout();
         JPanel cardPanel = new JPanel(cardLayout);
@@ -58,8 +62,8 @@ public class FrameHomepage extends JFrame {
                 JButton pulsantePazienti = e.getButtonPazienti();
 
                 if(pulsantePremuto.equals(pulsantePrenotazione)){
-                    panelPrenotazioni.getInterfacciaInserimento().aggiornaFileDottori();
-                    panelPrenotazioni.getInterfacciaInserimentoAggiungi().aggiornaFileDottori();
+                    panelPrenotazioni.getInterfacciaInserimento().aggiornaFile();
+                    panelPrenotazioni.getInterfacciaInserimentoAggiungi().aggiornaFile();
                     cardLayout.show(cardPanel, "PRENOTAZIONI");
                 }else if(pulsantePremuto.equals(pulsanteDottori)){
                     cardLayout.show(cardPanel, "DOTTORI");

@@ -1,17 +1,20 @@
 package GestionePrenotazioni.model;
 
+import GestioneDottori.model.Dottore;
+import GestionePazienti.model.Paziente;
+
 import java.io.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class Database {
+public class DatabasePrenotazione {
     private ArrayList<Prenotazione> prenotazioni;
+    private File file = new File(System.getProperty("user.home"), "databasePrenotazioni.dat");
 
-    public Database(){
+    public DatabasePrenotazione(){
         prenotazioni= new ArrayList<>();
     }
 
@@ -86,6 +89,33 @@ public class Database {
         oos.close();
         fop.close();
     }
+
+    public void AggiornaDottorePrenotazione(Dottore vecchioDottore, Dottore nuovoDottore){
+        for(int i=0; i<prenotazioni.size(); i++){
+            if(prenotazioni.get(i).getDottore().equals(vecchioDottore)){
+                prenotazioni.get(i).setDottore(nuovoDottore);
+            }
+        }
+        try {
+            salvaSuFile(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void AggiornaPazientePrenotazione(Paziente vecchioPaziente, Paziente nuovoPaziente){
+        for(int i=0; i<prenotazioni.size(); i++){
+            if(prenotazioni.get(i).getPaziente().equals(vecchioPaziente)){
+                prenotazioni.get(i).setPaziente(nuovoPaziente);
+            }
+        }
+        try {
+            salvaSuFile(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void caricaDaFile(File file) throws IOException {
         if (file.length() != 0) {

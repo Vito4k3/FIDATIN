@@ -1,5 +1,6 @@
 package GestionePrenotazioni.view;
 
+import GestioneDottori.model.Dottore;
 import GestionePrenotazioni.model.Prenotazione;
 
 import javax.swing.table.AbstractTableModel;
@@ -12,6 +13,19 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
 
     public void setListaPrenotazioni(List<Prenotazione> listaPrenotazioni){
         this.listaPrenotazioni= listaPrenotazioni;
+    }
+
+    public void aggiornaDatiDottore(Dottore dottore, Dottore dottoreNuovo) {
+        // Itera attraverso tutte le prenotazioni
+        for (Prenotazione prenotazione : listaPrenotazioni) {
+            // Controlla se il dottore della prenotazione è lo stesso del dottore modificato
+            if (prenotazione.getDottore().equals(dottore)) {
+                // Aggiorna il dottore nella prenotazione con il nuovo dottore
+                prenotazione.setDottore(dottoreNuovo);
+            }
+        }
+        // Aggiorna la tabella
+        aggiorna();
     }
 
     @Override
@@ -50,10 +64,7 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
         }
     }
 
-
-
-
-
-
-
+    public void aggiorna(){
+        this.fireTableDataChanged();
+    }
 }

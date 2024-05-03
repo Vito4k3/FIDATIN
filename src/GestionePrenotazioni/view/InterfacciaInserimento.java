@@ -50,7 +50,7 @@ public class InterfacciaInserimento extends JPanel {
     private File fileDatabaseDottori = new File(System.getProperty("user.home"), "databaseDottori.dat");
     private File fileDatabasePazienti = new File(System.getProperty("user.home"), "databasePazienti.dat");
 
-    public void aggiornaFileDottori(){
+    public void aggiornaFile(){
         try {
             databaseDottori.caricaDaFile(fileDatabaseDottori);
         } catch (IOException e) {
@@ -244,13 +244,13 @@ public class InterfacciaInserimento extends JPanel {
         return (Dottore) sceltaDottore.getSelectedItem();
     }
     public void setBoxDottore(Dottore dottore) {
-        int ris = 0;
-        for(int i=0; i<listaDottori.size(); i++){
-            if(dottore.getNome().equals(listaDottori.get(i).getNome()) && dottore.getCognome().equals(listaDottori.get(i).getCognome())){
-                ris=i;
-            }
+        int index = listaDottori.indexOf(dottore); // Trova l'indice del dottore nella lista
+        if (index != -1) { // Verifica se il dottore è stato trovato nella lista
+            this.sceltaDottore.setSelectedIndex(index); // Imposta l'elemento selezionato nella combobox
+        } else {
+            // Se il dottore non è stato trovato, gestisci questo caso di conseguenza (ad esempio, stampa un messaggio di avviso)
+            System.out.println("Dottore non trovato nella lista.");
         }
-        this.sceltaDottore.setSelectedItem(listaDottori.get(ris));
     }
 
     public void setTitle(String title){

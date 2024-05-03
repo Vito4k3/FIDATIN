@@ -34,6 +34,7 @@ public class InterfacciaTabella extends JPanel {
         add(myScrollPane);
     }
 
+
     public void setDati(List<Prenotazione> listaPrenotazioni){
         modelloTabellaPrenotazioni.setListaPrenotazioni(listaPrenotazioni);
     }

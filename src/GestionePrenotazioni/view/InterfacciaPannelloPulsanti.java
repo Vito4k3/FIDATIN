@@ -58,7 +58,7 @@ public class InterfacciaPannelloPulsanti extends JPanel implements ActionListene
         flowLayout2.setAlignment(FlowLayout.RIGHT);
 
         panelOrdinamento.setBorder(new EmptyBorder(25,0,0,0));
-        panelOpzioni.setBorder(new EmptyBorder(0,0,0,0));
+        panelOpzioni.setBorder(new EmptyBorder(0,0,0,0));//
 
         setBorder(new EmptyBorder(0,8,0,8));
 

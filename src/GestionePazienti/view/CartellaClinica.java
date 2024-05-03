@@ -1,64 +1,55 @@
 package GestionePazienti.view;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import GestionePrescrizioni.model.Prescrizione;
 import GestionePrenotazioni.model.Prenotazione;
 
-public class CartellaClinica {
-    private String GruppoSang, Diagnosi;
-    private Vector Prenotazioni, Prescrizioni;
+public class CartellaClinica implements Serializable {
+    private String Dati;
+    private ArrayList<Prenotazione> Prenotazioni;
+    private ArrayList<Prescrizione> Prescrizioni;
     
 
     public CartellaClinica() {
-        GruppoSang = "";
-        Diagnosi = "";
-        Prenotazioni = new Vector();
-        Prescrizioni = new Vector();
+        Dati = "";
+        Prenotazioni = new ArrayList<>();
+        Prescrizioni = new ArrayList<>();
     }
 
-    public CartellaClinica(String gruppoSang, String diagnosi, Vector prenotazioni, Vector prescrizioni) {
-        GruppoSang = gruppoSang;
-        Diagnosi = diagnosi;
+    public CartellaClinica(String dati, ArrayList<Prenotazione> prenotazioni, ArrayList<Prescrizione> prescrizioni) {
+        Dati = dati;
         Prenotazioni = prenotazioni;
         Prescrizioni = prescrizioni;
     }
 
-    public String getGruppoSang() {
-        return GruppoSang;
+    public String getDati() {
+        return Dati;
     }
 
 
-    public void setGruppoSang(String gruppoSang) {
-        GruppoSang = gruppoSang;
+    public void setDati(String dati) {
+        Dati = dati;
     }
 
-
-    public String getDiagnosi() {
-        return Diagnosi;
-    }
-
-
-    public void setDiagnosi(String diagnosi) {
-        Diagnosi = diagnosi;
-    }
-
-    public Vector getPrenotazioni() {
+    public ArrayList<Prenotazione> getPrenotazioni() {
         return Prenotazioni;
     }
 
 
-    public void setPrenotazioni(Vector prenotazioni) {
+    public void setPrenotazioni(ArrayList<Prenotazione> prenotazioni) {
         Prenotazioni = prenotazioni;
     }
 
 
-    public Vector getPrescrizioni() {
+    public ArrayList<Prescrizione> getPrescrizioni() {
         return Prescrizioni;
     }
 
 
-    public void setPrescrizioni(Vector prescrizioni) {
+    public void setPrescrizioni(ArrayList<Prescrizione> prescrizioni) {
         Prescrizioni = prescrizioni;
     }
 
@@ -72,7 +63,7 @@ public class CartellaClinica {
     public void RimuoviPrescrizione(Prescrizione p){
         for(int i = 0; i < this.Prescrizioni.size(); i++){
             if(this.Prescrizioni.get(i).equals(p)){
-                this.Prescrizioni.removeElementAt(i);
+                this.Prescrizioni.remove(i);
             }
         }
     }
@@ -85,10 +76,11 @@ public class CartellaClinica {
     public void RimuoviPrenotazione(Prenotazione p){
         for(int i = 0; i < this.Prenotazioni.size(); i++){
             if(this.Prenotazioni.get(i).equals(p)){
-                this.Prenotazioni.removeElementAt(i);
+                this.Prenotazioni.remove(i);
             }
         }
     }
+
 
     public String leggiPrenotazioni(){
         String s = "";
