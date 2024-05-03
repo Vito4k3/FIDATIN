@@ -278,4 +278,8 @@ public class FramePrenotazioni extends JPanel{
     public InterfacciaInserimento getInterfacciaInserimento(){
         return interfacciaInserimento;
     }
+
+    public InterfacciaInserimento getInterfacciaInserimentoAggiungi(){
+        return interfacciaInserimentoAggiungi;
+    }
 }

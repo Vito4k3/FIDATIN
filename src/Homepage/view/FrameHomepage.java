@@ -59,6 +59,7 @@ public class FrameHomepage extends JFrame {
 
                 if(pulsantePremuto.equals(pulsantePrenotazione)){
                     panelPrenotazioni.getInterfacciaInserimento().aggiornaFileDottori();
+                    panelPrenotazioni.getInterfacciaInserimentoAggiungi().aggiornaFileDottori();
                     cardLayout.show(cardPanel, "PRENOTAZIONI");
                 }else if(pulsantePremuto.equals(pulsanteDottori)){
                     cardLayout.show(cardPanel, "DOTTORI");

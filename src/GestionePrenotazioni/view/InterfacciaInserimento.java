@@ -56,10 +56,22 @@ public class InterfacciaInserimento extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            gestionePazienti.caricaDaFile(fileDatabasePazienti);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         listaDottori.clear();
         listaDottori.addAll(databaseDottori.getDottori());
 
         sceltaDottore.sostituisciLista(listaDottori);
+
+        listaPazienti.clear();
+        listaPazienti.addAll(gestionePazienti.getPazienti());
+
+        sceltaPaziente.sostituisciLista(listaPazienti);
     }
     public InterfacciaInserimento(){
         setLayout(new BorderLayout());
@@ -67,12 +79,6 @@ public class InterfacciaInserimento extends JPanel {
 
         gestionePazienti = new GestionePazienti();
         databaseDottori = new DatabaseDottori();
-
-        try {
-            gestionePazienti.caricaDaFile(fileDatabasePazienti);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         listaPazienti = new ArrayList<>(gestionePazienti.getPazienti());
         listaDottori = new ArrayList<>(databaseDottori.getDottori());

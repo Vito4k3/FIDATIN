@@ -1,5 +1,6 @@
 package Style;
 
+import GestioneDottori.model.Dottore;
 import GestionePazienti.model.Paziente;
 
 import javax.swing.*;
@@ -24,6 +25,19 @@ public class MyComboBoxPaziente extends JComboBox<Paziente>{
     }
 
 
+    public void sostituisciLista(List<Paziente> lista) {
+        // Rimuovi tutti gli elementi dal modello del combobox
+        modelloCombo.removeAllElements();
+
+        // Aggiungi gli elementi della nuova lista al modello del combobox
+        for (Paziente paziente : lista) {
+            modelloCombo.addElement(paziente);
+        }
+
+        // Notifica il combobox che il modello dei dati è stato cambiato
+        revalidate();
+        repaint();
+    }
     private class PazienteComboBoxRenderer extends JLabel implements ListCellRenderer<Paziente> {
         @Override
         public Component getListCellRendererComponent(JList<? extends Paziente> list, Paziente paziente, int index, boolean isSelected, boolean cellHasFocus) {
