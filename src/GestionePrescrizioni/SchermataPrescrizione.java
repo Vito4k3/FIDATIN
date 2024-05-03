@@ -321,6 +321,9 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
     public InterfacciaInserimento getInterfacciaInserimento(){
         return this.interfacciaInserimento;
     }
+    public GestionePrescrizioni getGestionePrescrizione (){
+        return this.gestionePrescrizioni;
+    }
 
 
 }
