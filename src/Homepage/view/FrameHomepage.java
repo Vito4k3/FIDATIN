@@ -36,6 +36,7 @@ public class FrameHomepage extends JFrame {
 
         panelDottori.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
         panelPazienti.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
+        panelPazienti.setDatabasePrescrizioni(panelPrescrizioni.getGestionePrescrizione());
         interfacciaHomepage.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
 
         // Crea il layout a card e aggiunge i pannelli al layout associandoli a stringhe univoche

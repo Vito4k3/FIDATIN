@@ -11,10 +11,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.xml.crypto.Data;
 
+import GestionePrenotazioni.model.Prenotazione;
+import GestionePrescrizioni.model.GestionePrescrizioni;
+
 import GestioneDottori.model.Dottore;
 import GestionePazienti.model.GestionePazienti;
 import GestionePazienti.model.Paziente;
 import GestionePrenotazioni.model.DatabasePrenotazione;
+import GestionePrescrizioni.model.Prescrizione;
 import Homepage.view.FrameHomepage;
 import Style.*;
 import org.intellij.lang.annotations.Flow;
@@ -22,6 +26,7 @@ import org.intellij.lang.annotations.Flow;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class InterfacciaPAZIENTI extends JPanel{
     private DefaultTableModel tableModel;
@@ -32,10 +37,15 @@ public class InterfacciaPAZIENTI extends JPanel{
     private Color verde;
     private JTextField fieldRicerca;
     private DatabasePrenotazione databasePrenotazione;
+    private GestionePrescrizioni databasePrescrizioni;
+    private CartellaClinica cartellaClinica;
 
     public InterfacciaPAZIENTI() {
         setSize(900, 700);
         setLayout(new BorderLayout());
+
+        databasePrenotazione = new DatabasePrenotazione();
+        databasePrescrizioni = new GestionePrescrizioni();
 
         this.caricaFile();
 
@@ -85,6 +95,8 @@ public class InterfacciaPAZIENTI extends JPanel{
 
         interfacciaTab = new InterfacciaTab("Gestione Pazienti");
         interfacciaTab.setColor(new Color(48, 115, 81));
+
+        cartellaClinica = new CartellaClinica();
 
         // Creazione della tabella dei pazienti
 
@@ -175,8 +187,8 @@ public class InterfacciaPAZIENTI extends JPanel{
 
                 JTabbedPane tabbedPane = new JTabbedPane();
                 JPanel panel1 = new JPanel(new BorderLayout());
-                JPanel panel2 = new JPanel();
-                JPanel panel3 = new JPanel();
+                JPanel panel2 = new JPanel(new BorderLayout());
+                JPanel panel3 = new JPanel(new BorderLayout());
 
                 // Simulazione dei documenti
                 JLabel l1 = new JLabel("Dati di " + paziente.getNome() + " " + paziente.getCognome());
@@ -192,17 +204,98 @@ public class InterfacciaPAZIENTI extends JPanel{
                 scroll.setBackground(Color.white);
 
                 JLabel l2 = new JLabel("Prescrizioni di " + paziente.getNome() + " " + paziente.getCognome());
+
+                ArrayList<Prescrizione> listaPrescrizioniCliente = new ArrayList<>(cartellaClinica.caricaPrescrizioniPaziente(paziente));
+                String[] colonnePrescrizioni = {"Dottore", "Oggetto Prescrizione"};
+                DefaultTableModel tableModelPrescrizioniPaziente = new DefaultTableModel(colonnePrescrizioni, 0){
+
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        // TODO Auto-generated method stub
+                        return false;
+                    }
+
+                    @Override
+                    public int getRowCount() {
+                        return listaPrescrizioniCliente.size();
+                    }
+
+                    @Override
+                    public Object getValueAt(int rowIndex, int columnIndex) {
+                        Prescrizione prescrizione= listaPrescrizioniCliente.get(rowIndex);
+                        switch(columnIndex){
+                            case 0:
+                                return prescrizione.getDottore().getNome() + " " + prescrizione.getDottore().getCognome();
+                            case 1:
+                                return prescrizione.getOggettoPrescrizione();
+                            default:
+                                return null;
+                        }
+                    }
+
+                };
+
+                JTable tablePrescrizioniPaziente = new JTable(tableModelPrescrizioniPaziente);
+
+                tablePrescrizioniPaziente.getTableHeader().setReorderingAllowed(false);
+                tablePrescrizioniPaziente.getTableHeader().setResizingAllowed(false);
+
                 JLabel l3 = new JLabel("Prenotazioni di " + paziente.getNome() + " " + paziente.getCognome());
-                panel1.add(l1, BorderLayout.PAGE_START);
-                panel1.add(scroll, BorderLayout.CENTER);
-                panel2.add(l2);
-                panel3.add(l3);
+
+                ArrayList<Prenotazione> listaPrenotazioniPaziente = new ArrayList<>(cartellaClinica.caricaPrenotazioniPaziente(paziente));
+                String[] colonnePrenotazioniPaziente = {"Dottore", "Data", "Ora", "Reparto", "Tipo"};
+
+                DefaultTableModel tableModelPrenotazioniPaziente = new DefaultTableModel(colonnePrenotazioniPaziente, 0){
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        // TODO Auto-generated method stub
+                        return false;
+                    }
+
+                    @Override
+                    public int getRowCount() {
+                        return listaPrenotazioniPaziente.size();
+                    }
+
+                    @Override
+                    public Object getValueAt(int rowIndex, int columnIndex) {
+                        Prenotazione prenotazione= listaPrenotazioniPaziente.get(rowIndex);
+                        switch(columnIndex){
+                            case 0:
+                                return prenotazione.getDottore().getNome() + " " + prenotazione.getDottore().getCognome();
+                            case 1:
+                                return prenotazione.getData();
+                            case 2:
+                                return prenotazione.getOra();
+                            case 3:
+                                return prenotazione.getReparto();
+                            case 4:
+                                return prenotazione.getTipoPrenotazione();
+                            default:
+                                return null;
+                        }
+                    }
+                };
+
+                JTable tablePrenotazioniPaziente = new JTable(tableModelPrenotazioniPaziente);
+
+                tablePrenotazioniPaziente.getTableHeader().setReorderingAllowed(false);
+                tablePrenotazioniPaziente.getTableHeader().setResizingAllowed(false);
+
+                panel1.add(l1, BorderLayout.PAGE_START);    //dati
+                panel1.add(scroll, BorderLayout.CENTER);    //dati
+
+                panel2.add(l2, BorderLayout.PAGE_START); //Prescrizioni
+                panel2.add(new MyScrollPane(tablePrescrizioniPaziente), BorderLayout.CENTER);
+
+                panel3.add(l3, BorderLayout.PAGE_START); //prenotazioni
+                panel3.add(new MyScrollPane(tablePrenotazioniPaziente));
 
                 tabbedPane.addTab("Dati", panel1);
                 tabbedPane.addTab("Prescrizioni", panel2);
                 tabbedPane.addTab("Prenotazioni", panel3);
 
-                tabbedPane.setPreferredSize(new Dimension(350, 150));
+                tabbedPane.setPreferredSize(new Dimension(550, 300));
 
                 JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, tabbedPane,
                         "Cartella Clinica di " + paziente.getNome() + " " + paziente.getCognome(), JOptionPane.PLAIN_MESSAGE);
@@ -453,7 +546,6 @@ public class InterfacciaPAZIENTI extends JPanel{
                             capField.getText(),
                     };
 
-                    CartellaClinica cartellaClinica = new CartellaClinica();
                     cartellaClinica.setDati("Data di Nascita: " + dataDiNascitaField.getText() + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
                             "\nSesso: " + sessoField.getText() + "\nResidenza: " + residenzaField.getText() + "\nCAP: " + capField.getText());
 
@@ -639,6 +731,11 @@ public class InterfacciaPAZIENTI extends JPanel{
     }
     public void setDatabasePrenotazioni(DatabasePrenotazione database){
         this.databasePrenotazione = database;
+        cartellaClinica.setListaPrenotazioni(databasePrenotazione.getPrenotazioni());
+    }
+    public void setDatabasePrescrizioni(GestionePrescrizioni prescrizioni){
+        this.databasePrescrizioni = prescrizioni;
+        cartellaClinica.setListaPrescrizioni(databasePrescrizioni.getPrescrizioni());
     }
 
 }

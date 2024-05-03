@@ -1,16 +1,19 @@
 package GestionePazienti.view;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
+import GestionePazienti.model.Paziente;
 import GestionePrescrizioni.model.Prescrizione;
 import GestionePrenotazioni.model.Prenotazione;
 
 public class CartellaClinica implements Serializable {
     private String Dati;
-    private ArrayList<Prenotazione> Prenotazioni;
-    private ArrayList<Prescrizione> Prescrizioni;
+    private List<Prenotazione> Prenotazioni;
+    private List<Prescrizione> Prescrizioni;
     
 
     public CartellaClinica() {
@@ -34,7 +37,7 @@ public class CartellaClinica implements Serializable {
         Dati = dati;
     }
 
-    public ArrayList<Prenotazione> getPrenotazioni() {
+    public List<Prenotazione> getPrenotazioni() {
         return Prenotazioni;
     }
 
@@ -44,7 +47,7 @@ public class CartellaClinica implements Serializable {
     }
 
 
-    public ArrayList<Prescrizione> getPrescrizioni() {
+    public List<Prescrizione> getPrescrizioni() {
         return Prescrizioni;
     }
 
@@ -55,50 +58,31 @@ public class CartellaClinica implements Serializable {
 
 
     //aggiunta e rimozione della prescrizione con passaggio di oggetto di tipo Prescrizione
-    public void AggiuntaPrescrizione(Prescrizione p){
-        Prescrizioni.add(p);
-    }
 
-
-    public void RimuoviPrescrizione(Prescrizione p){
-        for(int i = 0; i < this.Prescrizioni.size(); i++){
-            if(this.Prescrizioni.get(i).equals(p)){
-                this.Prescrizioni.remove(i);
+    public List<Prenotazione> caricaPrenotazioniPaziente(Paziente paziente){
+        List<Prenotazione> listaPrenotazioniPaziente = new ArrayList<>();
+        for(int i=0; i<Prenotazioni.size(); i++){
+            if(Prenotazioni.get(i).getPaziente().equals(paziente)){
+                listaPrenotazioniPaziente.add(Prenotazioni.get(i));
             }
         }
+        return listaPrenotazioniPaziente;
     }
 
-    //aggiunta e rimozione prescrizione con passaggio di oggetto di tipo Prenotazione
-    private void AggiuntaPrenotazione(Prenotazione p){
-        Prenotazioni.add(p);
-    }
-
-    public void RimuoviPrenotazione(Prenotazione p){
-        for(int i = 0; i < this.Prenotazioni.size(); i++){
-            if(this.Prenotazioni.get(i).equals(p)){
-                this.Prenotazioni.remove(i);
+    public List<Prescrizione> caricaPrescrizioniPaziente(Paziente paziente){
+        List<Prescrizione> listaPrescrizioniPaziente = new ArrayList<>();
+        for(int i=0; i<Prescrizioni.size(); i++){
+            if(Prescrizioni.get(i).getPaziente().equals(paziente)){
+                listaPrescrizioniPaziente.add(Prescrizioni.get(i));
             }
         }
+        return listaPrescrizioniPaziente;
     }
 
-
-    public String leggiPrenotazioni(){
-        String s = "";
-        for(int i = 0 ; i < this.Prenotazioni.size(); i++){
-            Prenotazione p = (Prenotazione)this.Prenotazioni.get(i);
-            s = s + p.toString();
-        }
-
-        return s;
+    public void setListaPrenotazioni(List<Prenotazione> listaPrenotazioni){
+        Prenotazioni= listaPrenotazioni;
     }
-
-    public String leggiPrescrizioni(){
-        String s = "";
-        for(int i = 0 ; i < this.Prescrizioni.size(); i++){
-            Prescrizione p = (Prescrizione)this.Prescrizioni.get(i);
-            s = s + p.toString();
-        }
-
-        return s;
+    public void setListaPrescrizioni(List<Prescrizione> listaPrescrizioni){
+        Prescrizioni= listaPrescrizioni;
     }
 }
