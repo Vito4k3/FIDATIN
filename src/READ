@@ -6,4 +6,4 @@ Cosa da sistemare:
     -migliorare design della scelta pannelli nella homepage quando si allarga la finestra
     -implementare barra di ricerca nelle prescrizioni
     -terminare interfaccia inserimento paziente
-    -completare cartella clinica prenotazioni e prescrizioni
+    -fixare che se elimino una prenotazione non si elimina dalla homepage prenotazioni giornaliere
