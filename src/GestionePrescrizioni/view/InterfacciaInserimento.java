@@ -2,9 +2,8 @@ package GestionePrescrizioni.view;
 
 import GestioneDottori.model.DatabaseDottori;
 import GestioneDottori.model.Dottore;
-import GestionePazienti.model.GestionePazienti;
+import GestionePazienti.model.DatabasePazienti;
 import GestionePazienti.model.Paziente;
-import GestionePrenotazioni.model.Reparto;
 import Style.*;
 
 import javax.swing.*;
@@ -13,8 +12,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 
 public class InterfacciaInserimento extends JPanel {
@@ -25,33 +22,19 @@ public class InterfacciaInserimento extends JPanel {
     private MyComboBoxPaziente sceltaPaziente;
     private JButton buttonSalva;
     private DatabaseDottori databaseDottori;
-    private GestionePazienti gestionePazienti;
+    private DatabasePazienti databasePazienti;
     private ArrayList<Paziente> listaPazienti;
     private ArrayList<Dottore> listaDottori;
     private MyComboBoxDottori sceltaDottore;
-    private File fileDatabaseDottori = new File(System.getProperty("user.home"), "databaseDottori.dat");
-    private File fileDatabasePazienti = new File(System.getProperty("user.home"), "databasePazienti.dat");
 
-    public void aggiornaFile(){
-        try {
-            databaseDottori.caricaDaFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            gestionePazienti.caricaDaFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+    public void aggiornaFile(DatabaseDottori databaseDottori, DatabasePazienti databasePazienti){
         listaDottori.clear();
         listaDottori.addAll(databaseDottori.getDottori());
 
         sceltaDottore.sostituisciLista(listaDottori);
 
         listaPazienti.clear();
-        listaPazienti.addAll(gestionePazienti.getPazienti());
+        listaPazienti.addAll(databasePazienti.getPazienti());
 
         sceltaPaziente.sostituisciLista(listaPazienti);
     }
@@ -60,19 +43,10 @@ public class InterfacciaInserimento extends JPanel {
         setBackground(Color.white);
 
         databaseDottori = new DatabaseDottori();
-        gestionePazienti = new  GestionePazienti();
+        databasePazienti = new DatabasePazienti();
 
-        try {
-            databaseDottori.caricaDaFile();
-        } catch (IOException e) {
-        }
-        try {
-            gestionePazienti.caricaDaFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        listaPazienti = new ArrayList<>(gestionePazienti.getPazienti());
+        listaPazienti = new ArrayList<>(databasePazienti.getPazienti());
         listaDottori = new ArrayList<>(databaseDottori.getDottori());
 
         // Inizializzazione panel

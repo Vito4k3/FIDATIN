@@ -25,47 +25,7 @@ public class DatabasePrescrizioni {
     public void InserimentoPrescrizione(Prescrizione c){
         listaPrescrizioni.add(c);
     }
-    
-    public String Stampa(){
-        String s = "";
-        for(Prescrizione c: listaPrescrizioni){
-            s += c.toString() + "\n";
-        }
-    
-        return s;
-    }
-    
-    
-    public void ricercaPrescrizione(String nomeCliente, String cognomeCliente){
-        for(Prescrizione a: listaPrescrizioni){
-            if(a instanceof Prescrizione){
-               System.out.println("Prescrizione trovata");
-            }else{
-                 System.out.println("Perscrizione non trovata");
-        }
-        
-    }
-        for(Prescrizione a: listaPrescrizioni){
-            if(a instanceof Prescrizione){
-               System.out.println("Prescrizione trovata");
-            }else{
-                 System.out.println("Perscrizione non trovata");
-        }
-        
-    }
-}
-    
-    
-    public Prescrizione rimozionePrescrizione(String nomeCliente, String cognomeCliente){
-        if(listaPrescrizioni.size()-1!=0){
-            listaPrescrizioni.remove(nomeCliente);
-            listaPrescrizioni.remove(cognomeCliente);
-              System.out.println("Prescrizione eliminata");
-        }else{
-            return null;
-        }
-        return null;
-    }
+
 
     public void rimuoviPrescrizione(int index){
         if(index>=0){
@@ -104,7 +64,10 @@ public class DatabasePrescrizioni {
     }
 
     public void caricaDaFile() throws IOException {
-        if (file.length() != 0) {
+        if (!file.exists()) {
+            file.createNewFile();
+            System.out.println("File creato!");
+        }else if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
@@ -168,19 +131,6 @@ public class DatabasePrescrizioni {
             JOptionPane.showMessageDialog(null, "Prescrizione stampata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void caricaFile(){
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                System.out.println("File creato!");
-            }else{
-                caricaDaFile();
-            }
-        }catch (IOException e) {
             e.printStackTrace();
         }
     }

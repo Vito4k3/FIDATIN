@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GestionePazienti{
+public class DatabasePazienti {
     private ArrayList<Paziente> Pazienti;
     String userHome = System.getProperty("user.home");
     public File file= new File(userHome, "databasePazienti.dat");
 
-    public GestionePazienti() {
+    public DatabasePazienti() {
         Pazienti = new ArrayList<>();
     }
 
@@ -40,7 +40,9 @@ public class GestionePazienti{
     }
 
     public void caricaDaFile() throws IOException {
-        if (file.length() != 0) {
+        if(!file.exists()){
+            file.createNewFile();
+        }else if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois2 = new ObjectInputStream(fis);
 

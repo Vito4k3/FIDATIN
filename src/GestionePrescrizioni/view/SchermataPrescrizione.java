@@ -111,8 +111,6 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
 
         };
 
-        databasePrescrizioni.caricaFile();
-
        
         containerJp = new JPanel(new BorderLayout(20, 10));
         interfacciaTab = new InterfacciaTab("Gestione Prescrizioni");
@@ -282,8 +280,13 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
                     interfacciaInserimento.getButtonSalva().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            prescrizioneDialog2.setVisible(false);
-                            processaEventoAggiungi();
+                            if(interfacciaInserimento.getSceltaDottore().getSelectedItem() != null && interfacciaInserimento.getSceltaPaziente().getSelectedItem() != null
+                                    && !interfacciaInserimento.getTextAreaOggetto().getText().isEmpty()){
+                                prescrizioneDialog2.setVisible(false);
+                                processaEventoAggiungi();
+                            }else{
+                                JOptionPane.showMessageDialog(prescrizioneDialog2, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
+                            }
                         }
                     });
                 }

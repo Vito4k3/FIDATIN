@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class InterfacciaHomepage extends JPanel implements ActionListener{
@@ -35,6 +36,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
     private JTable prenotazioniDiOggi;
     private DatabasePrenotazione databasePrenotazione;
     private List<Prenotazione> prenotazioniGiornaliere;
+    private String[] colonne;
 
     public InterfacciaHomepage(){
         init();
@@ -111,14 +113,9 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
 
         prenotazioniGiornaliere = framePrenotazioni.getController().getDatabase().prenotazioniGiornaliere();
 
-        String[] colonne;
-        if(!prenotazioniGiornaliere.isEmpty()) {
-            colonne = new String[]{"Paziente", "Dottore", "Orario", "Reparto", "Tipo"};
-        }else{
-            colonne = new String[]{"Nessuna prenotazione giornaliera"};
-        }
-        tableModel = new DefaultTableModel(colonne, 0){
+        colonne = new String[]{"Paziente", "Dottore", "Orario", "Reparto", "Tipo"};
 
+        tableModel = new DefaultTableModel(colonne, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
                 // TODO Auto-generated method stub

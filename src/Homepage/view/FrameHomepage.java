@@ -18,6 +18,10 @@ import java.io.IOException;
 
 public class FrameHomepage extends JFrame {
     private InterfacciaHomepage interfacciaHomepage;
+    private InterfacciaPAZIENTI panelPazienti;
+    private FrameDottori panelDottori;
+    private FramePrenotazioni panelPrenotazioni;
+    private SchermataPrescrizione panelPrescrizioni;
     private JPanel panel;
 
 
@@ -27,11 +31,13 @@ public class FrameHomepage extends JFrame {
         setLocationRelativeTo(null);
         setTitle("Fidatin");
 
+        panelPazienti = new InterfacciaPAZIENTI();
+        panelDottori = new FrameDottori();
+        panelPrenotazioni = new FramePrenotazioni();
+        panelPrescrizioni = new SchermataPrescrizione();
         interfacciaHomepage = new InterfacciaHomepage();
-        InterfacciaPAZIENTI panelPazienti = new InterfacciaPAZIENTI();
-        FrameDottori panelDottori = new FrameDottori();
-        FramePrenotazioni panelPrenotazioni = new FramePrenotazioni();
-        SchermataPrescrizione panelPrescrizioni = new SchermataPrescrizione();
+
+        caricaDaFile();
 
         panelDottori.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
         panelDottori.setDatabasePrescrizioni(panelPrescrizioni.getGestionePrescrizione());
@@ -64,14 +70,14 @@ public class FrameHomepage extends JFrame {
                 JButton pulsanteHomepage = e.getButtonHomepage();
 
                 if(pulsantePremuto.equals(pulsantePrenotazione)){
-                    panelPrenotazioni.getInterfacciaInserimento().aggiornaFile();
-                    panelPrenotazioni.getInterfacciaInserimentoAggiungi().aggiornaFile();
+                    panelPrenotazioni.getInterfacciaInserimento().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
+                    panelPrenotazioni.getInterfacciaInserimentoAggiungi().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
                     cardLayout.show(cardPanel, "PRENOTAZIONI");
                 }else if(pulsantePremuto.equals(pulsanteDottori)){
                     cardLayout.show(cardPanel, "DOTTORI");
                 }else if(pulsantePremuto.equals(pulsantePrescrizioni)){
-                    panelPrescrizioni.getInserimentoModifica().aggiornaFile();
-                    panelPrescrizioni.getInterfacciaInserimento().aggiornaFile();
+                    panelPrescrizioni.getInserimentoModifica().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
+                    panelPrescrizioni.getInterfacciaInserimento().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
                     cardLayout.show(cardPanel, "PRESCRIZIONI");
                 }else if(pulsantePremuto.equals(pulsantePazienti)){
                     cardLayout.show(cardPanel, "PAZIENTI");
@@ -124,14 +130,7 @@ public class FrameHomepage extends JFrame {
                 // Mostra un messaggio di conferma prima di chiudere la finestra
                 int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler uscire?", "Conferma", JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
-                    try {
-                        panelPrenotazioni.getController().getDatabase().salvaSuFile();
-                        panelDottori.getController().getDatabase().salvaSuFile();
-                        panelPazienti.getDatabasePazienti().salvaSuFile();
-                        panelPrescrizioni.getGestionePrescrizione().salvaSuFile();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    salvaSuFile();
                     System.exit(0);
                 }
             }
@@ -141,6 +140,28 @@ public class FrameHomepage extends JFrame {
         // Aggiunge il panel al contentPane del JFrame
         getContentPane().add(panel);
         setVisible(true);
+    }
+
+    public void caricaDaFile(){
+        try {
+            panelPrenotazioni.getController().getDatabase().caricaDaFile();
+            panelDottori.getController().getDatabase().caricaDaFile();
+            panelPazienti.getDatabasePazienti().caricaDaFile();
+            panelPrescrizioni.getGestionePrescrizione().caricaDaFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void salvaSuFile(){
+        try {
+            panelPrenotazioni.getController().getDatabase().salvaSuFile();
+            panelDottori.getController().getDatabase().salvaSuFile();
+            panelPazienti.getDatabasePazienti().salvaSuFile();
+            panelPrescrizioni.getGestionePrescrizione().salvaSuFile();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 

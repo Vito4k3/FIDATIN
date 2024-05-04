@@ -118,7 +118,10 @@ public class DatabasePrenotazione {
 
 
     public void caricaDaFile() throws IOException {
-        if (file.length() != 0) {
+        if(!file.exists()){
+            file.createNewFile();
+            System.out.println("File creato!");
+        }else if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
 

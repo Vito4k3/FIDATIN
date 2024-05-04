@@ -177,8 +177,6 @@ public class FrameDottori extends JPanel{
         });
 
 
-        this.caricaFile();   //crea e carica il file
-
         //Viene passato la lista di prenotazioni nella classe interfaccia Tabella
         interfacciaTabella.setDati(controller.getDottori());
 
@@ -196,20 +194,6 @@ public class FrameDottori extends JPanel{
         setVisible(true);
 
 
-    }
-
-    public void caricaFile(){
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                System.out.println("File creato!");
-            }else{
-                controller.caricaDaFile();
-                //controller.setContatore(controller.getPrenotazioni().size());
-            }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void processaEventoAggiungi() {

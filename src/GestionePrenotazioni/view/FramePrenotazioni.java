@@ -43,9 +43,6 @@ public class FramePrenotazioni extends JPanel{
     public FramePrenotazioni(){
         setLayout(new BorderLayout());
 
-        String userHome = System.getProperty("user.home");
-        file= new File(userHome, "databasePrenotazioni.dat");
-
         interfacciaInserimento = new InterfacciaInserimento();
 
         interfacciaInserimentoAggiungi = new InterfacciaInserimento();
@@ -75,7 +72,12 @@ public class FramePrenotazioni extends JPanel{
                             interfacciaInserimentoAggiungi.getButtonSalva().addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    processaEventoAggiungi();
+                                    if(interfacciaInserimentoAggiungi.getBoxDottore().getSelectedItem() != null &&
+                                            interfacciaInserimentoAggiungi.getBoxPaziente().getSelectedItem() != null) {
+                                        processaEventoAggiungi();
+                                    }else{
+                                        JOptionPane.showMessageDialog(dialog, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                    }
                                 }
                             });
                         }
@@ -176,10 +178,6 @@ public class FramePrenotazioni extends JPanel{
             }
         });
 
-
-
-        this.caricaFile();   //crea e carica il file
-
         //Viene passato la lista di prenotazioni nella classe interfaccia Tabella
         interfacciaTabella.setDati(controller.getPrenotazioni());
 
@@ -193,20 +191,6 @@ public class FramePrenotazioni extends JPanel{
         setMinimumSize(new Dimension(1000,600));
         setVisible(true);
 
-    }
-
-    public void caricaFile(){
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                System.out.println("File creato!");
-            }else{
-                controller.caricaDaFile(file);
-                controller.setContatore(controller.getPrenotazioni().size());
-            }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void processaEventoAggiungi() {
