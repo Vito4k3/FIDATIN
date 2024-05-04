@@ -161,8 +161,8 @@ public class InterfacciaPAZIENTI extends JPanel{
             // Modifica del paziente
             int selectedRiga = table.getSelectedRow();
             if (selectedRiga != -1) {
-                ModificaPazienteDialog dialog = new ModificaPazienteDialog(selectedRiga);
-                dialog.setVisible(true);
+                ModificaPazienteDialog dialog2 = new ModificaPazienteDialog(selectedRiga);
+                dialog2.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Seleziona un paziente da modificare.",
                         "Errore", JOptionPane.ERROR_MESSAGE);
@@ -172,13 +172,17 @@ public class InterfacciaPAZIENTI extends JPanel{
         eliminaButton.addActionListener(e -> {
             int rigaSelezionata = table.getSelectedRow();
             if (rigaSelezionata != -1) {
-                g.getPazienti().remove(rigaSelezionata);
-                tableModel.fireTableDataChanged();
-                try {
-                    g.salvaSuFile(file);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                int scelta= JOptionPane.showConfirmDialog(this, "Sei sicuro di voler eliminare questo paziente?", "Conferma", JOptionPane.OK_CANCEL_OPTION);
+                if(scelta == JOptionPane.OK_OPTION){
+                    g.getPazienti().remove(rigaSelezionata);
+                    tableModel.fireTableDataChanged();
+                    try {
+                        g.salvaSuFile(file);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
+                table.clearSelection();
             } else {
                 JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Seleziona una riga da eliminare.", "Errore",
                         JOptionPane.ERROR_MESSAGE);
@@ -602,7 +606,7 @@ public class InterfacciaPAZIENTI extends JPanel{
 
         public ModificaPazienteDialog( int riga) {
             this.riga = riga;
-            setSize(600, 400);
+            setSize(700, 400);
             setModal(true);
             setLocationRelativeTo(null);
 
@@ -661,7 +665,6 @@ public class InterfacciaPAZIENTI extends JPanel{
 
             SpinnerDateModel spinnerDateModel = new SpinnerDateModel(now, startDate, endDate, Calendar.YEAR);
 
-            dataDiNascitaSpinner = new JSpinner(spinnerDateModel);
 
             dataDiNascitaSpinner  = new JSpinner(spinnerDateModel);
             String format = "dd MMM yy";
@@ -711,7 +714,13 @@ public class InterfacciaPAZIENTI extends JPanel{
 
             panel.add(IndirizzoDiResidenzaPanel, BorderLayout.NORTH);
 
+
             JButton modificaButton = new MyButtonStyle("Modifica", darkerGreen);
+            modificaButton.setPreferredSize(new Dimension(120,40));
+            JPanel panelBottone = new JPanel(new FlowLayout());
+            panelBottone.add(modificaButton);
+            panel.add(panelBottone);
+
 
             modificaButton.addActionListener(new ActionListener() {
                 @Override
@@ -749,7 +758,7 @@ public class InterfacciaPAZIENTI extends JPanel{
                 }
             });
 
-            panel.add(modificaButton, BorderLayout.PAGE_END);
+            //panel.add(modificaButton, BorderLayout.PAGE_END);
             add(panel);
         }
 

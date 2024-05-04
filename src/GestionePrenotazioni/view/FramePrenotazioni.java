@@ -213,7 +213,7 @@ public class FramePrenotazioni extends JPanel{
     }
 
     private void processaEventoAggiungi() {
-        if(interfacciaInserimento.getBoxPaziente()!=null && interfacciaInserimento.getBoxDottore()!=null) {
+        if(interfacciaInserimento.getBoxPaziente().getSelectedItem()!=null && interfacciaInserimento.getBoxDottore().getSelectedItem()!=null) {
             Date dataPrenotazione = (Date) interfacciaInserimentoAggiungi.getSpinner().getValue();
             Date time = (Date) interfacciaInserimentoAggiungi.getTimeSpinner().getValue();
             LocalTime ora = LocalDateTime.ofInstant(time.toInstant(), ZoneId.systemDefault()).toLocalTime();
