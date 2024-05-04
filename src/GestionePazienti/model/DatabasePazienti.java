@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GestionePazienti{
+public class DatabasePazienti {
     private ArrayList<Paziente> Pazienti;
     String userHome = System.getProperty("user.home");
     public File file= new File(userHome, "databasePazienti.dat");
 
-    public GestionePazienti() {
+    public DatabasePazienti() {
         Pazienti = new ArrayList<>();
     }
 
@@ -26,7 +26,7 @@ public class GestionePazienti{
         }
     }
 
-    public void salvaSuFile(File file) throws IOException {
+    public void salvaSuFile() throws IOException {
 
         FileOutputStream fop = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(fop);
@@ -39,8 +39,10 @@ public class GestionePazienti{
         fop.close();
     }
 
-    public void caricaDaFile(File file) throws IOException {
-        if (file.length() != 0) {
+    public void caricaDaFile() throws IOException {
+        if(!file.exists()){
+            file.createNewFile();
+        }else if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois2 = new ObjectInputStream(fis);
 

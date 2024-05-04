@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package GestionePrescrizioni;
+package GestionePrescrizioni.view;
 import GestioneDottori.model.Dottore;
 import GestionePrenotazioni.view.MyOptionPane;
-import GestionePrescrizioni.model.GestionePrescrizioni;
+import GestionePrescrizioni.model.DatabasePrescrizioni;
 import GestionePrescrizioni.model.Prescrizione;
 import Style.*;
 import GestionePazienti.model.Paziente;
@@ -15,11 +15,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import javax.naming.BinaryRefAddr;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class SchermataPrescrizione extends JPanel implements ActionListener{
     
@@ -35,14 +39,16 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
     private JLabel vuota = new JLabel(" ");
     private JLabel vuota1 = new JLabel(" ");
     private JLabel vuota2 = new JLabel(" ");
+    private JLabel vuota3  = new JLabel(" ");
     private final Object colonne[] = {"Paziente","Dottore","Oggetto"};
     private InterfacciaTab interfacciaTab;
     private InterfacciaInserimento interfacciaInserimento, interfacciaInserimentoModifica;
-    private GestionePrescrizioni gestionePrescrizioni;
+    private DatabasePrescrizioni databasePrescrizioni;
     private Dialog prescrizioneDialog ,prescrizioneDialog2;
     private DefaultTableModel tableModel;
     private JButton cancella;
     private JFileChooser fileChooser;
+    private JTextField fieldRicerca;
     private File file = new File(System.getProperty("user.home"), "databasePrescrizioni.dat");
     public SchermataPrescrizione(){
         init();
@@ -72,7 +78,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         });
         fileChooser.setAcceptAllFileFilterUsed(false);
 
-        gestionePrescrizioni = new GestionePrescrizioni();
+        databasePrescrizioni = new DatabasePrescrizioni();
 
         cancella= new JButton();
         tableModel = new DefaultTableModel(colonne, 0){
@@ -85,12 +91,12 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
 
             @Override
             public int getRowCount() {
-                return gestionePrescrizioni.getPrescrizioni().size();
+                return databasePrescrizioni.getPrescrizioni().size();
             }
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                Prescrizione prescrizione= gestionePrescrizioni.getPrescrizioni().get(rowIndex);
+                Prescrizione prescrizione= databasePrescrizioni.getPrescrizioni().get(rowIndex);
                 switch(columnIndex){
                     case 0:
                         return prescrizione.getPaziente().getNome() + " " + prescrizione.getPaziente().getCognome();
@@ -105,8 +111,6 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
 
         };
 
-        gestionePrescrizioni.caricaFile(file);
-
        
         containerJp = new JPanel(new BorderLayout(20, 10));
         interfacciaTab = new InterfacciaTab("Gestione Prescrizioni");
@@ -114,6 +118,34 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
 
         interfacciaInserimento = new InterfacciaInserimento();
         interfacciaInserimentoModifica = new InterfacciaInserimento();
+
+        fieldRicerca = new JTextField(15);
+        fieldRicerca.setPreferredSize(new Dimension(110,20));
+        Border lineBorder = new LineBorder(Color.black, 2);
+        Border emptyBorder = new EmptyBorder(0,0,0,30);
+        Border compoundBorder = new CompoundBorder(lineBorder, emptyBorder);
+        fieldRicerca.setBorder(compoundBorder);
+
+        fieldRicerca.addKeyListener(new KeyListener() { //implementazione del keyListener sulla textField ricerca
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                AbstractTableModel dtb = (AbstractTableModel) tableModel;
+                TableRowSorter<AbstractTableModel> trs = new TableRowSorter<>(dtb);
+                table.setRowSorter(trs);
+                trs.setRowFilter(RowFilter.regexFilter(fieldRicerca.getText()));
+
+            }
+        });
 
         prescrizioneDialog = new JDialog();
         prescrizioneDialog2 = new JDialog();
@@ -137,6 +169,9 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         pulsanteCreaPrescrizione.addActionListener(this);
         pulsanteCreaPrescrizione.setFont(new Font("Arial",1,30));
         pulsanteCreaPrescrizione.setPreferredSize(new Dimension(270,30));
+
+        ovestJp.add(fieldRicerca);
+        ovestJp.add(vuota3);
 
         ovestJp.add(pulsanteCreaPrescrizione);
         ovestJp.add(vuota);
@@ -198,7 +233,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         JButton premuto = (JButton) e.getSource();
         if(premuto.equals(pulsanteModifica)){   //pulsante modifica
             int rigaSelezionata = table.getSelectedRow();
-            Prescrizione prescrizione = gestionePrescrizioni.getPrescrizioni().get(rigaSelezionata);
+            Prescrizione prescrizione = databasePrescrizioni.getPrescrizioni().get(rigaSelezionata);
             if(!prescrizioneDialog.isVisible()) {
                 if (interfacciaInserimentoModifica.getButtonSalva().getActionListeners().length == 0) {
                     interfacciaInserimentoModifica.getButtonSalva().addActionListener(new ActionListener() {
@@ -234,7 +269,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
                 }
 
                 try {
-                    gestionePrescrizioni.salvaPrescrizioneSuFile(fileToSave, rigaSelezionata);
+                    databasePrescrizioni.salvaPrescrizioneSuFile(rigaSelezionata);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(this, "Impossibile stampare la prenotazione" , "Errore di battitura", JOptionPane.ERROR_MESSAGE);
                 }
@@ -245,8 +280,13 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
                     interfacciaInserimento.getButtonSalva().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            prescrizioneDialog2.setVisible(false);
-                            processaEventoAggiungi();
+                            if(interfacciaInserimento.getSceltaDottore().getSelectedItem() != null && interfacciaInserimento.getSceltaPaziente().getSelectedItem() != null
+                                    && !interfacciaInserimento.getTextAreaOggetto().getText().isEmpty()){
+                                prescrizioneDialog2.setVisible(false);
+                                processaEventoAggiungi();
+                            }else{
+                                JOptionPane.showMessageDialog(prescrizioneDialog2, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
+                            }
                         }
                     });
                 }
@@ -263,13 +303,10 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
             if(rigaSelezionata!=-1) {
                 int sceltaUtente= MyOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questa prenotazione?", "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
                 if (sceltaUtente == JOptionPane.YES_OPTION) {
-                    gestionePrescrizioni.rimuoviPrescrizione(rigaSelezionata);
+                    databasePrescrizioni.rimuoviPrescrizione(rigaSelezionata);
                     tableModel.fireTableDataChanged();
-                    try {
-                        gestionePrescrizioni.salvaSuFile(file);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    JOptionPane.showMessageDialog(null, "Prescrizione eliminata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
                 }
             }
         }
@@ -283,22 +320,19 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         String oggettoPrescrizione = interfacciaInserimento.getTextAreaOggetto().getText();
 
         Prescrizione prescrizione= new Prescrizione(paziente, dottore, oggettoPrescrizione);
-        gestionePrescrizioni.InserimentoPrescrizione(prescrizione);
+        databasePrescrizioni.InserimentoPrescrizione(prescrizione);
 
         prescrizioneDialog.dispose();
-        try {
-            gestionePrescrizioni.salvaSuFile(file);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
         tableModel.fireTableDataChanged();
+        JOptionPane.showMessageDialog(null, "Prescrizione aggiunta con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     private void processaEventoModifica(){
         int rigaSelezionata= table.getSelectedRow();
         table.clearSelection();
 
-        Prescrizione prescrizione = gestionePrescrizioni.getPrescrizioni().get(rigaSelezionata);
+        Prescrizione prescrizione = databasePrescrizioni.getPrescrizioni().get(rigaSelezionata);
 
         Dottore dottore = (Dottore) interfacciaInserimentoModifica.getSceltaDottore().getSelectedItem();
         Paziente paziente = (Paziente) interfacciaInserimentoModifica.getSceltaPaziente().getSelectedItem();
@@ -309,22 +343,20 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         prescrizione.setOggettoPrescrizione(text);
 
         tableModel.fireTableDataChanged();
-
-        try {
-            gestionePrescrizioni.salvaSuFile(file);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        JOptionPane.showMessageDialog(null, "Prescrizione modificata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
     }
 
     public InterfacciaInserimento getInterfacciaInserimento(){
         return this.interfacciaInserimento;
     }
-    public GestionePrescrizioni getGestionePrescrizione (){
-        return this.gestionePrescrizioni;
+    public DatabasePrescrizioni getGestionePrescrizione (){
+        return this.databasePrescrizioni;
     }
 
+    public InterfacciaInserimento getInserimentoModifica(){
+        return this.interfacciaInserimentoModifica;
+    }
 
 }
 

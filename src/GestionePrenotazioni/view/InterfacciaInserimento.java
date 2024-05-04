@@ -9,7 +9,7 @@ import Style.MyButtonStyle;
 import Style.MyLabelStyle;
 import Style.MyComboBox;
 import Style.MyComboBoxDottori;
-import GestionePazienti.model.GestionePazienti;
+import GestionePazienti.model.DatabasePazienti;
 import Style.MyComboBoxPaziente;
 
 
@@ -18,8 +18,6 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -43,33 +41,19 @@ public class InterfacciaInserimento extends JPanel {
     private ArrayList<Paziente> listaPazienti;
     private DatabaseDottori databaseDottori;
     private ArrayList<Dottore> listaDottori;
-    private GestionePazienti gestionePazienti;
+    private DatabasePazienti databasePazienti;
     private MyComboBoxDottori sceltaDottore;
     //
     private JSpinner.DateEditor editor;
-    private File fileDatabaseDottori = new File(System.getProperty("user.home"), "databaseDottori.dat");
-    private File fileDatabasePazienti = new File(System.getProperty("user.home"), "databasePazienti.dat");
 
-    public void aggiornaFile(){
-        try {
-            databaseDottori.caricaDaFile(fileDatabaseDottori);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            gestionePazienti.caricaDaFile(fileDatabasePazienti);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+    public void aggiornaFile(DatabaseDottori databaseDottori, DatabasePazienti databasePazienti){
         listaDottori.clear();
         listaDottori.addAll(databaseDottori.getDottori());
 
         sceltaDottore.sostituisciLista(listaDottori);
 
         listaPazienti.clear();
-        listaPazienti.addAll(gestionePazienti.getPazienti());
+        listaPazienti.addAll(databasePazienti.getPazienti());
 
         sceltaPaziente.sostituisciLista(listaPazienti);
     }
@@ -77,10 +61,10 @@ public class InterfacciaInserimento extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.white);
 
-        gestionePazienti = new GestionePazienti();
+        databasePazienti = new DatabasePazienti();
         databaseDottori = new DatabaseDottori();
 
-        listaPazienti = new ArrayList<>(gestionePazienti.getPazienti());
+        listaPazienti = new ArrayList<>(databasePazienti.getPazienti());
         listaDottori = new ArrayList<>(databaseDottori.getDottori());
 
         // Inizializzazione panel

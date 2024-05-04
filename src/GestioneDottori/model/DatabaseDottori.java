@@ -1,12 +1,17 @@
 package GestioneDottori.model;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class DatabaseDottori {
     private ArrayList<Dottore> dottori;
+    private File file = new File(System.getProperty("user.home"), "databaseDottori.dat");
 
     public DatabaseDottori(){
         dottori = new ArrayList<Dottore>();
@@ -31,10 +36,24 @@ public class DatabaseDottori {
         return listaDottoriAttivi;
     }
 
+    /*public void aggiornaStatoDottori() {  Futuri aggiornamenti...
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm"); // crea un formatter per la conversione degli orari
+        LocalTime now = LocalTime.now(); // ottiene l'ora attuale
+        for (Dottore dottore : dottori) {
+            LocalTime orarioInizio = LocalTime.parse(dottore.getOrarioLavorativoInizio()); // ottiene l'orario di inizio lavoro del dottore
+            LocalTime orarioFine = LocalTime.parse(dottore.getOrarioLavorativoFine()); // ottiene l'orario di fine lavoro del dottore
+            if (orarioInizio.compareTo(now) <= 0 && orarioFine.compareTo(now) >= 0) { // confronta l'ora attuale con l'intervallo di lavoro del dottore
+                dottore.setStato(Status.ATTIVO); // il dottore è attivo se l'ora attuale rientra nell'intervallo di lavoro
+            } else {
+                dottore.setStato(Status.NON_ATTIVO); // altrimenti, il dottore è non attivo
+            }
+        }
+    }*/
+
     public List<Dottore> getDottori(){
         return dottori;
     }
-    public void salvaSuFile(File file) throws IOException {
+    public void salvaSuFile() throws IOException {
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
@@ -46,8 +65,10 @@ public class DatabaseDottori {
         fop.close();
     }
 
-    public void caricaDaFile(File file) throws IOException {
-        if (file != null && file.length() > 0) { // !!!
+    public void caricaDaFile() throws IOException {
+        if(!file.exists()){
+            file.createNewFile();
+        }else if (file != null && file.length() > 0) { // !!!
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois2 = new ObjectInputStream(fis);
 

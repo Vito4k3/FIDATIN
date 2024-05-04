@@ -43,9 +43,6 @@ public class FramePrenotazioni extends JPanel{
     public FramePrenotazioni(){
         setLayout(new BorderLayout());
 
-        String userHome = System.getProperty("user.home");
-        file= new File(userHome, "databasePrenotazioni.dat");
-
         interfacciaInserimento = new InterfacciaInserimento();
 
         interfacciaInserimentoAggiungi = new InterfacciaInserimento();
@@ -75,7 +72,12 @@ public class FramePrenotazioni extends JPanel{
                             interfacciaInserimentoAggiungi.getButtonSalva().addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    processaEventoAggiungi();
+                                    if(interfacciaInserimentoAggiungi.getBoxDottore().getSelectedItem() != null &&
+                                            interfacciaInserimentoAggiungi.getBoxPaziente().getSelectedItem() != null) {
+                                        processaEventoAggiungi();
+                                    }else{
+                                        JOptionPane.showMessageDialog(dialog, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                    }
                                 }
                             });
                         }
@@ -95,11 +97,8 @@ public class FramePrenotazioni extends JPanel{
                         if (sceltaUtente == JOptionPane.YES_OPTION) {
                             controller.getDatabase().rimuoviPrenotazione(rigaSelezionata);
                             interfacciaTabella.aggiorna();
-                            try {
-                                controller.salvaSuFile(file);
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
+                            JOptionPane.showMessageDialog(null, "Prenotazione eliminata!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
                         }
                     }
                 }else if(premuto.equals(buttonModifica)){       //Pulsante Modifica
@@ -179,10 +178,6 @@ public class FramePrenotazioni extends JPanel{
             }
         });
 
-
-
-        this.caricaFile();   //crea e carica il file
-
         //Viene passato la lista di prenotazioni nella classe interfaccia Tabella
         interfacciaTabella.setDati(controller.getPrenotazioni());
 
@@ -198,22 +193,8 @@ public class FramePrenotazioni extends JPanel{
 
     }
 
-    public void caricaFile(){
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                System.out.println("File creato!");
-            }else{
-                controller.caricaDaFile(file);
-                controller.setContatore(controller.getPrenotazioni().size());
-            }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void processaEventoAggiungi() {
-        if(interfacciaInserimento.getBoxPaziente()!=null && interfacciaInserimento.getBoxDottore()!=null) {
+        if(interfacciaInserimento.getBoxPaziente().getSelectedItem()!=null && interfacciaInserimento.getBoxDottore().getSelectedItem()!=null) {
             Date dataPrenotazione = (Date) interfacciaInserimentoAggiungi.getSpinner().getValue();
             Date time = (Date) interfacciaInserimentoAggiungi.getTimeSpinner().getValue();
             LocalTime ora = LocalDateTime.ofInstant(time.toInstant(), ZoneId.systemDefault()).toLocalTime();
@@ -225,12 +206,8 @@ public class FramePrenotazioni extends JPanel{
             controller.addPrenotazione(paziente, dottore, dataPrenotazione, ora, reparto, tipoPrenotazione);
             interfacciaTabella.aggiorna();
             dialog.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Prenotazione aggiunta!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-            try {
-                controller.salvaSuFile(file);   //salva il file ad ogni aggiunta
-            } catch (IOException ef) {
-                throw new RuntimeException(ef);
-            }
         }else{
             String[] options = {"OK"};
             JOptionPane.showOptionDialog(null, "Perfavore, inserisci tutti i campi!", "Errore", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
@@ -267,11 +244,8 @@ public class FramePrenotazioni extends JPanel{
         prenotazione.setTipoPrenotazione(tipoPrenotazione);
 
         interfacciaTabella.aggiorna();
-        try {
-            controller.salvaSuFile(file);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        JOptionPane.showMessageDialog(null, "Prenotazione modificata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
 

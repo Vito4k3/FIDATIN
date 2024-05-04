@@ -2,8 +2,13 @@ Coded by Vito Francesco Cosola
 --------------------------------------
 
 Cosa da sistemare:
-    -mettere il panel della stessa dimensione della tabella un poco di piu per i bordi arrotondati
     -migliorare design della scelta pannelli nella homepage quando si allarga la finestra
-    -implementare barra di ricerca nelle prescrizioni
     -terminare interfaccia inserimento paziente
-    -completare cartella clinica prenotazioni e prescrizioni
+    -sistemare interfaccia modifica paziente
+
+    -inserire conferma quando si vuole uscire da un dialog e si sono apportate delle modifiche
+    -diminuire lettura file
+
+    -se elimino un dottore non si eliminano le sue prenotazioni
+
+    -finire i controlli se tutto e inserito altrimenti non invia

@@ -14,19 +14,11 @@ import java.io.IOException;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class InterfacciaHomepage extends JPanel implements ActionListener{
-
-    final int larghezza = 800;
-    final int altezza = 600;
-    private JPanel containerJp;
-    private JPanel toolbarJp;
-    private JPanel southJp;
-    private JLabel southJl;
-    private JPanel ovestJp;
-    private JPanel estJp;
-    private JPanel centerJp;
+    private JPanel centerJp, gridContainer, estJp, ovestJp, toolbarJp, containerJp;
     private JLabel lblTxtBenvenuto = new JLabel("FIDATIN");
     private JLabel homepage = new JLabel("  HOMEPAGE");
     private JLabel gestione = new JLabel("  GESTIONE");
@@ -44,6 +36,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
     private JTable prenotazioniDiOggi;
     private DatabasePrenotazione databasePrenotazione;
     private List<Prenotazione> prenotazioniGiornaliere;
+    private String[] colonne;
 
     public InterfacciaHomepage(){
         init();
@@ -64,7 +57,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
         gestione.setBorder(new EmptyBorder(20,0,0,0));
 
         containerJp = new JPanel(new BorderLayout(20, 10));
-        JPanel gridContainer = new JPanel(new GridLayout(1,3));
+        gridContainer = new JPanel(new GridLayout(1,3));
         gridContainer.setBorder(new EmptyBorder(0,0,20,0));
         interfacciaTab = new InterfacciaTab("FIDATIN", 1);
         interfacciaTab.setColor(new Color(11, 103, 164));
@@ -116,18 +109,13 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
         });
 
         // EST
-        estJp = new JPanel(new GridLayout(2, 1, 10, 5));
+        estJp = new MyPanel(new GridLayout(2, 1, 10, 5));
 
         prenotazioniGiornaliere = framePrenotazioni.getController().getDatabase().prenotazioniGiornaliere();
 
-        String[] colonne;
-        if(!prenotazioniGiornaliere.isEmpty()) {
-            colonne = new String[]{"Paziente", "Dottore", "Orario", "Reparto", "Tipo"};
-        }else{
-            colonne = new String[]{"Nessuna prenotazione giornaliera"};
-        }
-        tableModel = new DefaultTableModel(colonne, 0){
+        colonne = new String[]{"Paziente", "Dottore", "Orario", "Reparto", "Tipo"};
 
+        tableModel = new DefaultTableModel(colonne, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
                 // TODO Auto-generated method stub
@@ -164,16 +152,40 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
             prenotazioniDiOggi.getColumnModel().getColumn(1).setPreferredWidth(100);
             prenotazioniDiOggi.getColumnModel().getColumn(2).setPreferredWidth(25);
         }
-        estJp.add(new MyScrollPane(prenotazioniDiOggi));
+        MyScrollPane scrollPane = new MyScrollPane(prenotazioniDiOggi);
+        scrollPane.setBorder(new EmptyBorder(10,10,10,10));
+        scrollPane.setOpaque(false);
+        MyPanel panel = new MyPanel(new BorderLayout());
+        panel.setBackground(Color.white);
+        estJp.setBorder(new EmptyBorder(5,10,10,0));
+        JLabel labelPrenotazioniGiornaliere = new JLabel("Prenotazioni giornaliere");
+        labelPrenotazioniGiornaliere.setBorder(new EmptyBorder(0,5,0,0));
+        panel.add(labelPrenotazioniGiornaliere, BorderLayout.PAGE_START);
+        panel.add(scrollPane);
+        estJp.add(panel);
         // add to container panel
+
 
         gridContainer.add(estJp);
 
-
         centerJp = new JPanel(new GridLayout(2, 1, 10, 5));
 
-        JTextArea jtxbacheca = new MyTextArea();
-        centerJp.add(jtxbacheca);
+        JTextArea bacheca = new MyTextArea();
+        JLabel labelBacheca = new JLabel("Bacheca");
+        labelBacheca.setBorder(new EmptyBorder(0,5,0,0));
+
+        JPanel panelBacheca = new MyPanel(new BorderLayout());
+        panelBacheca.setBackground(Color.white);
+        panelBacheca.setBorder(new EmptyBorder(5,5,5,5));
+        MyScrollPane scrollPaneBacheca = new MyScrollPane(bacheca);
+        scrollPaneBacheca.setBackground(Color.white);
+        scrollPane.setBorder(new EmptyBorder(10,10,10,10));
+        scrollPane.setOpaque(false);
+
+
+        panelBacheca.add(labelBacheca, BorderLayout.PAGE_START);
+        panelBacheca.add(scrollPaneBacheca);
+        centerJp.add(panelBacheca);
 
         gridContainer.add(new MyScrollPane(centerJp));
 
@@ -189,7 +201,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton premuto = (JButton) e.getSource();
-        EventoEvent eventoEvent = new EventoEvent(this, Prenotazioni, Dottori, Prescrizioni, Pazienti, premuto);
+        EventoEvent eventoEvent = new EventoEvent(this, Prenotazioni, Dottori, Prescrizioni, Pazienti, DashBoard, premuto);
         evento.evento(eventoEvent);
     }
 
@@ -202,5 +214,11 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
     public void setDatabasePrenotazioni(DatabasePrenotazione database){
         this.databasePrenotazione = database;
         prenotazioniGiornaliere = databasePrenotazione.prenotazioniGiornaliere();
+    }
+    public void rimuoviPannelloScelta(){
+        gridContainer.remove(ovestJp);
+        remove(ovestJp);
+        revalidate();
+        repaint();
     }
 }
