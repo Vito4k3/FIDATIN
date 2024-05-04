@@ -3,12 +3,7 @@ Coded by Vito Francesco Cosola
 
 Cosa da sistemare:
     -migliorare design della scelta pannelli nella homepage quando si allarga la finestra
-    -terminare interfaccia inserimento paziente
-    -sistemare interfaccia modifica paziente
 
     -inserire conferma quando si vuole uscire da un dialog e si sono apportate delle modifiche
-    -diminuire lettura file
 
-    -se elimino un dottore non si eliminano le sue prenotazioni
-
-    -finire i controlli se tutto e inserito altrimenti non invia
+    -se elimino un dottore non si eliminano le sue prenotazioni !
