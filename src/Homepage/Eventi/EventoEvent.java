@@ -4,16 +4,17 @@ import javax.swing.*;
 import java.util.EventObject;
 
 public class EventoEvent extends EventObject {
-    private JButton buttonPrenotazioni, premuto, buttonDottori, buttonPrescrizioni, buttonPazienti;
+    private JButton buttonPrenotazioni, premuto, buttonDottori, buttonPrescrizioni, buttonPazienti, buttonHomepage;
 
 
-    public EventoEvent(Object source, JButton buttonPrenotazioni, JButton buttonDottori, JButton buttonPrescrizioni, JButton buttonPazienti, JButton premuto) {
+    public EventoEvent(Object source, JButton buttonPrenotazioni, JButton buttonDottori, JButton buttonPrescrizioni, JButton buttonPazienti, JButton buttonHomepage, JButton premuto) {
         super(source);
         this.buttonPrenotazioni = buttonPrenotazioni;
         this.premuto = premuto;
         this.buttonDottori = buttonDottori;
         this.buttonPrescrizioni = buttonPrescrizioni;
         this.buttonPazienti = buttonPazienti;
+        this.buttonHomepage = buttonHomepage;
     }
 
     public JButton getButtonPrescrizioni() {
@@ -54,5 +55,13 @@ public class EventoEvent extends EventObject {
 
     public void setButtonDottori(JButton buttonDottori) {
         this.buttonDottori = buttonDottori;
+    }
+
+    public JButton getButtonHomepage() {
+        return buttonHomepage;
+    }
+
+    public void setButtonHomepage(JButton buttonHomepage) {
+        this.buttonHomepage = buttonHomepage;
     }
 }

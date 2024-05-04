@@ -7,6 +7,7 @@ import GestioneDottori.model.Dottore;
 import GestioneDottori.model.Status;
 import GestioneDottori.model.TipoOperatori;
 import GestionePrenotazioni.model.DatabasePrenotazione;
+import GestionePrescrizioni.model.DatabasePrescrizioni;
 import Style.InterfacciaTab;
 
 
@@ -31,7 +32,8 @@ public class FrameDottori extends JPanel{
     private File file;
     private JPanel mainPanel, homePanel;
     private JDialog dialog, dialog2;
-    private DatabasePrenotazione databasePrenotazionePrescrizioni;
+    private DatabasePrenotazione databasePrenotazioni;
+    private DatabasePrescrizioni databasePrescrizioni;
     private int ordinamento= 0;
 
     public FrameDottori(){
@@ -71,8 +73,12 @@ public class FrameDottori extends JPanel{
                                 interfacciaInserimentoAggiungi.getButtonSalva().addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        dialog.setVisible(false);
-                                        processaEventoAggiungi();
+                                        if(!(interfacciaInserimentoAggiungi.getFieldNome().getText().isEmpty() && interfacciaInserimentoAggiungi.getFieldCognome().getText().isEmpty())) {
+                                            dialog.setVisible(false);
+                                            processaEventoAggiungi();
+                                        }else{
+                                            JOptionPane.showMessageDialog(interfacciaInserimentoAggiungi, "Inserisci tutti i campi", "Errore", JOptionPane.WARNING_MESSAGE);
+                                        }
                                     }
                                 });
                             }
@@ -93,11 +99,7 @@ public class FrameDottori extends JPanel{
                             if (sceltaUtente == JOptionPane.YES_OPTION) {
                                 controller.getDatabase().rimuoviDottore(rigaSelezionata);
                                 interfacciaTabella.aggiorna();
-                                try {
-                                    controller.salvaSuFile(file);
-                                } catch (IOException ex) {
-                                    throw new RuntimeException(ex);
-                                }
+                                JOptionPane.showMessageDialog(null, "Dottore eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                     } else if (premuto.equals(buttonModifica)) {       //Pulsante Modifica
@@ -202,7 +204,7 @@ public class FrameDottori extends JPanel{
                 file.createNewFile();
                 System.out.println("File creato!");
             }else{
-                controller.caricaDaFile(file);
+                controller.caricaDaFile();
                 //controller.setContatore(controller.getPrenotazioni().size());
             }
         }catch (IOException e) {
@@ -220,15 +222,10 @@ public class FrameDottori extends JPanel{
         int status = interfacciaInserimentoAggiungi.getBoxStatus().getSelectedIndex();
         int tipoOperatore = interfacciaInserimentoAggiungi.getBoxTipoOperatore().getSelectedIndex();
 
-
         controller.addDottore(nome, cognome, tipoOperatore, oraInizio, oraFine, status);
         interfacciaTabella.aggiorna();
+        JOptionPane.showMessageDialog(null, "Dottore aggiunto con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-        try {
-            controller.salvaSuFile(file);   //salva il file ad ogni aggiunta
-        } catch (IOException ef) {
-            throw new RuntimeException(ef);
-        }
     }
 
     private void processaEventoModifica() {
@@ -255,16 +252,14 @@ public class FrameDottori extends JPanel{
         Dottore vecchioDottore = getController().getDottori().get(rigaSelezionata);
         Dottore nuovoDottore = new Dottore(nome, cognome, tipoOperatore, stato, oraInizio, oraFine);
 
-        databasePrenotazionePrescrizioni.AggiornaDottorePrenotazione(vecchioDottore, nuovoDottore);
+        databasePrenotazioni.AggiornaDottorePrenotazione(vecchioDottore, nuovoDottore);
+        databasePrescrizioni.AggiornaDottorePrenotazione(vecchioDottore, nuovoDottore);
 
         controller.getDatabase().sostituisciDottore(rigaSelezionata, nuovoDottore);
 
         interfacciaTabella.aggiorna();
-        try {
-            controller.salvaSuFile(file);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        JOptionPane.showMessageDialog(null, "Dottore modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     public JPanel getPanel(){
@@ -278,7 +273,10 @@ public class FrameDottori extends JPanel{
         return interfacciaPannelloPulsanti.getInterfacciaTab();
     }
     public void setDatabasePrenotazioni(DatabasePrenotazione databasePrenotazione){
-        this.databasePrenotazionePrescrizioni = databasePrenotazione;
+        this.databasePrenotazioni = databasePrenotazione;
+    }
+    public void setDatabasePrescrizioni(DatabasePrescrizioni databasePrescrizioni){
+        this.databasePrescrizioni= databasePrescrizioni;
     }
 
 }

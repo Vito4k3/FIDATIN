@@ -1,8 +1,8 @@
 package GestionePrescrizioni.model;
-import GestionePrenotazioni.model.Prenotazione;
+import GestioneDottori.model.Dottore;
+import GestionePazienti.model.Paziente;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,23 +10,25 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+import javax.swing.*;
 
 
-public class GestionePrescrizioni {
-    private ArrayList<Prescrizione> prescrizione;
+public class DatabasePrescrizioni {
+    private ArrayList<Prescrizione> listaPrescrizioni;
+    private File file = new File(System.getProperty("user.home"), "databasePrescrizioni.dat");
 
-    public GestionePrescrizioni() {
-        prescrizione = new ArrayList<Prescrizione>(); 
+    public DatabasePrescrizioni() {
+        listaPrescrizioni = new ArrayList<Prescrizione>();
     }
     
     public void InserimentoPrescrizione(Prescrizione c){
-        prescrizione.add(c);
+        listaPrescrizioni.add(c);
     }
     
     public String Stampa(){
         String s = "";
-        for(Prescrizione c:prescrizione){
+        for(Prescrizione c: listaPrescrizioni){
             s += c.toString() + "\n";
         }
     
@@ -35,7 +37,7 @@ public class GestionePrescrizioni {
     
     
     public void ricercaPrescrizione(String nomeCliente, String cognomeCliente){
-        for(Prescrizione a:prescrizione){     
+        for(Prescrizione a: listaPrescrizioni){
             if(a instanceof Prescrizione){
                System.out.println("Prescrizione trovata");
             }else{
@@ -43,7 +45,7 @@ public class GestionePrescrizioni {
         }
         
     }
-        for(Prescrizione a:prescrizione){      
+        for(Prescrizione a: listaPrescrizioni){
             if(a instanceof Prescrizione){
                System.out.println("Prescrizione trovata");
             }else{
@@ -55,9 +57,9 @@ public class GestionePrescrizioni {
     
     
     public Prescrizione rimozionePrescrizione(String nomeCliente, String cognomeCliente){
-        if(prescrizione.size()-1!=0){
-            prescrizione.remove(nomeCliente);
-            prescrizione.remove(cognomeCliente);
+        if(listaPrescrizioni.size()-1!=0){
+            listaPrescrizioni.remove(nomeCliente);
+            listaPrescrizioni.remove(cognomeCliente);
               System.out.println("Prescrizione eliminata");
         }else{
             return null;
@@ -67,15 +69,41 @@ public class GestionePrescrizioni {
 
     public void rimuoviPrescrizione(int index){
         if(index>=0){
-            prescrizione.remove(index);
+            listaPrescrizioni.remove(index);
         }
     }
 
-    public ArrayList<Prescrizione> getPrescrizioni(){
-        return this.prescrizione;
+
+    public void AggiornaDottorePrenotazione(Dottore vecchioDottore, Dottore nuovoDottore){
+        for(int i=0; i<listaPrescrizioni.size(); i++){
+            if(listaPrescrizioni.get(i).getDottore().equals(vecchioDottore)){
+                listaPrescrizioni.get(i).setDottore(nuovoDottore);
+            }
+        }
+        try {
+            salvaSuFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void caricaDaFile(File file) throws IOException {
+    public void AggiornaPazientePrenotazione(Paziente vecchioPaziente, Paziente nuovoPaziente){
+        for(int i=0; i<listaPrescrizioni.size(); i++){
+            if(listaPrescrizioni.get(i).getPaziente().equals(vecchioPaziente)){
+                listaPrescrizioni.get(i).setPaziente(nuovoPaziente);
+            }
+        }
+        try {
+            salvaSuFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public ArrayList<Prescrizione> getPrescrizioni(){
+        return this.listaPrescrizioni;
+    }
+
+    public void caricaDaFile() throws IOException {
         if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -83,8 +111,8 @@ public class GestionePrescrizioni {
             try {
                 Prescrizione[] prescrizioniCaricate = (Prescrizione[]) ois.readObject();
 
-                prescrizione.clear();
-                prescrizione.addAll(Arrays.asList(prescrizioniCaricate));
+                listaPrescrizioni.clear();
+                listaPrescrizioni.addAll(Arrays.asList(prescrizioniCaricate));
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -95,11 +123,11 @@ public class GestionePrescrizioni {
         }
     }
 
-    public void salvaSuFile(File file) throws IOException {
+    public void salvaSuFile() throws IOException {
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
-        Prescrizione[] arrayPrescrizioni= prescrizione.toArray(new Prescrizione[prescrizione.size()]);
+        Prescrizione[] arrayPrescrizioni= listaPrescrizioni.toArray(new Prescrizione[listaPrescrizioni.size()]);
 
         oos.writeObject(arrayPrescrizioni);
 
@@ -107,8 +135,8 @@ public class GestionePrescrizioni {
         fop.close();
     }
 
-    public void salvaPrescrizioneSuFile(File file, int index) throws IOException {
-        Prescrizione prescrizioneSelezionata = prescrizione.get(index);
+    public void salvaPrescrizioneSuFile(int index) throws IOException {
+        Prescrizione prescrizioneSelezionata = listaPrescrizioni.get(index);
         String outputFile = file.getAbsolutePath();
         String font = "src/GestionePrescrizioni/MyFont.TTF";
 
@@ -137,19 +165,20 @@ public class GestionePrescrizioni {
             document.save(outputFile);
             document.close();
 
-            System.out.println("File PDF creato con successo: " + outputFile);
+            JOptionPane.showMessageDialog(null, "Prescrizione stampata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void caricaFile(File file){
+    public void caricaFile(){
         try {
             if (!file.exists()) {
                 file.createNewFile();
                 System.out.println("File creato!");
             }else{
-                caricaDaFile(file);
+                caricaDaFile();
             }
         }catch (IOException e) {
             e.printStackTrace();

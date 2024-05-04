@@ -1,4 +1,4 @@
-package GestionePrescrizioni;
+package GestionePrescrizioni.view;
 
 import GestioneDottori.model.DatabaseDottori;
 import GestioneDottori.model.Dottore;
@@ -32,16 +32,28 @@ public class InterfacciaInserimento extends JPanel {
     private File fileDatabaseDottori = new File(System.getProperty("user.home"), "databaseDottori.dat");
     private File fileDatabasePazienti = new File(System.getProperty("user.home"), "databasePazienti.dat");
 
-    public void aggiornaFileDottori(){
+    public void aggiornaFile(){
         try {
-            databaseDottori.caricaDaFile(fileDatabaseDottori);
+            databaseDottori.caricaDaFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            gestionePazienti.caricaDaFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         listaDottori.clear();
         listaDottori.addAll(databaseDottori.getDottori());
 
         sceltaDottore.sostituisciLista(listaDottori);
+
+        listaPazienti.clear();
+        listaPazienti.addAll(gestionePazienti.getPazienti());
+
+        sceltaPaziente.sostituisciLista(listaPazienti);
     }
     public InterfacciaInserimento(){
         setLayout(new BorderLayout());
@@ -51,11 +63,11 @@ public class InterfacciaInserimento extends JPanel {
         gestionePazienti = new  GestionePazienti();
 
         try {
-            databaseDottori.caricaDaFile(fileDatabaseDottori);
+            databaseDottori.caricaDaFile();
         } catch (IOException e) {
         }
         try {
-            gestionePazienti.caricaDaFile(fileDatabasePazienti);
+            gestionePazienti.caricaDaFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

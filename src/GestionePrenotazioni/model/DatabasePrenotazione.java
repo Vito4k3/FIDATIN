@@ -78,7 +78,7 @@ public class DatabasePrenotazione {
     public List<Prenotazione> getPrenotazioni(){
         return prenotazioni;
     }
-    public void salvaSuFile(File file) throws IOException {
+    public void salvaSuFile() throws IOException {
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
@@ -97,7 +97,7 @@ public class DatabasePrenotazione {
             }
         }
         try {
-            salvaSuFile(file);
+            salvaSuFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -110,14 +110,14 @@ public class DatabasePrenotazione {
             }
         }
         try {
-            salvaSuFile(file);
+            salvaSuFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public void caricaDaFile(File file) throws IOException {
+    public void caricaDaFile() throws IOException {
         if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);

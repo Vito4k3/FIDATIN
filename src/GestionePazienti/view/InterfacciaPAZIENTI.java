@@ -1,6 +1,5 @@
 package GestionePazienti.view;
 
-import javax.print.ServiceUI;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -9,19 +8,15 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import javax.xml.crypto.Data;
 
 import GestionePrenotazioni.model.Prenotazione;
-import GestionePrescrizioni.model.GestionePrescrizioni;
+import GestionePrescrizioni.model.DatabasePrescrizioni;
 
-import GestioneDottori.model.Dottore;
 import GestionePazienti.model.GestionePazienti;
 import GestionePazienti.model.Paziente;
 import GestionePrenotazioni.model.DatabasePrenotazione;
 import GestionePrescrizioni.model.Prescrizione;
-import Homepage.view.FrameHomepage;
 import Style.*;
-import org.intellij.lang.annotations.Flow;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -41,7 +36,7 @@ public class InterfacciaPAZIENTI extends JPanel{
     private Color verde;
     private JTextField fieldRicerca;
     private DatabasePrenotazione databasePrenotazione;
-    private GestionePrescrizioni databasePrescrizioni;
+    private DatabasePrescrizioni databasePrescrizioni;
     private CartellaClinica cartellaClinica;
     private JSpinner dataDiNascitaSpinner;
 
@@ -50,7 +45,7 @@ public class InterfacciaPAZIENTI extends JPanel{
         setLayout(new BorderLayout());
 
         databasePrenotazione = new DatabasePrenotazione();
-        databasePrescrizioni = new GestionePrescrizioni();
+        databasePrescrizioni = new DatabasePrescrizioni();
 
         this.caricaFile();
 
@@ -176,11 +171,6 @@ public class InterfacciaPAZIENTI extends JPanel{
                 if(scelta == JOptionPane.OK_OPTION){
                     g.getPazienti().remove(rigaSelezionata);
                     tableModel.fireTableDataChanged();
-                    try {
-                        g.salvaSuFile(file);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
                 }
                 table.clearSelection();
             } else {
@@ -457,6 +447,7 @@ public class InterfacciaPAZIENTI extends JPanel{
             setSize(800, 400);
             setModal(true);
             setLocationRelativeTo(null);
+            setTitle("Aggiungi paziente");
 
             JPanel panel=new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -586,12 +577,6 @@ public class InterfacciaPAZIENTI extends JPanel{
                     //((InterfacciaPAZIENTI) parent).aggiungiPaziente(rowData);
                     dispose();
 
-                    try {
-                        g.salvaSuFile(file);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
                 }
 
             });
@@ -609,6 +594,7 @@ public class InterfacciaPAZIENTI extends JPanel{
             setSize(700, 400);
             setModal(true);
             setLocationRelativeTo(null);
+            setTitle("Modifica paziente");
 
             setLayout(new BorderLayout());
 
@@ -744,17 +730,13 @@ public class InterfacciaPAZIENTI extends JPanel{
                     Paziente vecchioPaziente = g.getPazienti().get(riga);
 
                     databasePrenotazione.AggiornaPazientePrenotazione(vecchioPaziente, paziente);
+                    databasePrescrizioni.AggiornaPazientePrenotazione(vecchioPaziente, paziente);
 
                     g.getPazienti().set(riga, paziente);
 
                     tableModel.fireTableDataChanged();
-                    //((InterfacciaPAZIENTI) parent).modificaPaziente(riga, rowData);
                     dispose();
-                    try {
-                        g.salvaSuFile(file);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    JOptionPane.showMessageDialog(null, "Paziente modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
 
@@ -769,7 +751,7 @@ public class InterfacciaPAZIENTI extends JPanel{
                 file.createNewFile();
                 System.out.println("File creato!");
             }else{
-                g.caricaDaFile(file);
+                g.caricaDaFile();
             }
         }catch (IOException e) {
             e.printStackTrace();
@@ -783,7 +765,7 @@ public class InterfacciaPAZIENTI extends JPanel{
         this.databasePrenotazione = database;
         cartellaClinica.setListaPrenotazioni(databasePrenotazione.getPrenotazioni());
     }
-    public void setDatabasePrescrizioni(GestionePrescrizioni prescrizioni){
+    public void setDatabasePrescrizioni(DatabasePrescrizioni prescrizioni){
         this.databasePrescrizioni = prescrizioni;
         cartellaClinica.setListaPrescrizioni(databasePrescrizioni.getPrescrizioni());
     }
@@ -802,6 +784,10 @@ public class InterfacciaPAZIENTI extends JPanel{
             System.out.println("Errore nella conversione della stringa data: " + e.getMessage());
         }
 
+    }
+
+    public GestionePazienti getDatabasePazienti(){
+        return g;
     }
 
 }

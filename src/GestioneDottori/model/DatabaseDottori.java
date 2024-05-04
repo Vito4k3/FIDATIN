@@ -7,6 +7,7 @@ import java.util.List;
 
 public class DatabaseDottori {
     private ArrayList<Dottore> dottori;
+    private File file = new File(System.getProperty("user.home"), "databaseDottori.dat");
 
     public DatabaseDottori(){
         dottori = new ArrayList<Dottore>();
@@ -34,7 +35,7 @@ public class DatabaseDottori {
     public List<Dottore> getDottori(){
         return dottori;
     }
-    public void salvaSuFile(File file) throws IOException {
+    public void salvaSuFile() throws IOException {
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
@@ -46,7 +47,7 @@ public class DatabaseDottori {
         fop.close();
     }
 
-    public void caricaDaFile(File file) throws IOException {
+    public void caricaDaFile() throws IOException {
         if (file != null && file.length() > 0) { // !!!
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois2 = new ObjectInputStream(fis);

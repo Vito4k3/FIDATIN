@@ -68,10 +68,10 @@ public class Controller {
         }
 
         public void salvaSuFile(File file) throws IOException {
-            databasePrenotazione.salvaSuFile(file);
+            databasePrenotazione.salvaSuFile();
         }
         public void caricaDaFile(File file) throws IOException {
-            databasePrenotazione.caricaDaFile(file);
+            databasePrenotazione.caricaDaFile();
         }
         public void setContatore(int contatore){
             prenotazione.setContatore(contatore);

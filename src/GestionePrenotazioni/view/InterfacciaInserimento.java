@@ -47,18 +47,16 @@ public class InterfacciaInserimento extends JPanel {
     private MyComboBoxDottori sceltaDottore;
     //
     private JSpinner.DateEditor editor;
-    private File fileDatabaseDottori = new File(System.getProperty("user.home"), "databaseDottori.dat");
-    private File fileDatabasePazienti = new File(System.getProperty("user.home"), "databasePazienti.dat");
 
     public void aggiornaFile(){
         try {
-            databaseDottori.caricaDaFile(fileDatabaseDottori);
+            databaseDottori.caricaDaFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            gestionePazienti.caricaDaFile(fileDatabasePazienti);
+            gestionePazienti.caricaDaFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

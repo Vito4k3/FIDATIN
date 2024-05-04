@@ -95,11 +95,8 @@ public class FramePrenotazioni extends JPanel{
                         if (sceltaUtente == JOptionPane.YES_OPTION) {
                             controller.getDatabase().rimuoviPrenotazione(rigaSelezionata);
                             interfacciaTabella.aggiorna();
-                            try {
-                                controller.salvaSuFile(file);
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
+                            JOptionPane.showMessageDialog(null, "Prenotazione eliminata!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
                         }
                     }
                 }else if(premuto.equals(buttonModifica)){       //Pulsante Modifica
@@ -225,12 +222,8 @@ public class FramePrenotazioni extends JPanel{
             controller.addPrenotazione(paziente, dottore, dataPrenotazione, ora, reparto, tipoPrenotazione);
             interfacciaTabella.aggiorna();
             dialog.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Prenotazione aggiunta!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-            try {
-                controller.salvaSuFile(file);   //salva il file ad ogni aggiunta
-            } catch (IOException ef) {
-                throw new RuntimeException(ef);
-            }
         }else{
             String[] options = {"OK"};
             JOptionPane.showOptionDialog(null, "Perfavore, inserisci tutti i campi!", "Errore", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
@@ -267,11 +260,8 @@ public class FramePrenotazioni extends JPanel{
         prenotazione.setTipoPrenotazione(tipoPrenotazione);
 
         interfacciaTabella.aggiorna();
-        try {
-            controller.salvaSuFile(file);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        JOptionPane.showMessageDialog(null, "Prenotazione modificata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
 

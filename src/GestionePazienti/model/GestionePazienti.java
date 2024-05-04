@@ -26,7 +26,7 @@ public class GestionePazienti{
         }
     }
 
-    public void salvaSuFile(File file) throws IOException {
+    public void salvaSuFile() throws IOException {
 
         FileOutputStream fop = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(fop);
@@ -39,7 +39,7 @@ public class GestionePazienti{
         fop.close();
     }
 
-    public void caricaDaFile(File file) throws IOException {
+    public void caricaDaFile() throws IOException {
         if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois2 = new ObjectInputStream(fis);
