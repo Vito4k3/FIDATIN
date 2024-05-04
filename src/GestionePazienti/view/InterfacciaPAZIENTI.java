@@ -26,7 +26,11 @@ import org.intellij.lang.annotations.Flow;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class InterfacciaPAZIENTI extends JPanel{
     private DefaultTableModel tableModel;
@@ -39,6 +43,7 @@ public class InterfacciaPAZIENTI extends JPanel{
     private DatabasePrenotazione databasePrenotazione;
     private GestionePrescrizioni databasePrescrizioni;
     private CartellaClinica cartellaClinica;
+    private JSpinner dataDiNascitaSpinner;
 
     public InterfacciaPAZIENTI() {
         setSize(900, 700);
@@ -441,7 +446,7 @@ public class InterfacciaPAZIENTI extends JPanel{
     }
 
     class AggiungiPazienteDialog extends JDialog implements Serializable{
-        private JTextField nomeField, cognomeField, residenzaField, capField, dataDiNascitaField, sessoField,
+        private JTextField nomeField, cognomeField, residenzaField, capField, sessoField,
                 codiceFiscaleField;
 
         public AggiungiPazienteDialog() {
@@ -489,8 +494,24 @@ public class InterfacciaPAZIENTI extends JPanel{
             panel.add(infPer);
 
             InformazioniPersonaliPanel.add(new JLabel("Data di Nascita:"));
-            dataDiNascitaField = new JTextField(30);
-            InformazioniPersonaliPanel.add(dataDiNascitaField);
+
+            Calendar calendar = Calendar.getInstance();
+            Date now= calendar.getTime();
+            calendar.add(Calendar.MONTH, -1);
+            Date startDate= calendar.getTime();
+            calendar.add(Calendar.YEAR, 3);
+            Date endDate=calendar.getTime();
+
+            SpinnerDateModel spinnerDateModel = new SpinnerDateModel(now, startDate, endDate, Calendar.YEAR);
+
+            dataDiNascitaSpinner  = new JSpinner(spinnerDateModel);
+            String format = "dd MMM yy";
+
+            JSpinner.DateEditor editor = new JSpinner.DateEditor(dataDiNascitaSpinner, format);
+            dataDiNascitaSpinner.setEditor(editor);
+            dataDiNascitaSpinner.setPreferredSize(new Dimension(140, 25));
+
+            InformazioniPersonaliPanel.add(dataDiNascitaSpinner);
 
             InformazioniPersonaliPanel.add(new JLabel("Codice Fiscale:"));
             codiceFiscaleField = new JTextField(30);
@@ -532,8 +553,7 @@ public class InterfacciaPAZIENTI extends JPanel{
 
             aggiungiButton.addActionListener(e -> {
 
-                if (nomeField.getText().isEmpty() || cognomeField.getText().isEmpty()
-                        || dataDiNascitaField.getText().isEmpty() ||
+                if (nomeField.getText().isEmpty() || cognomeField.getText().isEmpty() ||
                         codiceFiscaleField.getText().isEmpty() || sessoField.getText().isEmpty()
                         || residenzaField.getText().isEmpty() ||
                         capField.getText().isEmpty()) {
@@ -541,15 +561,18 @@ public class InterfacciaPAZIENTI extends JPanel{
                 JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Devi inserire tutti i campi.", "Errore", JOptionPane.ERROR_MESSAGE);
 
                 } else {
-                    Object[] rowData = { nomeField.getText(), cognomeField.getText(), dataDiNascitaField.getText(),
+                    Object[] rowData = { nomeField.getText(), cognomeField.getText(), getDataSpinner().getValue(),
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
                             capField.getText(),
                     };
 
-                    cartellaClinica.setDati("Data di Nascita: " + dataDiNascitaField.getText() + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+                    String data= sdf.format(getDataSpinner().getValue());
+
+                    cartellaClinica.setDati("Data di Nascita: " + data + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
                             "\nSesso: " + sessoField.getText() + "\nResidenza: " + residenzaField.getText() + "\nCAP: " + capField.getText());
 
-                    Paziente paziente = new Paziente(nomeField.getText(), cognomeField.getText(), dataDiNascitaField.getText(),
+                    Paziente paziente = new Paziente(nomeField.getText(), cognomeField.getText(), data,
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
                             capField.getText(),cartellaClinica);
 
@@ -629,10 +652,24 @@ public class InterfacciaPAZIENTI extends JPanel{
             panel.add(infPer);
 
             InformazioniPersonaliPanel.add(new JLabel("Data di Nascita:"));
-            JTextField dataDiNascitaField = new JTextField(30); // Imposta la dimensione iniziale a 30 caratteri
-            String text4 = (String) tableModel.getValueAt(riga, 2);
-            dataDiNascitaField.setText(text4);
-            InformazioniPersonaliPanel.add(dataDiNascitaField);
+            Calendar calendar = Calendar.getInstance();
+            Date now= calendar.getTime();
+            calendar.add(Calendar.MONTH, -1);
+            Date startDate= calendar.getTime();
+            calendar.add(Calendar.YEAR, 3);
+            Date endDate=calendar.getTime();
+
+            SpinnerDateModel spinnerDateModel = new SpinnerDateModel(now, startDate, endDate, Calendar.YEAR);
+
+            dataDiNascitaSpinner = new JSpinner(spinnerDateModel);
+
+            dataDiNascitaSpinner  = new JSpinner(spinnerDateModel);
+            String format = "dd MMM yy";
+
+            JSpinner.DateEditor editor = new JSpinner.DateEditor(dataDiNascitaSpinner, format);
+            dataDiNascitaSpinner.setEditor(editor);
+            dataDiNascitaSpinner.setPreferredSize(new Dimension(140, 25));
+            InformazioniPersonaliPanel.add(dataDiNascitaSpinner);
 
             InformazioniPersonaliPanel.add(new JLabel("Codice Fiscale:"));
             JTextField codiceFiscaleField = new JTextField(30); // Imposta la dimensione iniziale a 30 caratteri
@@ -679,15 +716,19 @@ public class InterfacciaPAZIENTI extends JPanel{
             modificaButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Object[] rowData = { nomeField.getText(), cognomeField.getText(), dataDiNascitaField.getText(),
+                    Object[] rowData = { nomeField.getText(), cognomeField.getText(),getDataSpinner(),
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
                             capField.getText() };
 
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+                    String data= sdf.format(getDataSpinner().getValue());
+
                     CartellaClinica cartellaClinica = new CartellaClinica();
-                    cartellaClinica.setDati("Data di Nascita: " + dataDiNascitaField.getText() + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
+                    cartellaClinica.setDati("Data di Nascita: " + data + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
                             "\nSesso: " + sessoField.getText() + "\nResidenza: " + residenzaField.getText() + "\nCAP: " + capField.getText());
 
-                    Paziente paziente = new Paziente(nomeField.getText(), cognomeField.getText(), dataDiNascitaField.getText(),
+
+                    Paziente paziente = new Paziente(nomeField.getText(), cognomeField.getText(), data,
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
                             capField.getText(),cartellaClinica);
 
@@ -736,6 +777,22 @@ public class InterfacciaPAZIENTI extends JPanel{
     public void setDatabasePrescrizioni(GestionePrescrizioni prescrizioni){
         this.databasePrescrizioni = prescrizioni;
         cartellaClinica.setListaPrescrizioni(databasePrescrizioni.getPrescrizioni());
+    }
+
+    public JSpinner getDataSpinner() {
+        return dataDiNascitaSpinner;
+    }
+
+    public void setSpinner(String dataStringa) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+        Date data = null;
+        try {
+            data = sdf.parse(dataStringa);
+            this.dataDiNascitaSpinner.setValue(data);
+        } catch (ParseException e) {
+            System.out.println("Errore nella conversione della stringa data: " + e.getMessage());
+        }
+
     }
 
 }

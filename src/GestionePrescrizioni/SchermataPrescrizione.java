@@ -17,9 +17,14 @@ import java.io.File;
 import java.io.IOException;
 import javax.naming.BinaryRefAddr;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class SchermataPrescrizione extends JPanel implements ActionListener{
     
@@ -35,6 +40,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
     private JLabel vuota = new JLabel(" ");
     private JLabel vuota1 = new JLabel(" ");
     private JLabel vuota2 = new JLabel(" ");
+    private JLabel vuota3  = new JLabel(" ");
     private final Object colonne[] = {"Paziente","Dottore","Oggetto"};
     private InterfacciaTab interfacciaTab;
     private InterfacciaInserimento interfacciaInserimento, interfacciaInserimentoModifica;
@@ -43,6 +49,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
     private DefaultTableModel tableModel;
     private JButton cancella;
     private JFileChooser fileChooser;
+    private JTextField fieldRicerca;
     private File file = new File(System.getProperty("user.home"), "databasePrescrizioni.dat");
     public SchermataPrescrizione(){
         init();
@@ -115,6 +122,34 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         interfacciaInserimento = new InterfacciaInserimento();
         interfacciaInserimentoModifica = new InterfacciaInserimento();
 
+        fieldRicerca = new JTextField(15);
+        fieldRicerca.setPreferredSize(new Dimension(110,20));
+        Border lineBorder = new LineBorder(Color.black, 2);
+        Border emptyBorder = new EmptyBorder(0,0,0,30);
+        Border compoundBorder = new CompoundBorder(lineBorder, emptyBorder);
+        fieldRicerca.setBorder(compoundBorder);
+
+        fieldRicerca.addKeyListener(new KeyListener() { //implementazione del keyListener sulla textField ricerca
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                AbstractTableModel dtb = (AbstractTableModel) tableModel;
+                TableRowSorter<AbstractTableModel> trs = new TableRowSorter<>(dtb);
+                table.setRowSorter(trs);
+                trs.setRowFilter(RowFilter.regexFilter(fieldRicerca.getText()));
+
+            }
+        });
+
         prescrizioneDialog = new JDialog();
         prescrizioneDialog2 = new JDialog();
 
@@ -137,6 +172,9 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         pulsanteCreaPrescrizione.addActionListener(this);
         pulsanteCreaPrescrizione.setFont(new Font("Arial",1,30));
         pulsanteCreaPrescrizione.setPreferredSize(new Dimension(270,30));
+
+        ovestJp.add(fieldRicerca);
+        ovestJp.add(vuota3);
 
         ovestJp.add(pulsanteCreaPrescrizione);
         ovestJp.add(vuota);
