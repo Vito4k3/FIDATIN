@@ -22,7 +22,8 @@ public class FrameHomepage extends JFrame {
     private FrameDottori panelDottori;
     private FramePrenotazioni panelPrenotazioni;
     private SchermataPrescrizione panelPrescrizioni;
-    private JPanel panel;
+    private ImageIcon icon = new ImageIcon("src/Icon/logoFinestra.png");
+
 
 
     public FrameHomepage(){
@@ -30,6 +31,7 @@ public class FrameHomepage extends JFrame {
         setSize(1200,750);
         setLocationRelativeTo(null);
         setTitle("Fidatin");
+        setIconImage(icon.getImage());
 
         panelPazienti = new InterfacciaPAZIENTI();
         panelDottori = new FrameDottori();
@@ -117,10 +119,14 @@ public class FrameHomepage extends JFrame {
         interfacciaHomepage.getTab().getButtonEsci().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FrameLogin frameLogin= new FrameLogin();
-                frameLogin.setSize(getSize());
-                frameLogin.setLocation(getLocation());
-                dispose();
+                int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler tornare al login?", "Conferma", JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    salvaSuFile();
+                    FrameLogin frameLogin = new FrameLogin();
+                    frameLogin.setSize(getSize());
+                    frameLogin.setLocation(getLocation());
+                    dispose();
+                }
             }
         });
 
@@ -164,8 +170,4 @@ public class FrameHomepage extends JFrame {
         }
     }
 
-
-    public JPanel getPanel(){
-        return panel;
-    }
 }

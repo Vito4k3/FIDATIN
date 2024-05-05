@@ -29,18 +29,13 @@ public class FrameDottori extends JPanel{
     private InterfacciaPannelloPulsanti interfacciaPannelloPulsanti;
     private InterfacciaTabella interfacciaTabella;
     private Controller controller;
-    private File file;
     private JPanel mainPanel, homePanel;
     private JDialog dialog, dialog2;
     private DatabasePrenotazione databasePrenotazioni;
     private DatabasePrescrizioni databasePrescrizioni;
-    private int ordinamento= 0;
 
     public FrameDottori(){
         setLayout(new BorderLayout());
-
-        String userHome = System.getProperty("user.home");
-        file= new File(userHome, "databaseDottori.dat");
 
         interfacciaInserimento = new InterfacciaInserimento();
         interfacciaInserimentoAggiungi = new InterfacciaInserimento();
@@ -95,8 +90,11 @@ public class FrameDottori extends JPanel{
                         int rigaSelezionata = -1;
                         rigaSelezionata = interfacciaTabella.getTable().getSelectedRow();
                         if (rigaSelezionata != -1) {
-                            int sceltaUtente = MyOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questa prenotazione?", "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
+                            int sceltaUtente = MyOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questo Dottore?\n" +
+                                    " Le Prenotazioni e Prescrizioni a suo carico verranno eliminate!", "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
                             if (sceltaUtente == JOptionPane.YES_OPTION) {
+                                databasePrenotazioni.situazioneDottoreEliminato(getController().getDatabase().getDottori().get(rigaSelezionata));
+                                databasePrescrizioni.situazioneDottoreEliminato(getController().getDatabase().getDottori().get(rigaSelezionata));
                                 controller.getDatabase().rimuoviDottore(rigaSelezionata);
                                 interfacciaTabella.aggiorna();
                                 JOptionPane.showMessageDialog(null, "Dottore eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);

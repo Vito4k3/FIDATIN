@@ -166,8 +166,11 @@ public class InterfacciaPAZIENTI extends JPanel{
         eliminaButton.addActionListener(e -> {
             int rigaSelezionata = table.getSelectedRow();
             if (rigaSelezionata != -1) {
-                int scelta= JOptionPane.showConfirmDialog(this, "Sei sicuro di voler eliminare questo paziente?", "Conferma", JOptionPane.OK_CANCEL_OPTION);
+                int scelta= JOptionPane.showConfirmDialog(this, "Sei sicuro di voler eliminare questo paziente?\n" +
+                        " Le prescrizioni e prenotazioni a suo carico verranno eliminate!", "Conferma", JOptionPane.OK_CANCEL_OPTION);
                 if(scelta == JOptionPane.OK_OPTION){
+                    databasePrenotazione.situazionePazienteEliminato(g.getPazienti().get(rigaSelezionata));
+                    databasePrescrizioni.situazionePazienteEliminato(g.getPazienti().get(rigaSelezionata));
                     g.getPazienti().remove(rigaSelezionata);
                     tableModel.fireTableDataChanged();
                     JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Paziente eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);

@@ -59,6 +59,22 @@ public class DatabasePrescrizioni {
             throw new RuntimeException(e);
         }
     }
+
+    public void situazioneDottoreEliminato(Dottore vecchioDottore){
+        for(int i=0; i<listaPrescrizioni.size(); i++){
+            if(listaPrescrizioni.get(i).getDottore().equals(vecchioDottore)){
+                listaPrescrizioni.remove(listaPrescrizioni.get(i));
+            }
+        }
+    }
+
+    public void situazionePazienteEliminato(Paziente vecchioPaziente){
+        for(int i=0; i<listaPrescrizioni.size(); i++){
+            if(listaPrescrizioni.get(i).getPaziente().equals(vecchioPaziente)){
+                listaPrescrizioni.remove(listaPrescrizioni.get(i));
+            }
+        }
+    }
     public ArrayList<Prescrizione> getPrescrizioni(){
         return this.listaPrescrizioni;
     }
@@ -98,9 +114,9 @@ public class DatabasePrescrizioni {
         fop.close();
     }
 
-    public void salvaPrescrizioneSuFile(int index) throws IOException {
+    public void salvaPrescrizioneSuFile(int index, File fileToSave) throws IOException {
         Prescrizione prescrizioneSelezionata = listaPrescrizioni.get(index);
-        String outputFile = file.getAbsolutePath();
+        String outputFile = fileToSave.getAbsolutePath();
         String font = "src/GestionePrescrizioni/MyFont.TTF";
 
         try {

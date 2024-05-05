@@ -103,6 +103,22 @@ public class DatabasePrenotazione {
         }
     }
 
+    public void situazioneDottoreEliminato(Dottore vecchioDottore){
+        for(int i=0; i<prenotazioni.size(); i++){
+            if(prenotazioni.get(i).getDottore().equals(vecchioDottore)){
+                prenotazioni.remove(prenotazioni.get(i));
+            }
+        }
+    }
+
+    public void situazionePazienteEliminato(Paziente vecchioPaziente){
+        for(int i=0; i<prenotazioni.size(); i++){
+            if(prenotazioni.get(i).getPaziente().equals(vecchioPaziente)){
+                prenotazioni.remove(prenotazioni.get(i));
+            }
+        }
+    }
+
     public void AggiornaPazientePrenotazione(Paziente vecchioPaziente, Paziente nuovoPaziente){
         for(int i=0; i<prenotazioni.size(); i++){
             if(prenotazioni.get(i).getPaziente().equals(vecchioPaziente)){

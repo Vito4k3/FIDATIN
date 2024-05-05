@@ -26,9 +26,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class SchermataPrescrizione extends JPanel implements ActionListener{
-    
- final int larghezza = 800;
-    final int altezza = 600;
     private JButton pulsanteCreaPrescrizione, pulsanteStampa, pulsanteModifica, pulsanteElimina;
     private JPanel containerJp;
     private JPanel toolbarJp;
@@ -49,7 +46,6 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
     private JButton cancella;
     private JFileChooser fileChooser;
     private JTextField fieldRicerca;
-    private File file = new File(System.getProperty("user.home"), "databasePrescrizioni.dat");
     public SchermataPrescrizione(){
         init();
     }
@@ -269,7 +265,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
                 }
 
                 try {
-                    databasePrescrizioni.salvaPrescrizioneSuFile(rigaSelezionata);
+                    databasePrescrizioni.salvaPrescrizioneSuFile(rigaSelezionata, fileToSave);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(this, "Impossibile stampare la prenotazione" , "Errore di battitura", JOptionPane.ERROR_MESSAGE);
                 }
@@ -325,6 +321,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         prescrizioneDialog.dispose();
         tableModel.fireTableDataChanged();
         JOptionPane.showMessageDialog(null, "Prescrizione aggiunta con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+        interfacciaInserimento.getTextAreaOggetto().setText("");
 
     }
 
