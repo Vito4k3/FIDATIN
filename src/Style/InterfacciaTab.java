@@ -31,13 +31,13 @@ public class InterfacciaTab extends JPanel {
         add(panel2, BorderLayout.LINE_END);
     }
     public InterfacciaTab(String titleTab, int i){
-        button2= new MyButtonStyle("Profilo", Color.white);
+        //button2= new MyButtonStyle("Profilo", Color.white);
         buttonIcon= new MyButtonStyle(iconaRidimensionata);
 
         init(titleTab);
         panel3.add(buttonIcon);
         panel.add(title);
-        panel2.add(button2);
+        //panel2.add(button2);
         panel2.add(buttonEsci);
 
         add(panel3, BorderLayout.LINE_START);
