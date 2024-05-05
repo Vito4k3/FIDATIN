@@ -100,6 +100,8 @@ public class FramePrenotazioni extends JPanel{
                             JOptionPane.showMessageDialog(null, "Prenotazione eliminata!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
                         }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Seleziona una prenotazione", "Errore", JOptionPane.ERROR_MESSAGE);
                     }
                 }else if(premuto.equals(buttonModifica)){       //Pulsante Modifica
                     dialog2= new JDialog();
@@ -144,6 +146,8 @@ public class FramePrenotazioni extends JPanel{
                             dialog2.setVisible(true);
                         }
 
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Seleziona una prenotazione", "Errore", JOptionPane.ERROR_MESSAGE);
                     }
                 }else if(premuto.equals(buttonOrdina)){
                     ordinamento++;

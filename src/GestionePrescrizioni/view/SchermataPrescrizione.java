@@ -228,47 +228,56 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         JButton premuto = (JButton) e.getSource();
         if(premuto.equals(pulsanteModifica)){   //pulsante modifica
-            int rigaSelezionata = table.getSelectedRow();
-            Prescrizione prescrizione = databasePrescrizioni.getPrescrizioni().get(rigaSelezionata);
-            if(!prescrizioneDialog.isVisible()) {
-                if (interfacciaInserimentoModifica.getButtonSalva().getActionListeners().length == 0) {
-                    interfacciaInserimentoModifica.getButtonSalva().addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            prescrizioneDialog.setVisible(false);
-                            processaEventoModifica();
-                        }
-                    });
+            int rigaSelezionata = -1;
+            rigaSelezionata = table.getSelectedRow();
+            if(rigaSelezionata!=-1) {
+                Prescrizione prescrizione = databasePrescrizioni.getPrescrizioni().get(rigaSelezionata);
+                if (!prescrizioneDialog.isVisible()) {
+                    if (interfacciaInserimentoModifica.getButtonSalva().getActionListeners().length == 0) {
+                        interfacciaInserimentoModifica.getButtonSalva().addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                prescrizioneDialog.setVisible(false);
+                                processaEventoModifica();
+                            }
+                        });
+                    }
+
+                    interfacciaInserimentoModifica.getSceltaDottore().setSelectedItem(prescrizione.getDottore());
+                    interfacciaInserimentoModifica.getSceltaPaziente().setSelectedItem(prescrizione.getPaziente());
+                    interfacciaInserimentoModifica.getTextAreaOggetto().setText(prescrizione.getOggettoPrescrizione());
+
+                    prescrizioneDialog.add(interfacciaInserimentoModifica);
+                    prescrizioneDialog.setModal(true);
+                    prescrizioneDialog.setSize(700, 500);
+                    prescrizioneDialog.setLocationRelativeTo(null);
+                    prescrizioneDialog.setResizable(false);
+                    prescrizioneDialog.setVisible(true);
                 }
-
-                interfacciaInserimentoModifica.getSceltaDottore().setSelectedItem(prescrizione.getDottore());
-                interfacciaInserimentoModifica.getSceltaPaziente().setSelectedItem(prescrizione.getPaziente());
-                interfacciaInserimentoModifica.getTextAreaOggetto().setText(prescrizione.getOggettoPrescrizione());
-
-                prescrizioneDialog.add(interfacciaInserimentoModifica);
-                prescrizioneDialog.setModal(true);
-                prescrizioneDialog.setSize(700, 500);
-                prescrizioneDialog.setLocationRelativeTo(null);
-                prescrizioneDialog.setResizable(false);
-                prescrizioneDialog.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(prescrizioneDialog, "Seleziona una prescrizione", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         }else if(premuto.equals(pulsanteStampa)){   //pulsante stampa
+            int rigaSelezionata = -1;
+            rigaSelezionata = table.getSelectedRow();
+            if(rigaSelezionata != -1) {
+                if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    String filePath = fileToSave.getAbsolutePath();
 
-            int rigaSelezionata = table.getSelectedRow();
-            if(fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
-                File fileToSave = fileChooser.getSelectedFile();
-                String filePath = fileToSave.getAbsolutePath();
+                    // controlla se il nome del file termina con l'estensione .pdf
+                    if (!filePath.endsWith(".pdf")) {
+                        fileToSave = new File(filePath + ".pdf");
+                    }
 
-                // controlla se il nome del file termina con l'estensione .pdf
-                if (!filePath.endsWith(".pdf")) {
-                    fileToSave = new File(filePath + ".pdf");
+                    try {
+                        databasePrescrizioni.salvaPrescrizioneSuFile(rigaSelezionata, fileToSave);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(this, "Impossibile stampare la prenotazione", "Errore di battitura", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-
-                try {
-                    databasePrescrizioni.salvaPrescrizioneSuFile(rigaSelezionata, fileToSave);
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(this, "Impossibile stampare la prenotazione" , "Errore di battitura", JOptionPane.ERROR_MESSAGE);
-                }
+            }else{
+                JOptionPane.showMessageDialog(prescrizioneDialog, "Seleziona una prescrizione", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         }else if(premuto.equals(pulsanteCreaPrescrizione)){     //pulsante aggiungi
             if(!prescrizioneDialog2.isVisible()) {
@@ -281,7 +290,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
                                 prescrizioneDialog2.setVisible(false);
                                 processaEventoAggiungi();
                             }else{
-                                JOptionPane.showMessageDialog(prescrizioneDialog2, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
                             }
                         }
                     });
@@ -304,6 +313,8 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
                     JOptionPane.showMessageDialog(null, "Prescrizione eliminata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
                 }
+            }else{
+                JOptionPane.showMessageDialog(null, "Seleziona una prescrizione", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

@@ -99,6 +99,8 @@ public class FrameDottori extends JPanel{
                                 interfacciaTabella.aggiorna();
                                 JOptionPane.showMessageDialog(null, "Dottore eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
                             }
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Seleziona un dottore", "Errore", JOptionPane.ERROR_MESSAGE);
                         }
                     } else if (premuto.equals(buttonModifica)) {       //Pulsante Modifica
                         JTable table = interfacciaTabella.getTable();
@@ -140,6 +142,8 @@ public class FrameDottori extends JPanel{
                                 dialog2.setResizable(false);
                                 dialog2.setVisible(true);
                             }
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Seleziona un dottore", "Errore", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
