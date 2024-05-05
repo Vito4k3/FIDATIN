@@ -10,6 +10,7 @@ public class IDandPassword {
         loginData.put("Dottore", "password1");
         loginData.put("Segretaria", "password2");
         loginData.put("Amministratore", "admin");
+        loginData.put("demo", "demo");
     }
 
     public HashMap getLoginData(){
