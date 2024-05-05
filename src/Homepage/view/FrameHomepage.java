@@ -86,9 +86,15 @@ public class FrameHomepage extends JFrame {
             interfacciaHomepage.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
             cardLayout.show(cardPanel, "HOMEPAGE");
         });
-        panelDottori.getTab().getButtonEsci().addActionListener(e -> cardLayout.show(cardPanel, "HOMEPAGE"));
+        panelDottori.getTab().getButtonEsci().addActionListener(e -> {
+            interfacciaHomepage.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
+            cardLayout.show(cardPanel, "HOMEPAGE");
+        });
         panelPrescrizioni.getTab().getButtonEsci().addActionListener(e -> cardLayout.show(cardPanel, "HOMEPAGE"));
-        panelPazienti.getTab().getButtonEsci().addActionListener(e -> cardLayout.show(cardPanel, "HOMEPAGE"));
+        panelPazienti.getTab().getButtonEsci().addActionListener(e -> {
+            interfacciaHomepage.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
+            cardLayout.show(cardPanel, "HOMEPAGE");
+        });
 
         interfacciaHomepage.getTab().getButtonEsci().setText("ESCI");
         interfacciaHomepage.getTab().getButtonEsci().addActionListener(e -> {
