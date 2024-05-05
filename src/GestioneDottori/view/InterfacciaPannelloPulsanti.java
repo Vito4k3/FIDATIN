@@ -21,7 +21,6 @@ public class InterfacciaPannelloPulsanti extends JPanel implements ActionListene
     private InterfacciaTab interfacciaTab;
     private JCheckBox visualizzaDottoriAttivi;
     private Evento evento;
-    private InterfacciaPannelloPulsanti interfacciaPannelloPulsanti;
 
     InterfacciaPannelloPulsanti(){
 

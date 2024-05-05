@@ -27,14 +27,6 @@ public class PanelloLogo extends JPanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        gbc.gridy=0;
-        gbc.gridx=0;
-
-        //add(logo, gbc);
-
-        gbc.gridy=1;
-        gbc.gridx=0;
-
         add(nomeOspedale, gbc);
 
     }

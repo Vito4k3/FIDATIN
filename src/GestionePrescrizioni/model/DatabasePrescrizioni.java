@@ -19,7 +19,7 @@ public class DatabasePrescrizioni {
     private File file = new File(System.getProperty("user.home"), "databasePrescrizioni.dat");
 
     public DatabasePrescrizioni() {
-        listaPrescrizioni = new ArrayList<Prescrizione>();
+        listaPrescrizioni = new ArrayList<>();
     }
     
     public void InserimentoPrescrizione(Prescrizione c){
@@ -61,7 +61,7 @@ public class DatabasePrescrizioni {
     }
 
     public void situazioneDottoreEliminato(Dottore vecchioDottore){
-        for(int i=0; i<listaPrescrizioni.size(); i++){
+        for(int i = listaPrescrizioni.size() - 1; i >= 0; i--){
             if(listaPrescrizioni.get(i).getDottore().equals(vecchioDottore)){
                 listaPrescrizioni.remove(listaPrescrizioni.get(i));
             }
@@ -69,7 +69,7 @@ public class DatabasePrescrizioni {
     }
 
     public void situazionePazienteEliminato(Paziente vecchioPaziente){
-        for(int i=0; i<listaPrescrizioni.size(); i++){
+        for(int i = listaPrescrizioni.size() - 1; i >= 0; i--){
             if(listaPrescrizioni.get(i).getPaziente().equals(vecchioPaziente)){
                 listaPrescrizioni.remove(listaPrescrizioni.get(i));
             }
@@ -106,7 +106,7 @@ public class DatabasePrescrizioni {
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
-        Prescrizione[] arrayPrescrizioni= listaPrescrizioni.toArray(new Prescrizione[listaPrescrizioni.size()]);
+        Prescrizione[] arrayPrescrizioni= listaPrescrizioni.toArray(new Prescrizione[0]);
 
         oos.writeObject(arrayPrescrizioni);
 

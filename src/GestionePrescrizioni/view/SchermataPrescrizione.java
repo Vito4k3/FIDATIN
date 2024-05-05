@@ -37,7 +37,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
     private JLabel vuota1 = new JLabel(" ");
     private JLabel vuota2 = new JLabel(" ");
     private JLabel vuota3  = new JLabel(" ");
-    private final Object colonne[] = {"Paziente","Dottore","Oggetto"};
+    private final Object[] colonne = {"Paziente","Dottore","Oggetto"};
     private InterfacciaTab interfacciaTab;
     private InterfacciaInserimento interfacciaInserimento, interfacciaInserimentoModifica;
     private DatabasePrescrizioni databasePrescrizioni;
@@ -135,7 +135,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
 
             @Override
             public void keyReleased(KeyEvent e) {
-                AbstractTableModel dtb = (AbstractTableModel) tableModel;
+                AbstractTableModel dtb =  tableModel;
                 TableRowSorter<AbstractTableModel> trs = new TableRowSorter<>(dtb);
                 table.setRowSorter(trs);
                 trs.setRowFilter(RowFilter.regexFilter(fieldRicerca.getText()));
@@ -163,7 +163,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
 
         pulsanteCreaPrescrizione = new MyButtonStyle ("Crea Prescrizione", new Color(54, 159, 148));
         pulsanteCreaPrescrizione.addActionListener(this);
-        pulsanteCreaPrescrizione.setFont(new Font("Arial",1,30));
+        pulsanteCreaPrescrizione.setFont(new Font("Arial", Font.BOLD,30));
         pulsanteCreaPrescrizione.setPreferredSize(new Dimension(270,30));
 
         ovestJp.add(fieldRicerca);
@@ -173,20 +173,20 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
         ovestJp.add(vuota);
 
         pulsanteStampa = new MyButtonStyle("Stampa", new Color(54, 159, 148));
-        pulsanteStampa .setFont(new Font("Arial",1,30));
+        pulsanteStampa .setFont(new Font("Arial", Font.BOLD,30));
         pulsanteStampa.addActionListener(this);
 
         ovestJp.add(pulsanteStampa);
         ovestJp.add(vuota1);
 
         pulsanteModifica = new MyButtonStyle ("Modifica", new Color(54, 159, 148));
-        pulsanteModifica .setFont(new Font("Arial",1,30));
+        pulsanteModifica .setFont(new Font("Arial", Font.BOLD,30));
         pulsanteModifica.addActionListener(this);
 
         ovestJp.add(pulsanteModifica);
 
         pulsanteElimina = new MyButtonStyle("Elimina", new Color(54, 159, 148));
-        pulsanteElimina .setFont(new Font("Arial",1,30));
+        pulsanteElimina .setFont(new Font("Arial", Font.BOLD,30));
         pulsanteElimina.addActionListener(this);
 
         ovestJp.add(vuota2);

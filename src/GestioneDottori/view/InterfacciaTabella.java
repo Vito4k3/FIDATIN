@@ -5,8 +5,6 @@ import GestioneDottori.model.Dottore;
 import Style.MyScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.util.List;
 
@@ -35,7 +33,7 @@ public class InterfacciaTabella extends JPanel {
 
         table.setOpaque(false);
         table.setBackground(Color.WHITE);
-        table.setFont(new Font(null, Font.ROMAN_BASELINE, 13));
+        table.setFont(new Font(null, Font.PLAIN, 13));
         table.setForeground(new Color(0x800000));
 
         setLayout(new BorderLayout());

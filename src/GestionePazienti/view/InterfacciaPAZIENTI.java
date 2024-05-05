@@ -344,71 +344,6 @@ public class InterfacciaPAZIENTI extends JPanel{
         setVisible(true);
     }
 
-    private void loadFromFile(File percorsoFile) {
-        try (BufferedReader br = new BufferedReader(new FileReader(percorsoFile))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split("\t");
-                if (data.length == 7) {
-                    tableModel.addRow(data);
-                } else {
-                    JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Errore nel formato dei dati.", "Errore",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void aggiungiPaziente(Object[] DatoRiga) {
-        tableModel.addRow(DatoRiga);
-        aggiuntaAlFile(DatoRiga);
-    }
-
-    public void modificaPaziente(int riga, Object[] DatoRiga) {
-        for (int i = 0; i < DatoRiga.length; i++) {
-            tableModel.setValueAt(DatoRiga[i], riga, i);
-        }
-        modificaAlFile(riga, DatoRiga);
-    }
-
-    public void aggiuntaAlFile(Object[] DatoRiga) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            for (Object dato : DatoRiga) {
-                writer.write(dato.toString());
-                writer.append("\t"); // da un tab dopo l'attributo
-            }
-            writer.newLine(); // Vai a capo per il prossimo paziente
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void modificaAlFile(int riga, Object[] DatoRiga) {
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            StringBuilder fileContent = new StringBuilder();
-            int count = 0;
-            while ((line = br.readLine()) != null) {
-                if (count == riga) {
-                    StringBuilder sb = new StringBuilder();
-                    for (Object dato : DatoRiga) {
-                        sb.append(dato).append("\t");
-                    }
-                    sb.deleteCharAt(sb.length() - 1); // Rimuovi l'ultima virgola
-                    line = sb.toString();
-                }
-                fileContent.append(line).append("\n");
-                count++;
-            }
-            try (FileWriter writer = new FileWriter(file)) {
-                writer.write(fileContent.toString());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     class AggiungiPazienteDialog extends JDialog implements Serializable{
         private JTextField nomeField, cognomeField, residenzaField, capField, sessoField,
@@ -525,10 +460,6 @@ public class InterfacciaPAZIENTI extends JPanel{
                 JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Devi inserire tutti i campi.", "Errore", JOptionPane.ERROR_MESSAGE);
 
                 } else {
-                    Object[] rowData = { nomeField.getText(), cognomeField.getText(), getDataSpinner().getValue(),
-                            codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
-                            capField.getText(),
-                    };
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
                     String data= sdf.format(getDataSpinner().getValue());
@@ -550,7 +481,6 @@ public class InterfacciaPAZIENTI extends JPanel{
 
             });
 
-            //panel.add(aggiungiButton, BorderLayout.PAGE_END);
             add(panel);
         }
     }
@@ -678,9 +608,6 @@ public class InterfacciaPAZIENTI extends JPanel{
             modificaButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Object[] rowData = { nomeField.getText(), cognomeField.getText(),getDataSpinner(),
-                            codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
-                            capField.getText() };
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
                     String data= sdf.format(getDataSpinner().getValue());

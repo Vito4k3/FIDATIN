@@ -1,7 +1,5 @@
 package GestionePrenotazioni.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -26,13 +24,13 @@ public class Controller {
         Reparto reparto = null;
         switch(repartoInt){
             case 0:
-                reparto= reparto.DERMATOLOGIA;
+                reparto= Reparto.DERMATOLOGIA;
                 break;
             case 1:
-                reparto= reparto.CHIRURGIA;
+                reparto= Reparto.CHIRURGIA;
                 break;
             case 2:
-                reparto= reparto.VACCINI;
+                reparto= Reparto.VACCINI;
                 break;
         }
 
@@ -40,13 +38,13 @@ public class Controller {
         TipoPrenotazione tipoPrenotazione = null;
         switch(tipoPrenotazioneInt){
             case 0:
-                tipoPrenotazione= tipoPrenotazione.VISITA;
+                tipoPrenotazione= TipoPrenotazione.VISITA;
                 break;
             case 1:
-                tipoPrenotazione= tipoPrenotazione.INTERVENTO;
+                tipoPrenotazione= TipoPrenotazione.INTERVENTO;
                 break;
             case 2:
-                tipoPrenotazione= tipoPrenotazione.VACCINO;
+                tipoPrenotazione= TipoPrenotazione.VACCINO;
                 break;
         }
 
@@ -65,16 +63,6 @@ public class Controller {
         //metodo per restituire le prenotazioni
         public List<Prenotazione> getPrenotazioni() {
             return databasePrenotazione.getPrenotazioni();
-        }
-
-        public void salvaSuFile(File file) throws IOException {
-            databasePrenotazione.salvaSuFile();
-        }
-        public void caricaDaFile(File file) throws IOException {
-            databasePrenotazione.caricaDaFile();
-        }
-        public void setContatore(int contatore){
-            prenotazione.setContatore(contatore);
         }
 
         public DatabasePrenotazione getDatabase(){

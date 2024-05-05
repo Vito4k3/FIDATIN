@@ -1,6 +1,5 @@
 package Style;
 
-import GestioneDottori.model.Dottore;
 import GestionePazienti.model.Paziente;
 
 import javax.swing.*;
@@ -18,7 +17,7 @@ public class MyComboBoxPaziente extends JComboBox<Paziente>{
         setFocusable(false);
         setBackground(Color.white);
         setUI(new BasicComboBoxUI());
-        Paziente[] pazienti = listaPazienti.toArray(new Paziente[listaPazienti.size()]);
+        Paziente[] pazienti = listaPazienti.toArray(new Paziente[0]);
         modelloCombo = new DefaultComboBoxModel<>(pazienti);
         setModel(modelloCombo);
         setRenderer(new PazienteComboBoxRenderer());
@@ -38,7 +37,7 @@ public class MyComboBoxPaziente extends JComboBox<Paziente>{
         revalidate();
         repaint();
     }
-    private class PazienteComboBoxRenderer extends JLabel implements ListCellRenderer<Paziente> {
+    private static class PazienteComboBoxRenderer extends JLabel implements ListCellRenderer<Paziente> {
         @Override
         public Component getListCellRendererComponent(JList<? extends Paziente> list, Paziente paziente, int index, boolean isSelected, boolean cellHasFocus) {
             if (paziente != null) {

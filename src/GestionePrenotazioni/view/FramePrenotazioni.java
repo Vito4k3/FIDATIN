@@ -1,8 +1,6 @@
 package GestionePrenotazioni.view;
 
-import GestioneDottori.model.Dottore;
-import GestioneDottori.view.FrameDottori;
-import GestionePazienti.model.Paziente;
+import GestioneDottori.model.Dottore;import GestionePazienti.model.Paziente;
 import GestionePrenotazioni.controller.Controller;
 
 import javax.swing.*;
@@ -10,11 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -27,7 +21,6 @@ import GestionePrenotazioni.model.Reparto;
 import GestionePrenotazioni.model.TipoPrenotazione;
 import Eventi.Evento;
 import Eventi.EventoEvent;
-import Homepage.view.FrameHomepage;
 import Style.InterfacciaTab;
 
 public class FramePrenotazioni extends JPanel{
@@ -35,7 +28,6 @@ public class FramePrenotazioni extends JPanel{
     private InterfacciaPannelloPulsanti interfacciaPannelloPulsanti;
     private InterfacciaTabella interfacciaTabella;
     private Controller controller;
-    private File file;
     private JPanel boxPanel, homePanel;
     private JDialog dialog, dialog2;
     private int ordinamento= 0;

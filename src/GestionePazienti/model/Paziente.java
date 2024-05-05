@@ -1,6 +1,5 @@
 package GestionePazienti.model;
 
-import GestioneDottori.model.Dottore;
 import GestionePazienti.view.CartellaClinica;
 
 import java.io.Serializable;

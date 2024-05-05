@@ -4,14 +4,10 @@ import GestioneDottori.view.FrameDottori;
 import GestionePazienti.view.InterfacciaPAZIENTI;
 import GestionePrenotazioni.view.FramePrenotazioni;
 import GestionePrescrizioni.view.SchermataPrescrizione;
-import Homepage.Eventi.Evento;
 import Login.view.FrameLogin;
-import Homepage.Eventi.EventoEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -61,72 +57,48 @@ public class FrameHomepage extends JFrame {
         // Aggiunge il cardPanel al panel principale
         panel.add(cardPanel, "CARDS");
 
-        interfacciaHomepage.setEvento(new Evento() {
-            @Override
-            public void evento(EventoEvent e) {
-                JButton pulsantePrenotazione = e.getButtonPrenotazioni();
-                JButton pulsantePremuto = e.getPremuto();
-                JButton pulsanteDottori = e.getButtonDottori();
-                JButton pulsantePrescrizioni= e.getButtonPrescrizioni();
-                JButton pulsantePazienti = e.getButtonPazienti();
-                JButton pulsanteHomepage = e.getButtonHomepage();
+        interfacciaHomepage.setEvento(e -> {
+            JButton pulsantePrenotazione = e.getButtonPrenotazioni();
+            JButton pulsantePremuto = e.getPremuto();
+            JButton pulsanteDottori = e.getButtonDottori();
+            JButton pulsantePrescrizioni= e.getButtonPrescrizioni();
+            JButton pulsantePazienti = e.getButtonPazienti();
+            JButton pulsanteHomepage = e.getButtonHomepage();
 
-                if(pulsantePremuto.equals(pulsantePrenotazione)){
-                    panelPrenotazioni.getInterfacciaInserimento().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
-                    panelPrenotazioni.getInterfacciaInserimentoAggiungi().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
-                    cardLayout.show(cardPanel, "PRENOTAZIONI");
-                }else if(pulsantePremuto.equals(pulsanteDottori)){
-                    cardLayout.show(cardPanel, "DOTTORI");
-                }else if(pulsantePremuto.equals(pulsantePrescrizioni)){
-                    panelPrescrizioni.getInserimentoModifica().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
-                    panelPrescrizioni.getInterfacciaInserimento().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
-                    cardLayout.show(cardPanel, "PRESCRIZIONI");
-                }else if(pulsantePremuto.equals(pulsantePazienti)){
-                    cardLayout.show(cardPanel, "PAZIENTI");
-                }else if(pulsantePremuto.equals(pulsanteHomepage)){
-                    interfacciaHomepage.rimuoviPannelloScelta();
-                }
+            if(pulsantePremuto.equals(pulsantePrenotazione)){
+                panelPrenotazioni.getInterfacciaInserimento().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
+                panelPrenotazioni.getInterfacciaInserimentoAggiungi().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
+                cardLayout.show(cardPanel, "PRENOTAZIONI");
+            }else if(pulsantePremuto.equals(pulsanteDottori)){
+                cardLayout.show(cardPanel, "DOTTORI");
+            }else if(pulsantePremuto.equals(pulsantePrescrizioni)){
+                panelPrescrizioni.getInserimentoModifica().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
+                panelPrescrizioni.getInterfacciaInserimento().aggiornaFile(panelDottori.getController().getDatabase(), panelPazienti.getDatabasePazienti());
+                cardLayout.show(cardPanel, "PRESCRIZIONI");
+            }else if(pulsantePremuto.equals(pulsantePazienti)){
+                cardLayout.show(cardPanel, "PAZIENTI");
+            }else if(pulsantePremuto.equals(pulsanteHomepage)){
+                interfacciaHomepage.rimuoviPannelloScelta();
             }
         });
 
-        panelPrenotazioni.getTab().getButtonEsci().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                interfacciaHomepage.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
-                cardLayout.show(cardPanel, "HOMEPAGE");
-            }
+        panelPrenotazioni.getTab().getButtonEsci().addActionListener(e -> {
+            interfacciaHomepage.setDatabasePrenotazioni(panelPrenotazioni.getController().getDatabase());
+            cardLayout.show(cardPanel, "HOMEPAGE");
         });
-        panelDottori.getTab().getButtonEsci().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "HOMEPAGE");
-            }
-        });
-        panelPrescrizioni.getTab().getButtonEsci().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "HOMEPAGE");
-            }
-        });
-        panelPazienti.getTab().getButtonEsci().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "HOMEPAGE");
-            }
-        });
+        panelDottori.getTab().getButtonEsci().addActionListener(e -> cardLayout.show(cardPanel, "HOMEPAGE"));
+        panelPrescrizioni.getTab().getButtonEsci().addActionListener(e -> cardLayout.show(cardPanel, "HOMEPAGE"));
+        panelPazienti.getTab().getButtonEsci().addActionListener(e -> cardLayout.show(cardPanel, "HOMEPAGE"));
 
         interfacciaHomepage.getTab().getButtonEsci().setText("ESCI");
-        interfacciaHomepage.getTab().getButtonEsci().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler tornare al login?", "Conferma", JOptionPane.YES_NO_OPTION);
-                if (choice == JOptionPane.YES_OPTION) {
-                    salvaSuFile();
-                    FrameLogin frameLogin = new FrameLogin();
-                    frameLogin.setSize(getSize());
-                    frameLogin.setLocation(getLocation());
-                    dispose();
-                }
+        interfacciaHomepage.getTab().getButtonEsci().addActionListener(e -> {
+            int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler tornare al login?", "Conferma", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                salvaSuFile();
+                FrameLogin frameLogin = new FrameLogin();
+                frameLogin.setSize(getSize());
+                frameLogin.setLocation(getLocation());
+                dispose();
             }
         });
 

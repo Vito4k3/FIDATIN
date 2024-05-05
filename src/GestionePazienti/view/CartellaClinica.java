@@ -1,11 +1,8 @@
 package GestionePazienti.view;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-
 import GestionePazienti.model.Paziente;
 import GestionePrescrizioni.model.Prescrizione;
 import GestionePrenotazioni.model.Prenotazione;

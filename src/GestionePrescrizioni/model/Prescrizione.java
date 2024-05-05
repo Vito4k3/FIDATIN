@@ -4,7 +4,6 @@ package GestionePrescrizioni.model;
 import GestioneDottori.model.Dottore;
 import GestionePazienti.model.Paziente;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 public class Prescrizione implements Serializable {

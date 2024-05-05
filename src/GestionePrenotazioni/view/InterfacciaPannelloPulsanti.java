@@ -17,7 +17,6 @@ public class InterfacciaPannelloPulsanti extends JPanel implements ActionListene
     private JTextField fieldRicerca;
     private InterfacciaTab interfacciaTab;
     private Evento evento;
-    private InterfacciaPannelloPulsanti interfacciaPannelloPulsanti;
 
     InterfacciaPannelloPulsanti(){
 

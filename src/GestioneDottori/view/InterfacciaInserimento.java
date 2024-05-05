@@ -164,13 +164,6 @@ public class InterfacciaInserimento extends JPanel {
 
     public JButton getButtonSalva(){return buttonSalva;}
 
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
-
-    public void setMainPanel(JPanel mainPanel) {
-        this.mainPanel = mainPanel;
-    }
 
     public JComboBox getBoxTipoOperatore() {
         return boxTipoOperatore;

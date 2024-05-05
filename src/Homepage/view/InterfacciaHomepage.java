@@ -9,17 +9,13 @@ import Style.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class InterfacciaHomepage extends JPanel implements ActionListener{
     private JPanel centerJp, gridContainer, estJp, ovestJp, toolbarJp, containerJp;
-    private JLabel lblTxtBenvenuto = new JLabel("FIDATIN");
     private JLabel homepage = new JLabel("  HOMEPAGE");
     private JLabel gestione = new JLabel("  GESTIONE");
     private JLabel amministrazione = new JLabel("  AMMINISTRAZIONE");
@@ -28,7 +24,6 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
     private JButton Prenotazioni = new MyButtonStyle("Prenotazioni", Color.white, Color.black);
     private JButton Prescrizioni = new MyButtonStyle("Prescrizioni", Color.white, Color.black);
     private JButton Dottori = new MyButtonStyle("Dottori", Color.white, Color.black);
-    private JButton Bacheca = new JButton("Bacheca");
     private Evento evento;
     private InterfacciaTab interfacciaTab;
     private FramePrenotazioni framePrenotazioni= new FramePrenotazioni();
@@ -92,20 +87,15 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
 
         //gridContainer.add(ovestJp);
 
-        interfacciaTab.getButtonIcon().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(gridContainer.getComponent(0)!=ovestJp) {
-                    gridContainer.add(ovestJp, 0);
-                    revalidate();
-                    repaint();
-                }else {
-                    gridContainer.remove(ovestJp);
-                    remove(ovestJp);
-                    revalidate();
-                    repaint();
-                }
+        interfacciaTab.getButtonIcon().addActionListener(e -> {
+            if(gridContainer.getComponent(0)!=ovestJp) {
+                gridContainer.add(ovestJp, 0);
+            }else {
+                gridContainer.remove(ovestJp);
+                remove(ovestJp);
             }
+            revalidate();
+            repaint();
         });
 
         // EST
@@ -207,9 +197,6 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
 
     public InterfacciaTab getTab(){
         return interfacciaTab;
-    }
-    public DefaultTableModel getTableModel () {
-        return tableModel;
     }
     public void setDatabasePrenotazioni(DatabasePrenotazione database){
         this.databasePrenotazione = database;

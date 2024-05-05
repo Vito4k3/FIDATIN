@@ -2,13 +2,11 @@ package GestionePrenotazioni.view;
 
 
 import Style.MyScrollPane;
-import GestionePrenotazioni.view.CustomTableCellRenderer;
 import GestionePrenotazioni.model.Prenotazione;
 import Style.MyTableStyle;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.util.List;
 
 public class InterfacciaTabella extends JPanel {

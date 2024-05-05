@@ -7,7 +7,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.util.List;
-import java.util.Vector;
 
 public class MyComboBoxDottori extends JComboBox<Dottore>{
     private DefaultComboBoxModel<Dottore> modelloCombo;
@@ -46,7 +45,7 @@ public class MyComboBoxDottori extends JComboBox<Dottore>{
         repaint();
     }
 
-    private class DottoreComboBoxRenderer extends JLabel implements ListCellRenderer<Dottore> {
+    private static class DottoreComboBoxRenderer extends JLabel implements ListCellRenderer<Dottore> {
         @Override
         public Component getListCellRendererComponent(JList<? extends Dottore> list, Dottore dottore, int index, boolean isSelected, boolean cellHasFocus) {
             if (dottore != null) {

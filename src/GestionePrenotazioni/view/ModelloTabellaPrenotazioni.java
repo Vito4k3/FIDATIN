@@ -15,19 +15,6 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
         this.listaPrenotazioni= listaPrenotazioni;
     }
 
-    public void aggiornaDatiDottore(Dottore dottore, Dottore dottoreNuovo) {
-        // Itera attraverso tutte le prenotazioni
-        for (Prenotazione prenotazione : listaPrenotazioni) {
-            // Controlla se il dottore della prenotazione è lo stesso del dottore modificato
-            if (prenotazione.getDottore().equals(dottore)) {
-                // Aggiorna il dottore nella prenotazione con il nuovo dottore
-                prenotazione.setDottore(dottoreNuovo);
-            }
-        }
-        // Aggiorna la tabella
-        aggiorna();
-    }
-
     @Override
     public String getColumnName(int column) {
         return nomiColonne[column];
@@ -62,9 +49,5 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
             default:
                 return null;
         }
-    }
-
-    public void aggiorna(){
-        this.fireTableDataChanged();
     }
 }

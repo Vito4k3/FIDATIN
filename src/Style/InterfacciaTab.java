@@ -9,6 +9,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class InterfacciaTab extends JPanel {
 
@@ -17,7 +18,7 @@ public class InterfacciaTab extends JPanel {
     private JPanel panel, panel2, panel3;
     private Evento evento;
     private Color defaultColor;
-    ImageIcon icona = new ImageIcon(getClass().getResource("/Icon/menu_list_options_basic_icon_192477.png"));
+    ImageIcon icona = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Icon/menu_list_options_basic_icon_192477.png")));
     Image image = icona.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
     ImageIcon iconaRidimensionata = new ImageIcon(image);
 

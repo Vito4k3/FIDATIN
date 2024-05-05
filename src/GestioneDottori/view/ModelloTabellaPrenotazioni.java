@@ -53,17 +53,6 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
         }
     }
 
-
-    public void fixTable(JScrollPane scroll) {
-        scroll.getViewport().setBackground(Color.WHITE);
-        scroll.setVerticalScrollBar(new JScrollBar());
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        scroll.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        scroll.setBorder(new EmptyBorder(5, 10, 5, 10));
-    }
-
-
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return super.isCellEditable(rowIndex, columnIndex);

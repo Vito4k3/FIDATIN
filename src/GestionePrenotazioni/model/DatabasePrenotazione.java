@@ -24,9 +24,6 @@ public class DatabasePrenotazione {
     public void rimuoviPrenotazione(int id){
         prenotazioni.remove(id);
     }
-    public void sostituisciPrenotazione(int index, Prenotazione prenotazione){
-        prenotazioni.set(index, prenotazione);
-    }
 
     public List<Prenotazione> prenotazioniGiornaliere(){
         List<Prenotazione> listaPrenotazioniGiornaliere = new ArrayList<>();
@@ -82,7 +79,7 @@ public class DatabasePrenotazione {
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
-        Prenotazione[] arrayPrenotazioni= prenotazioni.toArray(new Prenotazione[prenotazioni.size()]);
+        Prenotazione[] arrayPrenotazioni= prenotazioni.toArray(new Prenotazione[0]);
 
         oos.writeObject(arrayPrenotazioni);
 
@@ -96,15 +93,10 @@ public class DatabasePrenotazione {
                 prenotazioni.get(i).setDottore(nuovoDottore);
             }
         }
-        try {
-            salvaSuFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void situazioneDottoreEliminato(Dottore vecchioDottore){
-        for(int i=0; i<prenotazioni.size(); i++){
+        for(int i = prenotazioni.size() - 1; i >= 0; i--){
             if(prenotazioni.get(i).getDottore().equals(vecchioDottore)){
                 prenotazioni.remove(prenotazioni.get(i));
             }
@@ -112,9 +104,9 @@ public class DatabasePrenotazione {
     }
 
     public void situazionePazienteEliminato(Paziente vecchioPaziente){
-        for(int i=0; i<prenotazioni.size(); i++){
-            if(prenotazioni.get(i).getPaziente().equals(vecchioPaziente)){
-                prenotazioni.remove(prenotazioni.get(i));
+        for (int i = prenotazioni.size() - 1; i >= 0; i--) {
+            if (prenotazioni.get(i).getPaziente().equals(vecchioPaziente)) {
+                prenotazioni.remove(i);
             }
         }
     }
@@ -124,11 +116,6 @@ public class DatabasePrenotazione {
             if(prenotazioni.get(i).getPaziente().equals(vecchioPaziente)){
                 prenotazioni.get(i).setPaziente(nuovoPaziente);
             }
-        }
-        try {
-            salvaSuFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

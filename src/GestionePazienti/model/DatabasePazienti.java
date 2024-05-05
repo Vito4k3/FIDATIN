@@ -18,20 +18,12 @@ public class DatabasePazienti {
         this.Pazienti.add(p);
     }
 
-    public void RimuoviPaziente(String nomePaziente, String cognomePaziente){
-        for(int i = 0; i < this.Pazienti.size(); i++){
-            if(((Paziente)this.Pazienti.get(i)).getNome().equals(nomePaziente) && ((Paziente)this.Pazienti.get(i)).getCognome().equals(cognomePaziente)){
-                this.Pazienti.remove(i);
-            }
-        }
-    }
-
     public void salvaSuFile() throws IOException {
 
         FileOutputStream fop = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(fop);
 
-        Paziente[] arrayPazienti = Pazienti.toArray(new Paziente[Pazienti.size()]);
+        Paziente[] arrayPazienti = Pazienti.toArray(new Paziente[0]);
 
         oos.writeObject(arrayPazienti);
 

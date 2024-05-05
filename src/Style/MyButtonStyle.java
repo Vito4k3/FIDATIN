@@ -11,7 +11,6 @@ import java.awt.geom.RoundRectangle2D;
 
 public class MyButtonStyle extends JButton {
 
-    private static final long serialVersionUID = 356381274638960888L;
     private int arco = 25; // il raggio dell'arco che determina il grado di arrotondamento dei bordi
 
 

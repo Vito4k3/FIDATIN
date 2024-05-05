@@ -16,8 +16,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -90,7 +88,7 @@ public class FrameDottori extends JPanel{
                         int rigaSelezionata = -1;
                         rigaSelezionata = interfacciaTabella.getTable().getSelectedRow();
                         if (rigaSelezionata != -1) {
-                            int sceltaUtente = MyOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questo Dottore?\n" +
+                            int sceltaUtente = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questo Dottore?\n" +
                                     " Le Prenotazioni e Prescrizioni a suo carico verranno eliminate!", "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
                             if (sceltaUtente == JOptionPane.YES_OPTION) {
                                 databasePrenotazioni.situazioneDottoreEliminato(getController().getDatabase().getDottori().get(rigaSelezionata));
@@ -188,14 +186,10 @@ public class FrameDottori extends JPanel{
 
         add(homePanel);
 
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         setSize(1200,750);
         setMinimumSize(new Dimension(1000,600));
-        //setTitle("Gestisci Prenotazioni");
-        //setLocationRelativeTo(null);
         setVisible(true);
-
-
     }
 
     private void processaEventoAggiungi() {
@@ -246,10 +240,6 @@ public class FrameDottori extends JPanel{
         interfacciaTabella.aggiorna();
         JOptionPane.showMessageDialog(null, "Dottore modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-    }
-
-    public JPanel getPanel(){
-        return this.homePanel;
     }
     public Controller getController(){
         return this.controller;

@@ -57,7 +57,7 @@ public class DatabaseDottori {
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
-        Dottore[] arrayDottori= dottori.toArray(new Dottore[dottori.size()]);
+        Dottore[] arrayDottori= dottori.toArray(new Dottore[0]);
 
         oos.writeObject(arrayDottori);
 

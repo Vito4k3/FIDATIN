@@ -21,32 +21,29 @@ public class FrameLogin extends JFrame {
         InterfacciaLogin interfacciaLogin = new InterfacciaLogin();
         PanelloLogo pannelloLogo= new PanelloLogo();
 
-        interfacciaLogin.setEvento(new Evento() {
-            @Override
-            public void evento(EventoEvent ev) {
-                String insertId = ev.getInsertId();
-                String insertPassword = ev.getInsertPassword();
-                JLabel labelMessaggi = ev.getLabelMessaggi();
+        interfacciaLogin.setEvento(ev -> {
+            String insertId = ev.getInsertId();
+            String insertPassword = ev.getInsertPassword();
+            JLabel labelMessaggi = ev.getLabelMessaggi();
 
-                if(insertId.isEmpty() || insertPassword.isEmpty() ){
-                    labelMessaggi.setForeground(Color.red);
-                    labelMessaggi.setText("Devi compilare tutti i campi!");
-                }else if(iDandPassword.getLoginData().containsKey(insertId)){
-                    if(iDandPassword.getLoginData().get(insertId).equals(insertPassword)){
-                        labelMessaggi.setForeground(Color.green);
-                        labelMessaggi.setText("Accesso in corso...");
-                        FrameHomepage frameHomepage= new FrameHomepage();
-                        frameHomepage.setLocation(getLocation());
-                        frameHomepage.setSize(getSize());
-                        dispose();
-                    }else{
-                        labelMessaggi.setForeground(Color.red);
-                        labelMessaggi.setText("Password sbagliata! ");
-                    }
+            if(insertId.isEmpty() || insertPassword.isEmpty() ){
+                labelMessaggi.setForeground(Color.red);
+                labelMessaggi.setText("Devi compilare tutti i campi!");
+            }else if(iDandPassword.getLoginData().containsKey(insertId)){
+                if(iDandPassword.getLoginData().get(insertId).equals(insertPassword)){
+                    labelMessaggi.setForeground(Color.green);
+                    labelMessaggi.setText("Accesso in corso...");
+                    FrameHomepage frameHomepage= new FrameHomepage();
+                    frameHomepage.setLocation(getLocation());
+                    frameHomepage.setSize(getSize());
+                    dispose();
                 }else{
                     labelMessaggi.setForeground(Color.red);
-                    labelMessaggi.setText("Username sbagliato! ");
+                    labelMessaggi.setText("Password sbagliata! ");
                 }
+            }else{
+                labelMessaggi.setForeground(Color.red);
+                labelMessaggi.setText("Username sbagliato! ");
             }
         });
 

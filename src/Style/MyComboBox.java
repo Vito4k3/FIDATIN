@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
-import java.util.Vector;
 
 public class MyComboBox extends JComboBox {
 

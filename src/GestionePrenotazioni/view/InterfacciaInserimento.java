@@ -16,8 +16,6 @@ import Style.MyComboBoxPaziente;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -146,46 +144,12 @@ public class InterfacciaInserimento extends JPanel {
         spinner.setPreferredSize(new Dimension(140, 25));
         spinner.setBorder(new LineBorder(new Color(0x1A5690), 3));
 
-        editor.getTextField().addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
-                try {
-                    // Prende il valore dallo spinner e lo converte in una data
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yy", Locale.ITALIAN);
-                    Date date = dateFormat.parse(editor.getTextField().getText());
-                    SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yy", Locale.ITALIAN);
-                    String dataString = dateFormat2.format(date);
-
-                    editor.commitEdit();
-                    setSpinner(dataString);
-
-                } catch (ParseException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
         timeModel = new SpinnerDateModel();
         timeModel.setCalendarField(Calendar.MINUTE);
 
         timeSpinner = new JSpinner(timeModel);
         JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm");
         timeSpinner.setEditor(timeEditor);
-
-        timeEditor.getTextField().addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
-                try {
-                    // Prende il valore dallo spinner e lo converte in una data
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.ITALIAN);
-                    String time = dateFormat.format(dateFormat.parse(timeEditor.getTextField().getText()));
-
-                    timeEditor.commitEdit();
-                    setTimeSpinner(time);
-
-                } catch (ParseException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
 
         timeSpinner.setBorder(new LineBorder(new Color(0x1A5690), 3));
 
@@ -242,14 +206,6 @@ public class InterfacciaInserimento extends JPanel {
     }
 
     public JButton getButtonSalva(){return buttonSalva;}
-
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
-
-    public void setMainPanel(JPanel mainPanel) {
-        this.mainPanel = mainPanel;
-    }
 
     public JComboBox getBoxTipoPrenotazione() {
         return boxTipoPrenotazione;
@@ -320,8 +276,5 @@ public class InterfacciaInserimento extends JPanel {
 
     public JSpinner.DateEditor getEditorSpinner(){
         return this.editor;
-    }
-    public List<Dottore> getDottori(){
-        return listaDottori;
     }
 }

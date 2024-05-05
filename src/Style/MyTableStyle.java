@@ -38,7 +38,7 @@ public class MyTableStyle extends JTable{
 
         setOpaque(true);
         setBackground(Color.WHITE);
-        setFont(new Font(null, Font.ROMAN_BASELINE, 13));
+        setFont(new Font(null, Font.PLAIN, 13));
         setForeground(new Color(0x1A5690));
     }
 
