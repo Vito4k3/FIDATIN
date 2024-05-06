@@ -66,6 +66,12 @@ public class Dottore implements Serializable {
     public void setOrarioLavorativoFine(String orarioLavorativoFine) {
         this.orarioLavorativoFine = orarioLavorativoFine;
     }
+    public boolean isAttivo(){
+        if(stato.equals(Status.ATTIVO)){
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public String toString() {

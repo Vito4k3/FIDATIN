@@ -1,8 +1,14 @@
 package GestionePazienti.model;
 
+import GestioneDottori.model.Dottore;
+import GestionePrenotazioni.model.Prenotazione;
+
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class DatabasePazienti {

@@ -65,8 +65,18 @@ public class FramePrenotazioni extends JPanel{
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     if(interfacciaInserimentoAggiungi.getBoxDottore().getSelectedItem() != null &&
-                                            interfacciaInserimentoAggiungi.getBoxPaziente().getSelectedItem() != null) {
-                                        processaEventoAggiungi();
+                                            interfacciaInserimentoAggiungi.getBoxPaziente().getSelectedItem() != null) {    //verifica che le comboBox non siano vuote
+                                        Date data = (Date) getInterfacciaInserimentoAggiungi().getTimeSpinner().getValue();
+                                        if(getController().getDatabase().visualizzaDisponibilita(interfacciaInserimentoAggiungi.getDottoreSelezionato(), data) &&
+                                                getController().getDatabase().visualizzaDisponibilita(interfacciaInserimentoAggiungi.getPazienteSelezionato(), data)){  //verifica se un dottore/paziente sia già impegnato in quell'orario
+                                            processaEventoAggiungi();
+                                        }else if(!interfacciaInserimentoAggiungi.getDottoreSelezionato().isAttivo()) {
+                                            JOptionPane.showMessageDialog(dialog, "Dottore non attivo!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                        }else if(!getController().getDatabase().visualizzaDisponibilita(interfacciaInserimentoAggiungi.getDottoreSelezionato(), data)){
+                                            JOptionPane.showMessageDialog(dialog, "Dottore non disponibile in questo orario!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                        }else{
+                                            JOptionPane.showMessageDialog(dialog, "Paziente già impegnato in questo orario!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                        }
                                     }else{
                                         JOptionPane.showMessageDialog(dialog, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
                                     }

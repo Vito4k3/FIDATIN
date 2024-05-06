@@ -52,7 +52,7 @@ public class FrameLogin extends JFrame {
         add(pannelloLogo);
         add(interfacciaLogin);
 
-        setSize(900,600);
+        setSize(1100,750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setTitle("Login");

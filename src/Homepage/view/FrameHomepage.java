@@ -24,7 +24,6 @@ public class FrameHomepage extends JFrame {
 
     public FrameHomepage(){
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(1200,750);
         setLocationRelativeTo(null);
         setTitle("Fidatin");
         setIconImage(icon.getImage());
@@ -117,6 +116,12 @@ public class FrameHomepage extends JFrame {
                     salvaSuFile();
                     System.exit(0);
                 }
+            }
+        });
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {     //in caso di chiusura improvvisa salva i file per evitare di perdere salvataggi
+            public void run() {
+               salvaSuFile();
             }
         });
 

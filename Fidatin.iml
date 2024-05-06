@@ -12,6 +12,7 @@
       <library>
         <CLASSES>
           <root url="jar://$USER_HOME$/OneDrive/Desktop/pdfbox-app-3.0.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/src/lib/pdfbox-app-3.0.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -1,10 +1,14 @@
 package GestionePrenotazioni.model;
 
 import GestioneDottori.model.Dottore;
+import GestioneDottori.model.Status;
 import GestionePazienti.model.Paziente;
 
+import javax.swing.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -85,6 +89,40 @@ public class DatabasePrenotazione {
 
         oos.close();
         fop.close();
+    }
+    public boolean visualizzaDisponibilita(Dottore dottore, Date orario){
+        if(dottore.isAttivo()) {
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(orario.toInstant(), java.time.ZoneId.systemDefault());
+            LocalTime nuovoOrario = localDateTime.toLocalTime();
+            LocalTime orarioLavorativoInizio = LocalTime.parse(dottore.getOrarioLavorativoInizio());
+            LocalTime orarioLavorativoFine = LocalTime.parse(dottore.getOrarioLavorativoFine());
+
+
+            for (Prenotazione prenotazione : prenotazioni) {
+                LocalTime orarioPrenotazione = LocalTime.parse(prenotazione.getOra());
+                if (prenotazione.getDottore().equals(dottore) && !(nuovoOrario.isAfter(orarioPrenotazione.plusMinutes(10))
+                        || nuovoOrario.isBefore(orarioPrenotazione.minusMinutes(10)))
+                        || !(nuovoOrario.isAfter(orarioLavorativoInizio) && nuovoOrario.isBefore(orarioLavorativoFine))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean visualizzaDisponibilita(Paziente paziente, Date orario){
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(orario.toInstant(), java.time.ZoneId.systemDefault());
+        LocalTime nuovoOrario = localDateTime.toLocalTime();
+
+        for(Prenotazione prenotazione : prenotazioni){
+            LocalTime orarioPrenotazione = LocalTime.parse(prenotazione.getOra());
+            if(prenotazione.getPaziente().equals(paziente) && !(nuovoOrario.isAfter(orarioPrenotazione.plusMinutes(10))
+                    || nuovoOrario.isBefore(orarioPrenotazione.minusMinutes(10)))){
+                return false;
+            }
+        }
+        return true;
     }
 
     public void AggiornaDottorePrenotazione(Dottore vecchioDottore, Dottore nuovoDottore){
