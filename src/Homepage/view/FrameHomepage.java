@@ -4,6 +4,7 @@ import GestioneDottori.view.FrameDottori;
 import GestionePazienti.view.InterfacciaPAZIENTI;
 import GestionePrenotazioni.view.FramePrenotazioni;
 import GestionePrescrizioni.view.SchermataPrescrizione;
+import Homepage.GestioneFile;
 import Login.view.FrameLogin;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class FrameHomepage extends JFrame {
     private SchermataPrescrizione panelPrescrizioni;
     private ImageIcon icon = new ImageIcon("src/Icon/logoFinestra.png");
 
-
+    private GestioneFile gestioneFile = new GestioneFile();
 
     public FrameHomepage(){
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -113,7 +114,6 @@ public class FrameHomepage extends JFrame {
                 // Mostra un messaggio di conferma prima di chiudere la finestra
                 int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler uscire?", "Conferma", JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
-                    salvaSuFile();
                     System.exit(0);
                 }
             }
@@ -133,10 +133,10 @@ public class FrameHomepage extends JFrame {
 
     public void caricaDaFile(){
         try {
-            panelPrenotazioni.getController().getDatabase().caricaDaFile();
-            panelDottori.getController().getDatabase().caricaDaFile();
-            panelPazienti.getDatabasePazienti().caricaDaFile();
-            panelPrescrizioni.getGestionePrescrizione().caricaDaFile();
+            panelPrenotazioni.getController().getDatabase().caricaDaFile(gestioneFile.getPath());
+            panelDottori.getController().getDatabase().caricaDaFile(gestioneFile.getPath());
+            panelPazienti.getDatabasePazienti().caricaDaFile(gestioneFile.getPath());
+            panelPrescrizioni.getGestionePrescrizione().caricaDaFile(gestioneFile.getPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -144,10 +144,10 @@ public class FrameHomepage extends JFrame {
 
     public void salvaSuFile(){
         try {
-            panelPrenotazioni.getController().getDatabase().salvaSuFile();
-            panelDottori.getController().getDatabase().salvaSuFile();
-            panelPazienti.getDatabasePazienti().salvaSuFile();
-            panelPrescrizioni.getGestionePrescrizione().salvaSuFile();
+            panelPrenotazioni.getController().getDatabase().salvaSuFile(gestioneFile.getPath());
+            panelDottori.getController().getDatabase().salvaSuFile(gestioneFile.getPath());
+            panelPazienti.getDatabasePazienti().salvaSuFile(gestioneFile.getPath());
+            panelPrescrizioni.getGestionePrescrizione().salvaSuFile(gestioneFile.getPath());
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

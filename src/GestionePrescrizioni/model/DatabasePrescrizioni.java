@@ -3,6 +3,7 @@ import GestioneDottori.model.Dottore;
 import GestionePazienti.model.Paziente;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,7 +17,7 @@ import javax.swing.*;
 
 public class DatabasePrescrizioni {
     private ArrayList<Prescrizione> listaPrescrizioni;
-    private File file = new File(System.getProperty("user.home"), "databasePrescrizioni.dat");
+    private String fileName = "databasePrescrizioni.dat";
 
     public DatabasePrescrizioni() {
         listaPrescrizioni = new ArrayList<>();
@@ -40,11 +41,6 @@ public class DatabasePrescrizioni {
                 listaPrescrizioni.get(i).setDottore(nuovoDottore);
             }
         }
-        try {
-            salvaSuFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void AggiornaPazientePrenotazione(Paziente vecchioPaziente, Paziente nuovoPaziente){
@@ -52,11 +48,6 @@ public class DatabasePrescrizioni {
             if(listaPrescrizioni.get(i).getPaziente().equals(vecchioPaziente)){
                 listaPrescrizioni.get(i).setPaziente(nuovoPaziente);
             }
-        }
-        try {
-            salvaSuFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -79,10 +70,10 @@ public class DatabasePrescrizioni {
         return this.listaPrescrizioni;
     }
 
-    public void caricaDaFile() throws IOException {
+    public void caricaDaFile(Path path) throws IOException {
+        File file = new File(path.toString() + File.separator + fileName);
         if (!file.exists()) {
             file.createNewFile();
-            System.out.println("File creato!");
         }else if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -102,7 +93,9 @@ public class DatabasePrescrizioni {
         }
     }
 
-    public void salvaSuFile() throws IOException {
+    public void salvaSuFile(Path path) throws IOException {
+
+        File file = new File(path.toString() + File.separator + fileName);
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 

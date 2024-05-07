@@ -14,9 +14,12 @@ import java.awt.*;
 
 public class FrameLogin extends JFrame {
     private IDandPassword iDandPassword;
+    private ImageIcon icon = new ImageIcon("src/Icon/logoFinestra.png");
 
     public FrameLogin(){
         setLayout(new GridLayout(1,2));
+        setIconImage(icon.getImage());
+
         iDandPassword = new IDandPassword();
         InterfacciaLogin interfacciaLogin = new InterfacciaLogin();
         PanelloLogo pannelloLogo= new PanelloLogo();

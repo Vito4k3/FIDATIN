@@ -32,7 +32,6 @@ public class InterfacciaPAZIENTI extends JPanel{
     private JTable table;
     private InterfacciaTab interfacciaTab;
     private DatabasePazienti g = new DatabasePazienti();
-    private File file = g.file;
     private Color verde;
     private JTextField fieldRicerca;
     private DatabasePrenotazione databasePrenotazione;
@@ -158,7 +157,7 @@ public class InterfacciaPAZIENTI extends JPanel{
                 ModificaPazienteDialog dialog2 = new ModificaPazienteDialog(selectedRiga);
                 dialog2.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Seleziona un paziente da modificare.",
+                JOptionPane.showMessageDialog(null, "Seleziona un paziente da modificare.",
                         "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -166,19 +165,18 @@ public class InterfacciaPAZIENTI extends JPanel{
         eliminaButton.addActionListener(e -> {
             int rigaSelezionata = table.getSelectedRow();
             if (rigaSelezionata != -1) {
-                int scelta= JOptionPane.showConfirmDialog(this, "Sei sicuro di voler eliminare questo paziente?\n" +
+                int scelta= JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questo paziente?\n" +
                         " Le prescrizioni e prenotazioni a suo carico verranno eliminate!", "Conferma", JOptionPane.OK_CANCEL_OPTION);
                 if(scelta == JOptionPane.OK_OPTION){
                     databasePrenotazione.situazionePazienteEliminato(g.getPazienti().get(rigaSelezionata));
                     databasePrescrizioni.situazionePazienteEliminato(g.getPazienti().get(rigaSelezionata));
                     g.getPazienti().remove(rigaSelezionata);
                     tableModel.fireTableDataChanged();
-                    JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Paziente eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Paziente eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
                 }
                 table.clearSelection();
             } else {
-                JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Seleziona una riga da eliminare.", "Errore",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Seleziona una riga da eliminare.", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -311,11 +309,10 @@ public class InterfacciaPAZIENTI extends JPanel{
 
                 tabbedPane.setPreferredSize(new Dimension(550, 300));
 
-                JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, tabbedPane,
+                JOptionPane.showMessageDialog(null, tabbedPane,
                         "Cartella Clinica di " + paziente.getNome() + " " + paziente.getCognome(), JOptionPane.PLAIN_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Seleziona un paziente.", "Errore",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Seleziona un paziente.", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -457,26 +454,29 @@ public class InterfacciaPAZIENTI extends JPanel{
                         || residenzaField.getText().isEmpty() ||
                         capField.getText().isEmpty()) {
 
-                JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Devi inserire tutti i campi.", "Errore", JOptionPane.ERROR_MESSAGE);
-
-                } else {
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-                    String data= sdf.format(getDataSpinner().getValue());
-
-                    cartellaClinica.setDati("Data di Nascita: " + data + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
-                            "\nSesso: " + sessoField.getText() + "\nResidenza: " + residenzaField.getText() + "\nCAP: " + capField.getText());
-
-                    Paziente paziente = new Paziente(nomeField.getText(), cognomeField.getText(), data,
+                    JOptionPane.showMessageDialog(null, "Devi inserire tutti i campi.", "Errore", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    Paziente pazienteSelezionato = new Paziente(nomeField.getText(), cognomeField.getText(), null,
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
-                            capField.getText(),cartellaClinica);
+                            capField.getText(), null);
+                    if(!g.isAlreadyExist(pazienteSelezionato)) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+                        String data= sdf.format(getDataSpinner().getValue());
 
-                    g.AggiungiPaziente(paziente);
-                    tableModel.fireTableDataChanged();
+                        cartellaClinica.setDati("Data di Nascita: " + data + "\nCodice Fiscale: " + codiceFiscaleField.getText() +
+                                "\nSesso: " + sessoField.getText() + "\nResidenza: " + residenzaField.getText() + "\nCAP: " + capField.getText());
 
-                    dispose();
-                    JOptionPane.showMessageDialog(InterfacciaPAZIENTI.this, "Paziente aggiunto con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                        Paziente paziente = new Paziente(nomeField.getText(), cognomeField.getText(), data,
+                                codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
+                                capField.getText(),cartellaClinica);
 
+                        g.AggiungiPaziente(paziente);
+                        tableModel.fireTableDataChanged();
+                        dispose();
+                        JOptionPane.showMessageDialog(null, "Paziente aggiunto con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Paziente già esistente!", "Errore", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
 
             });

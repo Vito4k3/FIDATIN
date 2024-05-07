@@ -1,6 +1,7 @@
 package GestioneDottori.model;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import java.util.*;
 
 public class DatabaseDottori {
     private ArrayList<Dottore> dottori;
-    private File file = new File(System.getProperty("user.home"), "databaseDottori.dat");
+    private String fileName = "databaseDottori.dat";
 
     public DatabaseDottori(){
         dottori = new ArrayList<Dottore>();
@@ -27,7 +28,7 @@ public class DatabaseDottori {
         dottori.set(index, dottore);
     }
     public List<Dottore> visualizzaDottoriAttivi(){
-        List<Dottore> listaDottoriAttivi = new ArrayList<Dottore>();
+        List<Dottore> listaDottoriAttivi = new ArrayList<>();
         for(int i=0; i<dottori.size(); i++){
             if(dottori.get(i).getStato().equals(Status.ATTIVO)){
                 listaDottoriAttivi.add(dottori.get(i));
@@ -36,7 +37,7 @@ public class DatabaseDottori {
         return listaDottoriAttivi;
     }
 
-    /*public void aggiornaStatoDottori() {  Futuri aggiornamenti...
+    /*public void aggiornaStatoDottori() {  //in base all'ora corrente imposta lo stato dei dottori ad attivo o non attivo
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm"); // crea un formatter per la conversione degli orari
         LocalTime now = LocalTime.now(); // ottiene l'ora attuale
         for (Dottore dottore : dottori) {
@@ -50,10 +51,21 @@ public class DatabaseDottori {
         }
     }*/
 
+    public boolean isAlreadyExists(Dottore dottoreSelezionato){  //verifica se ci sono più dottori con lo stesso nome
+        for(Dottore dottore : dottori){
+            if(dottore.equals(dottoreSelezionato)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Dottore> getDottori(){
         return dottori;
     }
-    public void salvaSuFile() throws IOException {
+    public void salvaSuFile(Path path) throws IOException {
+        File file = new File(path + File.separator + fileName);
+
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
@@ -65,10 +77,11 @@ public class DatabaseDottori {
         fop.close();
     }
 
-    public void caricaDaFile() throws IOException {
+    public void caricaDaFile(Path path) throws IOException {
+        File file = new File(path + File.separator + fileName);
         if(!file.exists()){
             file.createNewFile();
-        }else if (file != null && file.length() > 0) { // !!!
+        }else if (file.length() != 0) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois2 = new ObjectInputStream(fis);
 

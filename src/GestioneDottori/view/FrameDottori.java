@@ -67,10 +67,17 @@ public class FrameDottori extends JPanel{
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         if(!(interfacciaInserimentoAggiungi.getFieldNome().getText().isEmpty() && interfacciaInserimentoAggiungi.getFieldCognome().getText().isEmpty())) {
-                                            dialog.setVisible(false);
-                                            processaEventoAggiungi();
+                                            Dottore dottoreSelezionato = new Dottore(interfacciaInserimentoAggiungi.getFieldNome().getText(), interfacciaInserimentoAggiungi.getFieldCognome().getText(),
+                                                    (TipoOperatori) interfacciaInserimentoAggiungi.getBoxTipoOperatore().getSelectedItem(), (Status) interfacciaInserimentoAggiungi.getBoxStatus().getSelectedItem(),
+                                                    null, null);
+                                            if(!getController().getDatabase().isAlreadyExists(dottoreSelezionato)) {
+                                                dialog.setVisible(false);
+                                                processaEventoAggiungi();
+                                            }else{
+                                                JOptionPane.showMessageDialog(interfacciaInserimentoAggiungi, "Dottore già esistente", "Errore", JOptionPane.ERROR_MESSAGE);
+                                            }
                                         }else{
-                                            JOptionPane.showMessageDialog(interfacciaInserimentoAggiungi, "Inserisci tutti i campi", "Errore", JOptionPane.WARNING_MESSAGE);
+                                            JOptionPane.showMessageDialog(interfacciaInserimentoAggiungi, "Inserisci tutti i campi", "Errore", JOptionPane.ERROR_MESSAGE);
                                         }
                                     }
                                 });
@@ -92,7 +99,6 @@ public class FrameDottori extends JPanel{
                                     " Le Prenotazioni e Prescrizioni a suo carico verranno eliminate!", "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
                             if (sceltaUtente == JOptionPane.YES_OPTION) {
                                 databasePrenotazioni.situazioneDottoreEliminato(getController().getDatabase().getDottori().get(rigaSelezionata));
-                                databasePrescrizioni.situazioneDottoreEliminato(getController().getDatabase().getDottori().get(rigaSelezionata));
                                 controller.getDatabase().rimuoviDottore(rigaSelezionata);
                                 interfacciaTabella.aggiorna();
                                 JOptionPane.showMessageDialog(null, "Dottore eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);

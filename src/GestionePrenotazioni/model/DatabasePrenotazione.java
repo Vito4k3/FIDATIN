@@ -6,6 +6,7 @@ import GestionePazienti.model.Paziente;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class DatabasePrenotazione {
     private ArrayList<Prenotazione> prenotazioni;
-    private File file = new File(System.getProperty("user.home"), "databasePrenotazioni.dat");
+    public String fileName = "databasePrenotazioni.dat";
 
     public DatabasePrenotazione(){
         prenotazioni= new ArrayList<>();
@@ -79,7 +80,8 @@ public class DatabasePrenotazione {
     public List<Prenotazione> getPrenotazioni(){
         return prenotazioni;
     }
-    public void salvaSuFile() throws IOException {
+    public void salvaSuFile(Path path) throws IOException {
+        File file = new File(path.toString() + File.separator + fileName);
         FileOutputStream fop= new FileOutputStream(file);
         ObjectOutputStream oos= new ObjectOutputStream(fop);
 
@@ -89,6 +91,30 @@ public class DatabasePrenotazione {
 
         oos.close();
         fop.close();
+    }
+
+    public void caricaDaFile(Path path) throws IOException {
+        File file = new File(path.toString() + File.separator + fileName);
+
+        if(!file.exists()){
+            file.createNewFile();
+        }else if (file.length() != 0) {
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            try {
+                Prenotazione[] prenotazioniCaricate = (Prenotazione[]) ois.readObject();
+
+                prenotazioni.clear();
+                prenotazioni.addAll(Arrays.asList(prenotazioniCaricate));
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            ois.close();
+            fis.close();
+        }
     }
     public boolean visualizzaDisponibilita(Dottore dottore, Date orario){
         if(dottore.isAttivo()) {
@@ -157,27 +183,4 @@ public class DatabasePrenotazione {
         }
     }
 
-
-    public void caricaDaFile() throws IOException {
-        if(!file.exists()){
-            file.createNewFile();
-            System.out.println("File creato!");
-        }else if (file.length() != 0) {
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-
-            try {
-                Prenotazione[] prenotazioniCaricate = (Prenotazione[]) ois.readObject();
-
-                prenotazioni.clear();
-                prenotazioni.addAll(Arrays.asList(prenotazioniCaricate));
-
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            ois.close();
-            fis.close();
-        }
-    }
 }

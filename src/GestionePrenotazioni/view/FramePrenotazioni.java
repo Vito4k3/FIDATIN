@@ -71,14 +71,14 @@ public class FramePrenotazioni extends JPanel{
                                                 getController().getDatabase().visualizzaDisponibilita(interfacciaInserimentoAggiungi.getPazienteSelezionato(), data)){  //verifica se un dottore/paziente sia già impegnato in quell'orario
                                             processaEventoAggiungi();
                                         }else if(!interfacciaInserimentoAggiungi.getDottoreSelezionato().isAttivo()) {
-                                            JOptionPane.showMessageDialog(dialog, "Dottore non attivo!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                            JOptionPane.showMessageDialog(dialog, "Dottore non attivo!", "Errore", JOptionPane.ERROR_MESSAGE);
                                         }else if(!getController().getDatabase().visualizzaDisponibilita(interfacciaInserimentoAggiungi.getDottoreSelezionato(), data)){
-                                            JOptionPane.showMessageDialog(dialog, "Dottore non disponibile in questo orario!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                            JOptionPane.showMessageDialog(dialog, "Dottore non disponibile in questo orario!", "Errore", JOptionPane.ERROR_MESSAGE);
                                         }else{
-                                            JOptionPane.showMessageDialog(dialog, "Paziente già impegnato in questo orario!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                            JOptionPane.showMessageDialog(dialog, "Paziente già impegnato in questo orario!", "Errore", JOptionPane.ERROR_MESSAGE);
                                         }
                                     }else{
-                                        JOptionPane.showMessageDialog(dialog, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                        JOptionPane.showMessageDialog(dialog, "Inserisci tutti i campi!", "Errore", JOptionPane.ERROR_MESSAGE);
                                     }
                                 }
                             });

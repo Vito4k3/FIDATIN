@@ -52,12 +52,6 @@ public class Controller {
             return databaseDottori.getDottori();
         }
 
-        public void salvaSuFile() throws IOException {
-            databaseDottori.salvaSuFile();
-        }
-        public void caricaDaFile() throws IOException {
-            databaseDottori.caricaDaFile();
-        }
         //public void setContatore(int contatore){
            // dottore.setContatore(contatore);
         //}

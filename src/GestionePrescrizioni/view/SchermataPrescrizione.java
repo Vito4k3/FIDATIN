@@ -290,7 +290,7 @@ public class SchermataPrescrizione extends JPanel implements ActionListener{
                                 prescrizioneDialog2.setVisible(false);
                                 processaEventoAggiungi();
                             }else{
-                                JOptionPane.showMessageDialog(null, "Inserisci tutti i campi!", "Errore", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Inserisci tutti i campi!", "Errore", JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     });
