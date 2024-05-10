@@ -9,6 +9,8 @@ public class Dottore implements Serializable {
     private TipoOperatori tipoOperatore;
     private Status stato;
     private String orarioLavorativoInizio, orarioLavorativoFine;
+    private static int conteggio=0;
+    private int id;
 
     public Dottore(String nome, String cognome, TipoOperatori tipoOperatore, Status stato, String orarioLavorativoInizio, String orarioLavorativoFine) {
         this.nome = nome;
@@ -17,6 +19,8 @@ public class Dottore implements Serializable {
         this.stato = stato;
         this.orarioLavorativoInizio = orarioLavorativoInizio;
         this.orarioLavorativoFine = orarioLavorativoFine;
+        this.id=conteggio;
+        conteggio++;
     }
 
     public String getNome() {
@@ -66,6 +70,16 @@ public class Dottore implements Serializable {
     public void setOrarioLavorativoFine(String orarioLavorativoFine) {
         this.orarioLavorativoFine = orarioLavorativoFine;
     }
+    public static void setConteggio(int i){conteggio=i;}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public boolean isAttivo(){
         if(stato.equals(Status.ATTIVO)){
             return true;
@@ -90,6 +104,6 @@ public class Dottore implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Dottore dottore = (Dottore) o;
-        return Objects.equals(nome, dottore.nome) && Objects.equals(cognome, dottore.cognome);
+        return Objects.equals(id, dottore.id);
     }
 }

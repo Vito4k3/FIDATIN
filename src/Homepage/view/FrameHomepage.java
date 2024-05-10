@@ -96,7 +96,6 @@ public class FrameHomepage extends JFrame {
             cardLayout.show(cardPanel, "HOMEPAGE");
         });
 
-        interfacciaHomepage.getTab().getButtonEsci().setText("ESCI");
         interfacciaHomepage.getTab().getButtonEsci().addActionListener(e -> {
             int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler tornare al login?", "Conferma", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {

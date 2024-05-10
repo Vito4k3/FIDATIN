@@ -21,6 +21,7 @@ public class MyComboBoxPaziente extends JComboBox<Paziente>{
         modelloCombo = new DefaultComboBoxModel<>(pazienti);
         setModel(modelloCombo);
         setRenderer(new PazienteComboBoxRenderer());
+
     }
 
 
@@ -37,6 +38,7 @@ public class MyComboBoxPaziente extends JComboBox<Paziente>{
         revalidate();
         repaint();
     }
+
     private static class PazienteComboBoxRenderer extends JLabel implements ListCellRenderer<Paziente> {
         @Override
         public Component getListCellRendererComponent(JList<? extends Paziente> list, Paziente paziente, int index, boolean isSelected, boolean cellHasFocus) {

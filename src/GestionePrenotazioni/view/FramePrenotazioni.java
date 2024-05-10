@@ -97,7 +97,7 @@ public class FramePrenotazioni extends JPanel{
                     if(rigaSelezionata!=-1) {
                         int sceltaUtente= MyOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questa prenotazione?", "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
                         if (sceltaUtente == JOptionPane.YES_OPTION) {
-                            controller.getDatabase().rimuoviPrenotazione(rigaSelezionata);
+                            controller.getDatabase().rimuoviPrenotazione((int) interfacciaTabella.getTable().getValueAt(rigaSelezionata, 6));
                             interfacciaTabella.aggiorna();
                             JOptionPane.showMessageDialog(null, "Prenotazione eliminata!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
@@ -122,7 +122,7 @@ public class FramePrenotazioni extends JPanel{
                                     }
                                 });
                             }
-                            Prenotazione prenotazione = controller.getDatabase().getPrenotazioni().get(rigaSelezionata);
+                            Prenotazione prenotazione = getController().getDatabase().ricercaPrenotazione((int) table.getValueAt(rigaSelezionata, 6));
 
                             Paziente paziente = prenotazione.getPaziente();
                             Dottore dottore = prenotazione.getDottore();
@@ -241,7 +241,7 @@ public class FramePrenotazioni extends JPanel{
 
         Dottore dottore = interfacciaInserimento.getDottoreSelezionato();
 
-        Prenotazione prenotazione = controller.getDatabase().getPrenotazioni().get(rigaSelezionata);
+        Prenotazione prenotazione =  getController().getDatabase().ricercaPrenotazione((int) table.getValueAt(rigaSelezionata, 6));
         prenotazione.setPaziente(paziente);
         prenotazione.setDottore(dottore);
         prenotazione.setOra(ora);

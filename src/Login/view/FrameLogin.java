@@ -51,9 +51,9 @@ public class FrameLogin extends JFrame {
         });
 
 
-
         add(pannelloLogo);
         add(interfacciaLogin);
+        getContentPane().setBackground(new Color(135, 206, 250));
 
         setSize(1100,750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

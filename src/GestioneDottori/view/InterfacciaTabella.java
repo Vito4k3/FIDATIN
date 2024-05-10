@@ -10,13 +10,13 @@ import java.util.List;
 
 public class InterfacciaTabella extends JPanel {
     private JTable table;
-    private ModelloTabellaPrenotazioni modelloTabellaPrenotazioni;
+    private ModelloTabellaDottori modelloTabellaDottori;
     public InterfacciaTabella (){
 
-        modelloTabellaPrenotazioni= new ModelloTabellaPrenotazioni();
+        modelloTabellaDottori = new ModelloTabellaDottori();
         CustomTableCellRenderer tableCellRenderer = new CustomTableCellRenderer();
 
-        table= new JTable(modelloTabellaPrenotazioni);
+        table= new JTable(modelloTabellaDottori);
         table.setDefaultRenderer(Object.class, tableCellRenderer);
 
         table.setRowHeight(table.getRowHeight()+20);
@@ -41,11 +41,11 @@ public class InterfacciaTabella extends JPanel {
     }
 
     public void setDati(List<Dottore> listaDottori){
-        modelloTabellaPrenotazioni.setListaDottori(listaDottori);
+        modelloTabellaDottori.setListaDottori(listaDottori);
     }
 
     public void aggiorna(){
-        this.modelloTabellaPrenotazioni.fireTableDataChanged();
+        this.modelloTabellaDottori.fireTableDataChanged();
     }
 
     public JTable getTable() {

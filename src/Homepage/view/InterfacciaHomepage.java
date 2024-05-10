@@ -161,6 +161,11 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
         centerJp = new JPanel(new GridLayout(2, 1, 10, 5));
 
         JTextArea bacheca = new MyTextArea();
+        bacheca.setEditable(false);
+        bacheca.setFocusable(false);
+        bacheca.setText("Ampliamento della sede centrale\nSi rappresenta a quanti in indirizzo, ognuno per le proprie " +
+                "competenze e responsabilità,\nche i lavori di ampliamento della sede sono giunti in fase più interferenziale\n" +
+                "con la vita sanitaria\n\n" + "Nuovo primario! è subito una grande festa, sabato 10 maggio cornetti per tutti\n nella sala dottori!");
         JLabel labelBacheca = new JLabel("Bacheca");
         labelBacheca.setBorder(new EmptyBorder(0,5,0,0));
 
@@ -168,6 +173,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener{
         panelBacheca.setBackground(Color.white);
         panelBacheca.setBorder(new EmptyBorder(5,5,5,5));
         MyScrollPane scrollPaneBacheca = new MyScrollPane(bacheca);
+        scrollPaneBacheca.setPreferredSize(new Dimension(panelBacheca.getWidth(), panelBacheca.getHeight()));
         scrollPaneBacheca.setBackground(Color.white);
         scrollPane.setBorder(new EmptyBorder(10,10,10,10));
         scrollPane.setOpaque(false);

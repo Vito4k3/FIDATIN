@@ -32,6 +32,31 @@ public class DatabasePazienti {
         return false;
     }
 
+    public Paziente ricercaPaziente(int id){
+        for(Paziente paziente : Pazienti){
+            if(paziente.getId() == id){
+                return paziente;
+            }
+        }
+        return null;
+    }
+
+    public void sostituisciPaziente(Paziente vecchioPaziente, Paziente nuovoPaziente){
+        for(int i=0; i<Pazienti.size(); i++){
+            if(Pazienti.get(i).equals(vecchioPaziente)){
+                nuovoPaziente.setId(Pazienti.get(i).getId());
+                Pazienti.set(i, nuovoPaziente);
+            }
+        }
+    }
+    public void rimuoviPaziente(int id){
+        for(int i=0; i<Pazienti.size(); i++){
+            if(Pazienti.get(i).getId() == id){
+                Pazienti.remove(Pazienti.get(i));
+            }
+        }
+    }
+
     public void salvaSuFile(Path path) throws IOException {
         File file = new File(path.toString() + File.separator + fileName);
 
@@ -63,6 +88,15 @@ public class DatabasePazienti {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+
+            int max = Pazienti.getFirst().getId();
+            for(Paziente paziente : Pazienti){
+                if(paziente.getId() > max){
+                    max = paziente.getId();
+                }
+            }
+
+            Paziente.setConteggio(max+1);
 
             ois2.close();
             fis.close();

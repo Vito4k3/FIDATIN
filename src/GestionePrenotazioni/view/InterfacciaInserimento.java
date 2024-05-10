@@ -2,20 +2,27 @@ package GestionePrenotazioni.view;
 
 import GestioneDottori.model.DatabaseDottori;
 import GestioneDottori.model.Dottore;
+import GestioneDottori.view.ModelloTabellaDottori;
 import GestionePazienti.model.Paziente;
+import GestionePazienti.view.ModelloTabellaPazienti;
 import GestionePrenotazioni.model.Reparto;
 import GestionePrenotazioni.model.TipoPrenotazione;
-import Style.MyButtonStyle;
-import Style.MyLabelStyle;
-import Style.MyComboBox;
-import Style.MyComboBoxDottori;
+import Style.*;
 import GestionePazienti.model.DatabasePazienti;
-import Style.MyComboBoxPaziente;
+import org.intellij.lang.annotations.Flow;
 
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -169,9 +176,163 @@ public class InterfacciaInserimento extends JPanel {
         panelFlow2.add(panelBox5);
 
         panelBox1.add(labelPaziente);
-        panelBox1.add(sceltaPaziente);
+        MyButtonStyle buttonRicercaPazienti = new MyButtonStyle(MyButtonStyle.RICERCA);
+        JPanel panelSceltaPaziente = new JPanel(new BorderLayout());
+        panelSceltaPaziente.add(sceltaPaziente, BorderLayout.CENTER);
+        panelSceltaPaziente.add(buttonRicercaPazienti, BorderLayout.LINE_END);
+        panelBox1.add(panelSceltaPaziente);
+
+        buttonRicercaPazienti.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialog = new JDialog();
+                dialog.setLayout(new BorderLayout());
+
+                JPanel panelRicerca = new JPanel(new FlowLayout());
+                JLabel labelRicerca = new JLabel("Ricerca: ");
+                JTextField fieldRicerca = new JTextField(15);
+
+                List<Paziente> lista = new ArrayList<>();
+                ModelloTabellaPazienti modello = new ModelloTabellaPazienti(lista);
+                for(int i=0; i<sceltaPaziente.getItemCount()-1; i++){
+                    lista.add(sceltaPaziente.getItemAt(i));
+                }
+                JTable tabellaRicerca = new MyTableStyle(modello);
+                MyButtonStyle bottonSeleziona = new MyButtonStyle("Seleziona", Color.gray, Color.white);
+                fieldRicerca.addKeyListener(new KeyListener() { //implementazione del keyListener sulla textField ricerca
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        AbstractTableModel dtb = (AbstractTableModel) tabellaRicerca.getModel();
+                        TableRowSorter<AbstractTableModel> trs = new TableRowSorter<>(dtb);
+                        tabellaRicerca.setRowSorter(trs);
+                        trs.setRowFilter(RowFilter.regexFilter(fieldRicerca.getText()));
+
+                    }
+                });
+                bottonSeleziona.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int rigaSelezionata = tabellaRicerca.getSelectedRow();
+                        if(rigaSelezionata!=-1) {
+                            int id = (int) tabellaRicerca.getValueAt(rigaSelezionata, 7);
+                            for (int i = 0; i < sceltaPaziente.getItemCount() - 1; i++) {
+                                if (sceltaPaziente.getItemAt(i).getId() == id) {
+                                    sceltaPaziente.setSelectedIndex(i);
+                                }
+                            }
+                            dialog.dispose();
+                            setVisible(true);
+                        }else{
+                            JOptionPane.showMessageDialog(dialog, "Seleziona una riga", "Errore", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                });
+                panelRicerca.add(labelRicerca);
+                panelRicerca.add(fieldRicerca);
+                dialog.add(panelRicerca, BorderLayout.PAGE_START);
+                dialog.add(new MyScrollPane(tabellaRicerca), BorderLayout.CENTER);
+                dialog.add(bottonSeleziona, BorderLayout.PAGE_END);
+
+                dialog.setTitle("Seleziona");
+                dialog.setModal(true);
+                dialog.setSize(700, 500);
+                dialog.setLocationRelativeTo(null);
+                dialog.setResizable(false);
+                dialog.setVisible(true);
+            }
+        });
+
+
+
         panelBox2.add(labelDottore);
-        panelBox2.add(sceltaDottore);
+        MyButtonStyle buttonRicercaDottori = new MyButtonStyle(MyButtonStyle.RICERCA);
+        JPanel panelSceltaDottore = new JPanel(new BorderLayout());
+        panelSceltaDottore.add(sceltaDottore, BorderLayout.CENTER);
+        panelSceltaDottore.add(buttonRicercaDottori, BorderLayout.LINE_END);
+        panelBox2.add(panelSceltaDottore);
+
+        buttonRicercaDottori.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialog = new JDialog();
+                dialog.setLayout(new BorderLayout());
+
+                JPanel panelRicerca = new JPanel(new FlowLayout());
+                JLabel labelRicerca = new JLabel("Ricerca: ");
+                JTextField fieldRicerca = new JTextField(15);
+
+
+                List<Dottore> lista = new ArrayList<>();
+                ModelloTabellaDottori modello = new ModelloTabellaDottori();
+                for(int i=0; i<sceltaDottore.getItemCount()-1; i++){
+                    lista.add(sceltaDottore.getItemAt(i));
+                }
+                modello.setListaDottori(lista);
+                JTable tabellaRicerca = new MyTableStyle(modello);
+                MyButtonStyle bottonSeleziona = new MyButtonStyle("Seleziona", Color.gray, Color.white);
+
+                fieldRicerca.addKeyListener(new KeyListener() { //implementazione del keyListener sulla textField ricerca
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        AbstractTableModel dtb = (AbstractTableModel) tabellaRicerca.getModel();
+                        TableRowSorter<AbstractTableModel> trs = new TableRowSorter<>(dtb);
+                        tabellaRicerca.setRowSorter(trs);
+                        trs.setRowFilter(RowFilter.regexFilter(fieldRicerca.getText()));
+
+                    }
+                });
+                bottonSeleziona.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int rigaSelezionata = tabellaRicerca.getSelectedRow();
+                        if(rigaSelezionata!=-1) {
+                            int id = (int) tabellaRicerca.getValueAt(rigaSelezionata, 6);
+                            for (int i = 0; i < sceltaDottore.getItemCount() - 1; i++) {
+                                if (sceltaDottore.getItemAt(i).getId() == id) {
+                                    sceltaDottore.setSelectedIndex(i);
+                                }
+                            }
+                            dialog.dispose();
+                            setVisible(true);
+                        }else{
+                            JOptionPane.showMessageDialog(dialog, "Seleziona una riga", "Errore", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                });
+                panelRicerca.add(labelRicerca);
+                panelRicerca.add(fieldRicerca);
+                dialog.add(panelRicerca, BorderLayout.PAGE_START);
+                dialog.add(new MyScrollPane(tabellaRicerca), BorderLayout.CENTER);
+                dialog.add(bottonSeleziona, BorderLayout.PAGE_END);
+
+                dialog.setTitle("Seleziona");
+                dialog.setModal(true);
+                dialog.setSize(700, 500);
+                dialog.setLocationRelativeTo(null);
+                dialog.setResizable(false);
+                dialog.setVisible(true);
+            }
+        });
 
         panelFlow5.add(panelBox1);
         panelFlow5.add(panelBox2);
@@ -235,8 +396,8 @@ public class InterfacciaInserimento extends JPanel {
     }
     public void setBoxPaziente(Paziente paziente) {
         int ris = 0;
-        for(int i=0; i<listaDottori.size(); i++){
-            if(paziente.getNome().equals(listaDottori.get(i).getNome()) && paziente.getCognome().equals(listaDottori.get(i).getCognome())){
+        for(int i=0; i<listaPazienti.size(); i++){
+            if(paziente.getId() == listaPazienti.get(i).getId()){
                 ris=i;
             }
         }
@@ -277,4 +438,6 @@ public class InterfacciaInserimento extends JPanel {
     public JSpinner.DateEditor getEditorSpinner(){
         return this.editor;
     }
+
+
 }

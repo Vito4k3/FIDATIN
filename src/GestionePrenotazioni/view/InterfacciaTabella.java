@@ -25,6 +25,7 @@ public class InterfacciaTabella extends JPanel {
         table.getColumnModel().getColumn(2).setPreferredWidth(30);
         table.getColumnModel().getColumn(3).setPreferredWidth(25);
         table.getColumnModel().getColumn(4).setPreferredWidth(100);
+        table.getColumnModel().getColumn(5).setPreferredWidth(100);
 
         MyScrollPane myScrollPane = new MyScrollPane(table);
 

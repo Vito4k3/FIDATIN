@@ -8,21 +8,28 @@ import Login.Eventi.Evento;
 import Login.Eventi.EventoEvent;
 import Login.model.IDandPassword;
 import Style.MyButtonStyle;
+import Style.MyPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
-public class InterfacciaLogin extends JPanel implements ActionListener {
+public class InterfacciaLogin extends MyPanel implements ActionListener {
     JLabel labelNome, labelPassword, labelTitle, labelMessaggi;
     JTextField fieldNome;
     JPasswordField fieldPassword;
     JButton bottoneInvia;
     IDandPassword idandPassword;
     private Evento evento;
+
     public InterfacciaLogin(){
+        super(new GridBagLayout());
+        setArco(40);
+        setWidth(-16);
+
 
         labelTitle = new JLabel("LOGIN");
         labelTitle.setFont(new Font(null, Font.BOLD, 20));
@@ -36,7 +43,7 @@ public class InterfacciaLogin extends JPanel implements ActionListener {
         labelMessaggi = new JLabel(" ");
 
         setPreferredSize(new Dimension(200,500));
-        setLayout(new GridBagLayout());
+        //setLayout(new GridBagLayout());
         GridBagConstraints gbc= new GridBagConstraints();
         setBackground(Color.white);
 

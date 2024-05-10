@@ -28,9 +28,13 @@ public class DatabasePrescrizioni {
     }
 
 
-    public void rimuoviPrescrizione(int index){
-        if(index>=0){
-            listaPrescrizioni.remove(index);
+    public void rimuoviPrescrizione(int id){
+        if(id>=0) {
+            for (int i = 0; i < listaPrescrizioni.size(); i++) {
+                if (listaPrescrizioni.get(i).getId() == id) {
+                    listaPrescrizioni.remove(listaPrescrizioni.get(i));
+                }
+            }
         }
     }
 
@@ -51,20 +55,29 @@ public class DatabasePrescrizioni {
         }
     }
 
-    public void situazioneDottoreEliminato(Dottore vecchioDottore){
+    public void situazioneDottoreEliminato(int id){
         for(int i = listaPrescrizioni.size() - 1; i >= 0; i--){
-            if(listaPrescrizioni.get(i).getDottore().equals(vecchioDottore)){
+            if(listaPrescrizioni.get(i).getDottore().getId() == id ){
                 listaPrescrizioni.remove(listaPrescrizioni.get(i));
             }
         }
     }
 
-    public void situazionePazienteEliminato(Paziente vecchioPaziente){
+    public void situazionePazienteEliminato(int id){
         for(int i = listaPrescrizioni.size() - 1; i >= 0; i--){
-            if(listaPrescrizioni.get(i).getPaziente().equals(vecchioPaziente)){
+            if(listaPrescrizioni.get(i).getPaziente().getId() == id ){
                 listaPrescrizioni.remove(listaPrescrizioni.get(i));
             }
         }
+    }
+
+    public Prescrizione ricercaPrescrizione(int id){
+        for(Prescrizione prescrizione: listaPrescrizioni){
+            if(prescrizione.getId() == id ){
+                return prescrizione;
+            }
+        }
+        return null;
     }
     public ArrayList<Prescrizione> getPrescrizioni(){
         return this.listaPrescrizioni;
@@ -88,6 +101,14 @@ public class DatabasePrescrizioni {
                 e.printStackTrace();
             }
 
+            int max = listaPrescrizioni.getFirst().getId();
+            for(Prescrizione prescrizione : listaPrescrizioni){
+                if(prescrizione.getId() > max){
+                    max = prescrizione.getId();
+                }
+            }
+            Prescrizione.setConteggio(max+1);
+
             ois.close();
             fis.close();
         }
@@ -107,8 +128,8 @@ public class DatabasePrescrizioni {
         fop.close();
     }
 
-    public void salvaPrescrizioneSuFile(int index, File fileToSave) throws IOException {
-        Prescrizione prescrizioneSelezionata = listaPrescrizioni.get(index);
+    public void salvaPrescrizioneSuFile(int id, File fileToSave) throws IOException {
+        Prescrizione prescrizioneSelezionata = ricercaPrescrizione(id);
         String outputFile = fileToSave.getAbsolutePath();
         String font = "src/GestionePrescrizioni/MyFont.TTF";
 

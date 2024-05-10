@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ModelloTabellaPrenotazioni extends AbstractTableModel {
     List<Prenotazione> listaPrenotazioni;
-    private String[] nomiColonne= {"Paziente", "Dottore", "Data", "Ora", "Reparto", "Prestazione"};
+    private String[] nomiColonne= {"Paziente", "Dottore", "Data", "Ora", "Reparto", "Prestazione", "ID"};
     ModelloTabellaPrenotazioni(){}
 
     public void setListaPrenotazioni(List<Prenotazione> listaPrenotazioni){
@@ -27,7 +27,7 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 7;
     }
 
     @Override
@@ -46,6 +46,8 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
                 return prenotazione.getReparto();
             case 5:
                 return prenotazione.getTipoPrenotazione();
+            case 6:
+                return prenotazione.getId();
             default:
                 return null;
         }

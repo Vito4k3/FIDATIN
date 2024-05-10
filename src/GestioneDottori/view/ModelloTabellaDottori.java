@@ -2,16 +2,13 @@ package GestioneDottori.view;
 
 import GestioneDottori.model.Dottore;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
-import java.awt.*;
 import java.util.List;
 
-public class ModelloTabellaPrenotazioni extends AbstractTableModel {
+public class ModelloTabellaDottori extends AbstractTableModel {
     List<Dottore> listaDottori;
-    private String[] nomiColonne= {"Nome", "Cognome", "Tipo Operatore", "Inizio turno", "fine turno", "Stato"};
-    ModelloTabellaPrenotazioni(){}
+    private String[] nomiColonne= {"Nome", "Cognome", "Tipo Operatore", "Inizio turno", "fine turno", "Stato", "ID"};
+    public ModelloTabellaDottori(){}
 
     public void setListaDottori(List<Dottore> listaDottori){
         this.listaDottori = listaDottori;
@@ -29,7 +26,7 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 7;
     }
 
     @Override
@@ -48,6 +45,8 @@ public class ModelloTabellaPrenotazioni extends AbstractTableModel {
                 return dottore.getOrarioLavorativoFine();
             case 5:
                 return dottore.getStato();
+            case 6:
+                return dottore.getId();
             default:
                 return null;
         }

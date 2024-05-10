@@ -27,7 +27,11 @@ public class DatabasePrenotazione {
         prenotazioni.add(prenotazione);
     }
     public void rimuoviPrenotazione(int id){
-        prenotazioni.remove(id);
+        for(int i=0; i<prenotazioni.size(); i++){
+            if(prenotazioni.get(i).getId() == id){
+                prenotazioni.remove(prenotazioni.get(i));
+            }
+        }
     }
 
     public List<Prenotazione> prenotazioniGiornaliere(){
@@ -77,6 +81,15 @@ public class DatabasePrenotazione {
         }
     }
 
+    public Prenotazione ricercaPrenotazione(int id){
+        for(Prenotazione prenotazione : prenotazioni){
+            if(prenotazione.getId() == id){
+                return prenotazione;
+            }
+        }
+        return null;
+    }
+
     public List<Prenotazione> getPrenotazioni(){
         return prenotazioni;
     }
@@ -112,6 +125,15 @@ public class DatabasePrenotazione {
                 e.printStackTrace();
             }
 
+            int max = prenotazioni.getFirst().getId();
+            for(Prenotazione prenotazione : prenotazioni){
+                if(prenotazione.getId() > max){
+                    max = prenotazione.getId();
+                }
+            }
+
+            Prenotazione.setContatore(max+1);
+
             ois.close();
             fis.close();
         }
@@ -126,9 +148,9 @@ public class DatabasePrenotazione {
 
             for (Prenotazione prenotazione : prenotazioni) {
                 LocalTime orarioPrenotazione = LocalTime.parse(prenotazione.getOra());
-                if (prenotazione.getDottore().equals(dottore) && !(nuovoOrario.isAfter(orarioPrenotazione.plusMinutes(10))
+                if (prenotazione.getDottore().getId() == dottore.getId() && (!(nuovoOrario.isAfter(orarioPrenotazione.plusMinutes(10))
                         || nuovoOrario.isBefore(orarioPrenotazione.minusMinutes(10)))
-                        || !(nuovoOrario.isAfter(orarioLavorativoInizio) && nuovoOrario.isBefore(orarioLavorativoFine))) {
+                        || !(nuovoOrario.isAfter(orarioLavorativoInizio) && nuovoOrario.isBefore(orarioLavorativoFine)))) {
                     return false;
                 }
             }
@@ -159,17 +181,17 @@ public class DatabasePrenotazione {
         }
     }
 
-    public void situazioneDottoreEliminato(Dottore vecchioDottore){
+    public void situazioneDottoreEliminato(int id){
         for(int i = prenotazioni.size() - 1; i >= 0; i--){
-            if(prenotazioni.get(i).getDottore().equals(vecchioDottore)){
+            if(prenotazioni.get(i).getDottore().getId() == id ){
                 prenotazioni.remove(prenotazioni.get(i));
             }
         }
     }
 
-    public void situazionePazienteEliminato(Paziente vecchioPaziente){
+    public void situazionePazienteEliminato(int id){
         for (int i = prenotazioni.size() - 1; i >= 0; i--) {
-            if (prenotazioni.get(i).getPaziente().equals(vecchioPaziente)) {
+            if (prenotazioni.get(i).getPaziente().getId() == id) {
                 prenotazioni.remove(i);
             }
         }

@@ -98,8 +98,10 @@ public class FrameDottori extends JPanel{
                             int sceltaUtente = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questo Dottore?\n" +
                                     " Le Prenotazioni e Prescrizioni a suo carico verranno eliminate!", "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
                             if (sceltaUtente == JOptionPane.YES_OPTION) {
-                                databasePrenotazioni.situazioneDottoreEliminato(getController().getDatabase().getDottori().get(rigaSelezionata));
-                                controller.getDatabase().rimuoviDottore(rigaSelezionata);
+                                int idSelezionato = (int) interfacciaTabella.getTable().getValueAt(rigaSelezionata, 6);
+                                databasePrenotazioni.situazioneDottoreEliminato(idSelezionato);
+                                databasePrescrizioni.situazioneDottoreEliminato(idSelezionato);
+                                controller.getDatabase().rimuoviDottore(idSelezionato);
                                 interfacciaTabella.aggiorna();
                                 JOptionPane.showMessageDialog(null, "Dottore eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
                             }
@@ -122,7 +124,7 @@ public class FrameDottori extends JPanel{
                                         }
                                     });
                                 }
-                                Dottore dottore = controller.getDatabase().getDottori().get(rigaSelezionata);
+                                Dottore dottore = getController().getDatabase().ricercaDottore((int) table.getValueAt(rigaSelezionata, 6));
 
                                 String nome = dottore.getNome();
                                 String cognome = dottore.getCognome();
@@ -235,13 +237,13 @@ public class FrameDottori extends JPanel{
         Status stato = (Status) interfacciaInserimento.getBoxStatus().getSelectedItem();
 
 
-        Dottore vecchioDottore = getController().getDottori().get(rigaSelezionata);
+        Dottore vecchioDottore = getController().getDatabase().ricercaDottore((int) table.getValueAt(rigaSelezionata, 6));
         Dottore nuovoDottore = new Dottore(nome, cognome, tipoOperatore, stato, oraInizio, oraFine);
 
         databasePrenotazioni.AggiornaDottorePrenotazione(vecchioDottore, nuovoDottore);
         databasePrescrizioni.AggiornaDottorePrenotazione(vecchioDottore, nuovoDottore);
 
-        controller.getDatabase().sostituisciDottore(rigaSelezionata, nuovoDottore);
+        controller.getDatabase().sostituisciDottore(vecchioDottore, nuovoDottore);
 
         interfacciaTabella.aggiorna();
         JOptionPane.showMessageDialog(null, "Dottore modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);

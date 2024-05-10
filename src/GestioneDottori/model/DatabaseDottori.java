@@ -22,10 +22,19 @@ public class DatabaseDottori {
         dottori.add(dottore);
     }
     public void rimuoviDottore(int id){
-        dottori.remove(id);
+        for(int i=0; i<dottori.size(); i++){
+            if(dottori.get(i).getId() == id){
+                dottori.remove(dottori.get(i));
+            }
+        }
     }
-    public void sostituisciDottore(int index, Dottore dottore){
-        dottori.set(index, dottore);
+    public void sostituisciDottore(Dottore vecchioDottore, Dottore dottore){
+        for(int i=0; i<dottori.size(); i++){
+            if(dottori.get(i).getId() == vecchioDottore.getId()){
+                dottore.setId(vecchioDottore.getId());
+                dottori.set(i, dottore);
+            }
+        }
     }
     public List<Dottore> visualizzaDottoriAttivi(){
         List<Dottore> listaDottoriAttivi = new ArrayList<>();
@@ -35,6 +44,15 @@ public class DatabaseDottori {
             }
         }
         return listaDottoriAttivi;
+    }
+
+    public Dottore ricercaDottore(int id){
+        for(Dottore dottore : dottori){
+            if(dottore.getId() == id){
+                return dottore;
+            }
+        }
+        return null;
     }
 
     /*public void aggiornaStatoDottori() {  //in base all'ora corrente imposta lo stato dei dottori ad attivo o non attivo
@@ -94,6 +112,15 @@ public class DatabaseDottori {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+
+            int max = dottori.get(0).getId();
+            for(Dottore dottore : dottori){
+                if(dottore.getId() > max){
+                    max = dottore.getId();
+                }
+            }
+
+            Dottore.setConteggio(max+1);
 
             ois2.close();
             fis.close();

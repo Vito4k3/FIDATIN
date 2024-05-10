@@ -28,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class InterfacciaPAZIENTI extends JPanel{
-    private DefaultTableModel tableModel;
     private JTable table;
     private InterfacciaTab interfacciaTab;
     private DatabasePazienti g = new DatabasePazienti();
@@ -38,6 +37,7 @@ public class InterfacciaPAZIENTI extends JPanel{
     private DatabasePrescrizioni databasePrescrizioni;
     private CartellaClinica cartellaClinica;
     private JSpinner dataDiNascitaSpinner;
+    private ModelloTabellaPazienti tableModel;
 
     public InterfacciaPAZIENTI() {
         setSize(900, 700);
@@ -48,45 +48,8 @@ public class InterfacciaPAZIENTI extends JPanel{
 
 
         verde = new Color(48, 115, 81);
-        String[] colonne = { "Nome", "Cognome", "Data di nascita", "Codice Fiscale", "Sesso", "Residenza", "Cap" };
 
-        tableModel = new DefaultTableModel(colonne, 0){
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public int getRowCount() {
-                return g.getPazienti().size();
-            }
-
-            @Override
-            public Object getValueAt(int rowIndex, int columnIndex) {
-                Paziente paziente= g.getPazienti().get(rowIndex);
-                switch(columnIndex){
-                    case 0:
-                        return paziente.getNome();
-                    case 1:
-                        return paziente.getCognome();
-                    case 2:
-                        return paziente.getDataNascita();
-                    case 3:
-                        return paziente.getCodiceFiscale();
-                    case 4:
-                        return paziente.getSesso();
-                    case 5:
-                        return paziente.getResidenza();
-                    case 6:
-                        return paziente.getCap();
-                    default:
-                        return null;
-                }
-            }
-            
-        };
+        tableModel = new ModelloTabellaPazienti(g.getPazienti());
 
 
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -168,9 +131,10 @@ public class InterfacciaPAZIENTI extends JPanel{
                 int scelta= JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare questo paziente?\n" +
                         " Le prescrizioni e prenotazioni a suo carico verranno eliminate!", "Conferma", JOptionPane.OK_CANCEL_OPTION);
                 if(scelta == JOptionPane.OK_OPTION){
-                    databasePrenotazione.situazionePazienteEliminato(g.getPazienti().get(rigaSelezionata));
-                    databasePrescrizioni.situazionePazienteEliminato(g.getPazienti().get(rigaSelezionata));
-                    g.getPazienti().remove(rigaSelezionata);
+                    int idPazienteSelezionato = (int) table.getValueAt(rigaSelezionata, 7);
+                    databasePrenotazione.situazionePazienteEliminato(idPazienteSelezionato);
+                    databasePrescrizioni.situazionePazienteEliminato(idPazienteSelezionato);
+                    g.rimuoviPaziente(idPazienteSelezionato);
                     tableModel.fireTableDataChanged();
                     JOptionPane.showMessageDialog(null, "Paziente eliminato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -489,7 +453,9 @@ public class InterfacciaPAZIENTI extends JPanel{
         private int riga;
 
         public ModificaPazienteDialog( int riga) {
-            this.riga = riga;
+            int idPazienteSelezionato = (int) table.getValueAt(riga, 7);
+            Paziente pazienteSelezionato = g.ricercaPaziente(idPazienteSelezionato);
+
             setSize(700, 400);
             setModal(true);
             setLocationRelativeTo(null);
@@ -516,13 +482,13 @@ public class InterfacciaPAZIENTI extends JPanel{
 
             DatiPazientePanel.add(new JLabel("Nome:"));
             JTextField nomeField = new JTextField(30); // Imposta la dimensione iniziale a 30 caratteri
-            String text = (String) tableModel.getValueAt(riga, 0);
+            String text = pazienteSelezionato.getNome();
             nomeField.setText(text);
             DatiPazientePanel.add(nomeField);
 
             DatiPazientePanel.add(new JLabel("Cognome:"));
             JTextField cognomeField = new JTextField(30); // Imposta la dimensione iniziale a 30 caratteri
-            String text1 = (String) tableModel.getValueAt(riga, 1);
+            String text1 = pazienteSelezionato.getCognome();
             cognomeField.setText(text1);
             DatiPazientePanel.add(cognomeField);
 
@@ -559,13 +525,13 @@ public class InterfacciaPAZIENTI extends JPanel{
 
             InformazioniPersonaliPanel.add(new JLabel("Codice Fiscale:"));
             JTextField codiceFiscaleField = new JTextField(30); // Imposta la dimensione iniziale a 30 caratteri
-            String text6 = (String) tableModel.getValueAt(riga, 3);
+            String text6 = pazienteSelezionato.getCodiceFiscale();
             codiceFiscaleField.setText(text6);
             InformazioniPersonaliPanel.add(codiceFiscaleField);
 
             InformazioniPersonaliPanel.add(new JLabel("Sesso:"));
             JTextField sessoField = new JTextField(30); // Imposta la dimensione iniziale a 30 caratteri
-            String text5 = (String) tableModel.getValueAt(riga, 4);
+            String text5 = pazienteSelezionato.getSesso();
             sessoField.setText(text5);
             InformazioniPersonaliPanel.add(sessoField);
 
@@ -585,13 +551,13 @@ public class InterfacciaPAZIENTI extends JPanel{
 
             IndirizzoDiResidenzaPanel.add(new JLabel("Residenza:"));
             JTextField residenzaField = new JTextField(30); // Imposta la dimensione iniziale a 30 caratteri
-            String text2 = (String) tableModel.getValueAt(riga, 5);
+            String text2 = pazienteSelezionato.getResidenza();
             residenzaField.setText(text2);
             IndirizzoDiResidenzaPanel.add(residenzaField);
 
             IndirizzoDiResidenzaPanel.add(new JLabel("CAP:"));
             JTextField capField = new JTextField(30); // Imposta la dimensione iniziale a 30 caratteri
-            String text3 = (String) tableModel.getValueAt(riga, 6);
+            String text3 = pazienteSelezionato.getCap();
             capField.setText(text3);
             IndirizzoDiResidenzaPanel.add(capField);
 
@@ -609,6 +575,7 @@ public class InterfacciaPAZIENTI extends JPanel{
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
+
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
                     String data= sdf.format(getDataSpinner().getValue());
 
@@ -621,16 +588,16 @@ public class InterfacciaPAZIENTI extends JPanel{
                             codiceFiscaleField.getText(), sessoField.getText(), residenzaField.getText(),
                             capField.getText(),cartellaClinica);
 
-                    Paziente vecchioPaziente = g.getPazienti().get(riga);
+                    Paziente vecchioPaziente = g.ricercaPaziente((int) table.getValueAt(riga, 7));
 
-                    databasePrenotazione.AggiornaPazientePrenotazione(vecchioPaziente, paziente);
-                    databasePrescrizioni.AggiornaPazientePrenotazione(vecchioPaziente, paziente);
+                        databasePrenotazione.AggiornaPazientePrenotazione(vecchioPaziente, paziente);
+                        databasePrescrizioni.AggiornaPazientePrenotazione(vecchioPaziente, paziente);
 
-                    g.getPazienti().set(riga, paziente);
+                        g.sostituisciPaziente(vecchioPaziente, paziente);
 
-                    tableModel.fireTableDataChanged();
-                    dispose();
-                    JOptionPane.showMessageDialog(null, "Paziente modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                        tableModel.fireTableDataChanged();
+                        dispose();
+                        JOptionPane.showMessageDialog(null, "Paziente modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
 

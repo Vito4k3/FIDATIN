@@ -8,6 +8,8 @@ import java.util.Objects;
 public class Paziente implements Serializable {
     private String nome, cognome, codiceFiscale, residenza, dataNascita, sesso, cap;
     private CartellaClinica cartella;
+    private static int conteggio = 0;
+    private int id;
     
     public Paziente(String nome, String cognome, String dataNascita, String codiceFiscale, String sesso, String residenza, String cap,
             CartellaClinica cartella) {
@@ -19,6 +21,8 @@ public class Paziente implements Serializable {
         this.cartella = cartella;
         this.cap=cap;
         this.sesso = sesso;
+        this.id=conteggio;
+        conteggio++;
     }
 
     public Paziente() {
@@ -29,6 +33,7 @@ public class Paziente implements Serializable {
         this.dataNascita = "";
         this.cartella = null;
         this.sesso=" ";
+        conteggio++;
     }
 
     public String getNome() {
@@ -94,6 +99,11 @@ public class Paziente implements Serializable {
     public void setCartella(CartellaClinica cartella) {
         this.cartella = cartella;
     }
+    public int getId(){return this.id;}
+    public void setId(int i){this.id= i;}
+    public static void setConteggio(int i){
+        conteggio = i;
+    }
 
         @Override
         public String toString() {
@@ -106,7 +116,7 @@ public class Paziente implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Paziente paziente = (Paziente) o;
-        return Objects.equals(paziente.getCodiceFiscale(), codiceFiscale);
+        return Objects.equals(paziente.id, id);
     }
     
 
