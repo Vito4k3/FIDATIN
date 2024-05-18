@@ -1,6 +1,8 @@
 package Style;
 
 import Eventi.Evento;
+import Eventi.PassaggioDati;
+import Login.view.FrameLogin;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -9,7 +11,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.Objects;
 
-public class InterfacciaTab extends JPanel {
+public class InterfacciaTab extends JPanel{
 
     private JLabel title, logo;
     private JButton buttonEsci, button2, buttonIcon, buttonEsciLogo;
@@ -31,6 +33,8 @@ public class InterfacciaTab extends JPanel {
     ImageIcon icona4 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Icon/iconHome.png")));
     Image imageHome = icona4.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
     ImageIcon iconaHomeRidimensionata = new ImageIcon(imageHome);
+    private String nomeUtente;
+
 
 
     public InterfacciaTab(String titleTab){
@@ -84,6 +88,10 @@ public class InterfacciaTab extends JPanel {
 
     }
 
+    public ImageIcon getLogo(){
+        return iconaLogoRidimensionata;
+    }
+
     public void init2(String titleTab){
         init(titleTab);
     }
@@ -103,4 +111,8 @@ public class InterfacciaTab extends JPanel {
     public JButton getButtonEsci(){
         return buttonEsci;
     }
+    public void setNomeUtente(String nome){
+        nomeUtente = nome;
+    }
+
 }

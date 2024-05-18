@@ -1,11 +1,13 @@
 package Homepage.view;
 
+import Eventi.PassaggioDati;
 import GestioneDottori.view.FrameDottori;
 import GestionePazienti.view.InterfacciaPAZIENTI;
 import GestionePrenotazioni.view.FramePrenotazioni;
 import GestionePrescrizioni.view.SchermataPrescrizione;
 import Homepage.GestioneFile;
 import Login.view.FrameLogin;
+import Style.InterfacciaTab;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,13 +15,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-public class FrameHomepage extends JFrame {
+public class FrameHomepage extends JFrame implements PassaggioDati {
     private InterfacciaHomepage interfacciaHomepage;
     private InterfacciaPAZIENTI panelPazienti;
     private FrameDottori panelDottori;
     private FramePrenotazioni panelPrenotazioni;
     private SchermataPrescrizione panelPrescrizioni;
     private ImageIcon icon = new ImageIcon("src/Icon/logoFinestra.png");
+    private String nomeUtente;
 
     private GestioneFile gestioneFile = new GestioneFile();
 
@@ -28,6 +31,8 @@ public class FrameHomepage extends JFrame {
         setLocationRelativeTo(null);
         setTitle("Fidatin");
         setIconImage(icon.getImage());
+
+        System.out.println(nomeUtente);
 
         panelPazienti = new InterfacciaPAZIENTI();
         panelDottori = new FrameDottori();
@@ -97,7 +102,8 @@ public class FrameHomepage extends JFrame {
         });
 
         interfacciaHomepage.getTab().getButtonEsci().addActionListener(e -> {
-            int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler tornare al login?", "Conferma", JOptionPane.YES_NO_OPTION);
+            String[] options = {"Si", "No"};
+            int choice = JOptionPane.showOptionDialog(getContentPane(), "Sei sicuro di voler tornare al login?", "Conferma", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
             if (choice == JOptionPane.YES_OPTION) {
                 salvaSuFile();
                 FrameLogin frameLogin = new FrameLogin();
@@ -152,4 +158,8 @@ public class FrameHomepage extends JFrame {
         }
     }
 
+    @Override
+    public void stringaPassata(String data) {
+        nomeUtente = data;
+    }
 }

@@ -4,6 +4,7 @@ package Login.view;
     Coded by Vito Francesco Cosola
  */
 
+import Eventi.PassaggioDati;
 import Homepage.view.FrameHomepage;
 import Login.Eventi.Evento;
 import Login.Eventi.EventoEvent;
@@ -15,6 +16,9 @@ import java.awt.*;
 public class FrameLogin extends JFrame {
     private IDandPassword iDandPassword;
     private ImageIcon icon = new ImageIcon("src/Icon/logoFinestra.png");
+    private String nomeUtente = "";
+    private FrameHomepage frameHomepage;
+    private PassaggioDati passaggioDati;
 
     public FrameLogin(){
         setLayout(new GridLayout(1,2));
@@ -36,9 +40,12 @@ public class FrameLogin extends JFrame {
                 if(iDandPassword.getLoginData().get(insertId).equals(insertPassword)){
                     labelMessaggi.setForeground(Color.green);
                     labelMessaggi.setText("Accesso in corso...");
-                    FrameHomepage frameHomepage= new FrameHomepage();
+                    frameHomepage = new FrameHomepage();
                     frameHomepage.setLocation(getLocation());
                     frameHomepage.setSize(getSize());
+                    setStringPassListener(frameHomepage);
+                    nomeUtente = String.valueOf(iDandPassword.getLoginData().get(insertId));
+                    passaggioDati.stringaPassata(nomeUtente);
                     dispose();
                 }else{
                     labelMessaggi.setForeground(Color.red);
@@ -62,5 +69,8 @@ public class FrameLogin extends JFrame {
         setVisible(true);
     }
 
+    public void setStringPassListener(PassaggioDati listener) {
+        this.passaggioDati = listener;
+    }
 
 }
