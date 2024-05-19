@@ -42,7 +42,7 @@ public class InterfacciaTab extends JPanel{
         panel.add(title);
 
         add(panel, BorderLayout.CENTER);
-        add(buttonEsci, BorderLayout.LINE_END);
+        add(buttonEsci, BorderLayout.LINE_START);
     }
     public InterfacciaTab(String titleTab, int i){
         setLayout(new BorderLayout());

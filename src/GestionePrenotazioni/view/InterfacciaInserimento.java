@@ -194,7 +194,7 @@ public class InterfacciaInserimento extends JPanel {
 
                 List<Paziente> lista = new ArrayList<>();
                 ModelloTabellaPazienti modello = new ModelloTabellaPazienti(lista);
-                for(int i=0; i<sceltaPaziente.getItemCount()-1; i++){
+                for(int i=0; i<sceltaPaziente.getItemCount(); i++){
                     lista.add(sceltaPaziente.getItemAt(i));
                 }
                 JTable tabellaRicerca = new MyTableStyle(modello);
@@ -274,7 +274,7 @@ public class InterfacciaInserimento extends JPanel {
 
                 List<Dottore> lista = new ArrayList<>();
                 ModelloTabellaDottori modello = new ModelloTabellaDottori();
-                for(int i=0; i<sceltaDottore.getItemCount()-1; i++){
+                for(int i=0; i<sceltaDottore.getItemCount(); i++){
                     lista.add(sceltaDottore.getItemAt(i));
                 }
                 modello.setListaDottori(lista);

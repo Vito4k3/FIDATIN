@@ -59,7 +59,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener {
         textAreaBacheca.setFocusable(false);
         textAreaBacheca.setText("Ampliamento della sede centrale\nSi rappresenta a quanti in indirizzo, ognuno per le proprie " +
                 "competenze e responsabilità,\nche i lavori di ampliamento della sede sono giunti in fase più interferenziale\n" +
-                "con la vita sanitaria\n\n" + "Nuovo primario! è subito una grande festa, sabato 10 maggio cornetti per tutti\n nella sala dottori!");
+                "con la vita sanitaria\n");
         JLabel labelBacheca = new JLabel("Bacheca");
         labelBacheca.setBorder(new EmptyBorder(0,5,0,0));
         JPanel panelBacheca = new MyPanel(new BorderLayout());
@@ -164,7 +164,7 @@ public class InterfacciaHomepage extends JPanel implements ActionListener {
         EventoEvent eventoEvent = new EventoEvent(this, buttonPrenotazioni, buttonDottori, buttonPrescrizioni, buttonPazienti, buttonHomepage, premuto);
         evento.evento(eventoEvent);
     }
-    
+
 
     public InterfacciaTab getTab(){
         return interfacciaTab;
@@ -173,7 +173,6 @@ public class InterfacciaHomepage extends JPanel implements ActionListener {
         this.databasePrenotazione = database;
         prenotazioniGiornaliere = databasePrenotazione.prenotazioniGiornaliere();
         modelloPrenotazioniGiornaliere.setListaPrenotazioni(prenotazioniGiornaliere);
-        System.out.print(prenotazioniGiornaliere.get(0));
     }
     public void rimuoviPannelloScelta(){
         mainPanel.remove(panel1);
