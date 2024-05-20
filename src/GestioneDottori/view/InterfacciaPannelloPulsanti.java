@@ -52,7 +52,6 @@ public class InterfacciaPannelloPulsanti extends JPanel implements ActionListene
 
         fieldRicerca = new JTextField(15);
         fieldRicerca.setPreferredSize(new Dimension(140,30));
-        fieldRicerca.setBorder(new EmptyBorder(0,5,0,0));
         Border lineBorder = new LineBorder(Color.black, 2);
         Border emptyBorder = new EmptyBorder(0,0,0,30);
         Border compoundBorder = new CompoundBorder(lineBorder, emptyBorder);
@@ -72,8 +71,6 @@ public class InterfacciaPannelloPulsanti extends JPanel implements ActionListene
 
         FlowLayout flowLayout2 = (FlowLayout) panelCheckBox.getLayout();
         flowLayout2.setAlignment(FlowLayout.LEFT);
-
-        setBorder(new EmptyBorder(0,8,0,8));
 
         add(interfacciaTab);
         add(panelCheckBox);

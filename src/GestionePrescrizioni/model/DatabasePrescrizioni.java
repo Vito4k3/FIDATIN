@@ -116,16 +116,18 @@ public class DatabasePrescrizioni {
 
     public void salvaSuFile(Path path) throws IOException {
 
-        File file = new File(path.toString() + File.separator + fileName);
-        FileOutputStream fop= new FileOutputStream(file);
-        ObjectOutputStream oos= new ObjectOutputStream(fop);
+        if(!listaPrescrizioni.isEmpty()) {
+            File file = new File(path.toString() + File.separator + fileName);
+            FileOutputStream fop = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fop);
 
-        Prescrizione[] arrayPrescrizioni= listaPrescrizioni.toArray(new Prescrizione[0]);
+            Prescrizione[] arrayPrescrizioni = listaPrescrizioni.toArray(new Prescrizione[0]);
 
-        oos.writeObject(arrayPrescrizioni);
+            oos.writeObject(arrayPrescrizioni);
 
-        oos.close();
-        fop.close();
+            oos.close();
+            fop.close();
+        }
     }
 
     public void salvaPrescrizioneSuFile(int id, File fileToSave) throws IOException {

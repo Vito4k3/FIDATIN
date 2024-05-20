@@ -32,8 +32,6 @@ public class FrameHomepage extends JFrame implements PassaggioDati {
         setTitle("Fidatin");
         setIconImage(icon.getImage());
 
-        System.out.println(nomeUtente);
-
         panelPazienti = new InterfacciaPAZIENTI();
         panelDottori = new FrameDottori();
         panelPrenotazioni = new FramePrenotazioni();

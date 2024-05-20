@@ -94,16 +94,18 @@ public class DatabasePrenotazione {
         return prenotazioni;
     }
     public void salvaSuFile(Path path) throws IOException {
-        File file = new File(path.toString() + File.separator + fileName);
-        FileOutputStream fop= new FileOutputStream(file);
-        ObjectOutputStream oos= new ObjectOutputStream(fop);
+        if(!prenotazioni.isEmpty()) {
+            File file = new File(path.toString() + File.separator + fileName);
+            FileOutputStream fop = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fop);
 
-        Prenotazione[] arrayPrenotazioni= prenotazioni.toArray(new Prenotazione[0]);
+            Prenotazione[] arrayPrenotazioni = prenotazioni.toArray(new Prenotazione[0]);
 
-        oos.writeObject(arrayPrenotazioni);
+            oos.writeObject(arrayPrenotazioni);
 
-        oos.close();
-        fop.close();
+            oos.close();
+            fop.close();
+        }
     }
 
     public void caricaDaFile(Path path) throws IOException {

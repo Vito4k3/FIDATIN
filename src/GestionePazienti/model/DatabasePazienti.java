@@ -58,17 +58,19 @@ public class DatabasePazienti {
     }
 
     public void salvaSuFile(Path path) throws IOException {
-        File file = new File(path.toString() + File.separator + fileName);
+        if(!Pazienti.isEmpty()) {
+            File file = new File(path.toString() + File.separator + fileName);
 
-        FileOutputStream fop = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fop);
+            FileOutputStream fop = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fop);
 
-        Paziente[] arrayPazienti = Pazienti.toArray(new Paziente[0]);
+            Paziente[] arrayPazienti = Pazienti.toArray(new Paziente[0]);
 
-        oos.writeObject(arrayPazienti);
+            oos.writeObject(arrayPazienti);
 
-        oos.close();
-        fop.close();
+            oos.close();
+            fop.close();
+        }
     }
 
     public void caricaDaFile(Path path) throws IOException {

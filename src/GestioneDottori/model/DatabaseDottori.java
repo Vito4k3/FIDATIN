@@ -82,17 +82,19 @@ public class DatabaseDottori {
         return dottori;
     }
     public void salvaSuFile(Path path) throws IOException {
-        File file = new File(path + File.separator + fileName);
+        if(!dottori.isEmpty()) {
+            File file = new File(path + File.separator + fileName);
 
-        FileOutputStream fop= new FileOutputStream(file);
-        ObjectOutputStream oos= new ObjectOutputStream(fop);
+            FileOutputStream fop = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fop);
 
-        Dottore[] arrayDottori= dottori.toArray(new Dottore[0]);
+            Dottore[] arrayDottori = dottori.toArray(new Dottore[0]);
 
-        oos.writeObject(arrayDottori);
+            oos.writeObject(arrayDottori);
 
-        oos.close();
-        fop.close();
+            oos.close();
+            fop.close();
+        }
     }
 
     public void caricaDaFile(Path path) throws IOException {
